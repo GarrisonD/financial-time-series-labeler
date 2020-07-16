@@ -1,0 +1,13 @@
+diff --git a/node_modules/uplot/dist/uPlot.d.ts b/node_modules/uplot/dist/uPlot.d.ts
+index 74dba7e..53aec1a 100644
+--- a/node_modules/uplot/dist/uPlot.d.ts
++++ b/node_modules/uplot/dist/uPlot.d.ts
+@@ -311,7 +311,7 @@ declare namespace uPlot {
+ 		/** table-legend multi-values formatter */
+ 		values?: (self: uPlot, seriesIdx: number, idx: number) => object;
+ 
+-		paths?: (self: uPlot, seriesIdx: number, idx0: number, idx1: number) => {
++		paths?: (self: uPlot, seriesIdx: number, idx0: number, idx1: number) => null | {
+ 			/** path to stroke */
+ 			stroke?: Path2D;
+ 

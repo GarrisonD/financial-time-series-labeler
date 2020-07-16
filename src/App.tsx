@@ -1,7 +1,9 @@
 import React from "react";
 
+import Chart from "components/Chart";
+
 const App = () => {
-  return <div>Hello, world!</div>;
+  return <Chart />;
 };
 
 export default App;
