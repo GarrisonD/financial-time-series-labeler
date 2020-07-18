@@ -16,4 +16,4 @@ const Dropzone = ({
   );
 };
 
-export default Dropzone;
+export default React.memo(Dropzone);
