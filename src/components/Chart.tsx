@@ -5,12 +5,13 @@ import "uplot/dist/uPlot.min.css";
 
 import data from "./data";
 
-const fmtUSD = (val: number, dec: number) => {
-  return "$" + val.toFixed(dec).replace(/\d(?=(\d{3})+(?:\.|$))/g, "$&,");
-};
+const fmtDate = uPlot.fmtDate("{YYYY}-{MM}-{DD}");
 
-// draws candlestick symbols (expects data in OHLC order)
-function candlestickPlugin({
+const tzDate = (timestamp: number) =>
+  uPlot.tzDate(new Date(timestamp * 1e3), "Etc/UTC");
+
+// draws candlestick symbols (expects data in OHLC format)
+const candlestickPlugin = ({
   gap = 2,
   shadowColor = "#000000",
   bearishColor = "#e54245",
@@ -18,8 +19,8 @@ function candlestickPlugin({
   bodyMaxWidth = 20,
   shadowWidth = 2,
   bodyOutline = 1,
-} = {}) {
-  function drawCandles(u: uPlot) {
+} = {}) => {
+  const drawCandles = (u: uPlot) => {
     u.ctx.save();
 
     const offset = (shadowWidth % 2) / 2;
@@ -83,7 +84,7 @@ function candlestickPlugin({
     u.ctx.translate(-offset, -offset);
 
     u.ctx.restore();
-  }
+  };
 
   return {
     opts: (_u: uPlot, opts: uPlot.Options) => {
@@ -104,15 +105,13 @@ function candlestickPlugin({
       draw: [drawCandles],
     },
   };
-}
+};
 
-const Chart = () => {
+const Chart = ({ title }: { title: string }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const container = containerRef.current!;
-
-    const tzDate = (ts: number) => uPlot.tzDate(new Date(ts * 1e3), "Etc/UTC");
 
     const options = {
       width: container.clientWidth,
@@ -120,43 +119,24 @@ const Chart = () => {
         container.clientHeight -
         27 /* substract height of title */ -
         35 /* substract height of legend */,
-      title: "Some title here",
+      title,
       tzDate,
       plugins: [candlestickPlugin()],
       scales: { x: { distr: 2 as const } },
       series: [
         {
           label: "Date",
-          value: (_u: uPlot, ts: number) =>
-            uPlot.fmtDate("{YYYY}-{MM}-{DD}")(tzDate(ts)),
+          value: (_u: uPlot, timestamp: number) => fmtDate(tzDate(timestamp)),
         },
-        {
-          label: "Open",
-          value: (_u: uPlot, v: number) => fmtUSD(v, 2),
-        },
-        {
-          label: "High",
-          value: (_u: uPlot, v: number) => fmtUSD(v, 2),
-        },
-        {
-          label: "Low",
-          value: (_u: uPlot, v: number) => fmtUSD(v, 2),
-        },
-        {
-          label: "Close",
-          value: (_u: uPlot, v: number) => fmtUSD(v, 2),
-        },
-      ],
-      axes: [
-        {},
-        {
-          values: (_u: uPlot, vals: number[]) => vals.map((v) => fmtUSD(v, 0)),
-        },
+        { label: "Open" },
+        { label: "High" },
+        { label: "Low" },
+        { label: "Close" },
       ],
     };
 
     new uPlot(options, data, container);
-  }, []);
+  }, [title]);
 
   return (
     <div

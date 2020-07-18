@@ -1,9 +1,14 @@
 import React from "react";
 
-import Chart from "components/Chart";
+import ChartPane from "components/ChartPane";
 
 const App = () => {
-  return <Chart />;
+  return (
+    <div style={{ display: "flex", flex: 1, padding: "10px" }}>
+      <ChartPane />
+      <ChartPane />
+    </div>
+  );
 };
 
 export default App;
