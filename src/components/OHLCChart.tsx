@@ -102,6 +102,83 @@ const candlestickPlugin = ({
   };
 };
 
+const wheelZoomPlugin = ({ factor = 0.95 } = {}) => {
+  function clamp(
+    nRange: number,
+    nMin: number,
+    nMax: number,
+    fRange: number,
+    fMin: number,
+    fMax: number
+  ) {
+    if (nRange > fRange) {
+      nMin = fMin;
+      nMax = fMax;
+    } else if (nMin < fMin) {
+      nMin = fMin;
+      nMax = fMin + nRange;
+    } else if (nMax > fMax) {
+      nMax = fMax;
+      nMin = fMax - nRange;
+    }
+
+    return [nMin, nMax];
+  }
+
+  return {
+    hooks: {
+      ready: [
+        (u: uPlot) => {
+          const xMin = u.scales.x.min!;
+          const xMax = u.scales.x.max!;
+          const yMin = u.scales.y.min!;
+          const yMax = u.scales.y.max!;
+
+          const xRange = xMax - xMin;
+          const yRange = yMax - yMin;
+
+          let plot = u.root.querySelector(".over")!;
+          let rect = plot.getBoundingClientRect();
+
+          plot.addEventListener("wheel", (e) => {
+            e.preventDefault();
+
+            let { left, top } = u.cursor;
+
+            let leftPct = left! / rect.width;
+            let btmPct = 1 - top! / rect.height;
+            let xVal = u.posToVal(left!, "x");
+            let yVal = u.posToVal(top!, "y");
+
+            let oxRange = u.scales.x.max! - u.scales.x.min!;
+            let oyRange = u.scales.y.max! - u.scales.y.min!;
+
+            let nxRange =
+              (e as WheelEvent).deltaY < 0
+                ? oxRange * factor
+                : oxRange / factor;
+            let nxMin = xVal - leftPct * nxRange;
+            let nxMax = nxMin + nxRange;
+            console.log("Before clamp", nxMin, nxMax);
+            [nxMin, nxMax] = clamp(nxRange, nxMin, nxMax, xRange, xMin, xMax);
+            console.log("After clamp", nxMin, nxMax);
+
+            let nyRange = oyRange;
+            let nyMin = yVal - btmPct * nyRange;
+            let nyMax = nyMin + nyRange;
+            [nyMin, nyMax] = clamp(nyRange, nyMin, nyMax, yRange, yMin, yMax);
+
+            u.batch(() => {
+              u.setScale("x", { min: nxMin, max: nxMax });
+              u.setScale("y", { min: nyMin, max: nyMax });
+            });
+          });
+        },
+      ],
+    },
+  };
+};
+
 const OHLCChart = ({ name: title, records }: OHLCFile) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -116,7 +193,7 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
         35 /* substract height of legend */,
       title,
       tzDate,
-      plugins: [candlestickPlugin()],
+      plugins: [candlestickPlugin(), wheelZoomPlugin()],
       scales: { x: { distr: 2 as const } },
       series: [
         {
