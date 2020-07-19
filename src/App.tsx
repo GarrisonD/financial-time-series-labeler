@@ -1,12 +1,18 @@
 import React from "react";
 
-import ChartPane from "components/ChartPane";
+import OHLCChart from "components/OHLCChart";
+import CSVUploader from "components/CSVUploader";
 
 const App = () => {
+  const [ohlcFile, setOHLCFile] = React.useState<OHLCFile>();
+
   return (
     <div style={{ display: "flex", flex: 1, padding: "10px" }}>
-      <ChartPane />
-      <ChartPane />
+      {ohlcFile ? (
+        <OHLCChart {...ohlcFile} />
+      ) : (
+        <CSVUploader onFileParsed={setOHLCFile} />
+      )}
     </div>
   );
 };

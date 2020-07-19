@@ -3,12 +3,7 @@ import uPlot from "uplot";
 
 import "uplot/dist/uPlot.min.css";
 
-import data from "./data";
-
-const fmtDate = uPlot.fmtDate("{YYYY}-{MM}-{DD}");
-
-const tzDate = (timestamp: number) =>
-  uPlot.tzDate(new Date(timestamp * 1e3), "Etc/UTC");
+const tzDate = (timestamp: number) => new Date(timestamp * 1e3);
 
 // draws candlestick symbols (expects data in OHLC format)
 const candlestickPlugin = ({
@@ -107,7 +102,7 @@ const candlestickPlugin = ({
   };
 };
 
-const Chart = ({ title }: { title: string }) => {
+const OHLCChart = ({ name: title, records }: OHLCFile) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -125,8 +120,9 @@ const Chart = ({ title }: { title: string }) => {
       scales: { x: { distr: 2 as const } },
       series: [
         {
-          label: "Date",
-          value: (_u: uPlot, timestamp: number) => fmtDate(tzDate(timestamp)),
+          label: "Timestamp",
+          value: (_u: uPlot, timestamp: number) =>
+            tzDate(timestamp).toLocaleString("en-GB", { timeZone: "Etc/UTC" }),
         },
         { label: "Open" },
         { label: "High" },
@@ -135,8 +131,18 @@ const Chart = ({ title }: { title: string }) => {
       ],
     };
 
-    new uPlot(options, data, container);
-  }, [title]);
+    new uPlot(
+      options,
+      [
+        records.map((value) => value.Timestamp),
+        records.map((value) => value.Open),
+        records.map((value) => value.High),
+        records.map((value) => value.Low),
+        records.map((value) => value.Close),
+      ],
+      container
+    );
+  }, [records, title]);
 
   return (
     <div
@@ -150,4 +156,4 @@ const Chart = ({ title }: { title: string }) => {
   );
 };
 
-export default Chart;
+export default React.memo(OHLCChart);
