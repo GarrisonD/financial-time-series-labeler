@@ -12,9 +12,10 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
     const width = container.clientWidth - MARGINS.left - MARGINS.right;
     const height = container.clientHeight - MARGINS.top - MARGINS.bottom;
 
-    const svg = d3
+    const chart = d3
       .select(container)
       .append("g")
+      .attr("id", "chart")
       .attr("transform", `translate(${MARGINS.left}, ${MARGINS.top})`);
 
     const timestamps = records.map(
@@ -31,9 +32,9 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
 
     const xAxis = d3.axisBottom<Date>(xBand).tickValues([timestamps[25]]);
 
-    svg
+    chart
       .append("g")
-      .attr("class", "x-axis")
+      .attr("id", "x-axis")
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
 
@@ -48,14 +49,26 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
 
     const yAxis = d3.axisLeft<number>(yScale);
 
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    chart.append("g").attr("id", "y-axis").call(yAxis);
 
-    const candlesContainer = svg.append("g").attr("class", "candles-container");
+    const chartBody = chart.append("g").attr("id", "chart-body");
+
+    // This invisible rect is responsible for receiving
+    // mouse scroll events from any pixel of the chart
+    // (not only when mouse is on one of the candles)
+    chartBody
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("pointer-events", "all")
+      .attr("fill", "none");
+
+    const candles = chartBody.append("g").attr("id", "candles");
 
     // TODO: merge rect.candle and g.whisker into one
 
-    candlesContainer
-      .selectAll("rect.candle")
+    candles
+      .selectAll(".candle")
       .data(records)
       .enter()
       .append("rect")
@@ -73,8 +86,8 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
         d.Open === d.Close ? "silver" : d.Open > d.Close ? "red" : "green"
       );
 
-    candlesContainer
-      .selectAll("g.whisker")
+    candles
+      .selectAll(".whisker")
       .data(records)
       .enter()
       .append("line")
@@ -86,11 +99,15 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
       .attr("stroke", (d) =>
         d.Open === d.Close ? "white" : d.Open > d.Close ? "red" : "green"
       );
+
+    const zoom = d3.zoom().on("zoom", () => {
+      candles.attr("transform", d3.event.transform);
+    });
+
+    chartBody.call(zoom as any);
   }, [records]);
 
-  return (
-    <svg className="d3-container" ref={containerRef} style={{ flex: 1 }} />
-  );
+  return <svg ref={containerRef} style={{ flex: 1 }} />;
 };
 
 export default React.memo(OHLCChart);
