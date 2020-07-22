@@ -22,7 +22,7 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
       (record) => new Date(record.Timestamp * 1e3)
     );
 
-    const xBand = d3
+    const xScale = d3
       .scaleBand<Date>()
       .domain(timestamps)
       .range([0, width])
@@ -30,7 +30,7 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
       .paddingOuter(1)
       .align(0.5);
 
-    const xAxis = d3.axisBottom<Date>(xBand).tickValues([timestamps[25]]);
+    const xAxis = d3.axisBottom<Date>(xScale).tickValues([timestamps[25]]);
 
     chart
       .append("g")
@@ -72,10 +72,10 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
       .data(records)
       .enter()
       .append("rect")
-      .attr("x", (_, i) => xBand(timestamps[i])!)
+      .attr("x", (_, i) => xScale(timestamps[i])!)
       .attr("class", "candle")
       .attr("y", (d) => yScale(Math.max(d.Open, d.Close)))
-      .attr("width", xBand.bandwidth())
+      .attr("width", xScale.bandwidth())
       .attr("height", (d) =>
         d.Open === d.Close
           ? 1
@@ -92,8 +92,8 @@ const OHLCChart = ({ name: title, records }: OHLCFile) => {
       .enter()
       .append("line")
       .attr("class", "whisker")
-      .attr("x1", (_, i) => xBand(timestamps[i])! + xBand.bandwidth() / 2)
-      .attr("x2", (_, i) => xBand(timestamps[i])! + xBand.bandwidth() / 2)
+      .attr("x1", (_, i) => xScale(timestamps[i])! + xScale.bandwidth() / 2)
+      .attr("x2", (_, i) => xScale(timestamps[i])! + xScale.bandwidth() / 2)
       .attr("y1", (d) => yScale(d.High))
       .attr("y2", (d) => yScale(d.Low))
       .attr("stroke", (d) =>
