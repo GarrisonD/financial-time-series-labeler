@@ -17,7 +17,6 @@
     "typescript": "^3.9.7"
   },
   "scripts": {
-    "postinstall": "patch-package",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -41,7 +40,6 @@
   "devDependencies": {
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "patch-package": "^6.2.2",
     "prettier": "^2.0.5"
   },
   "husky": {
