@@ -2,6 +2,8 @@ import React from "react";
 import * as d3 from "d3";
 
 const INITIAL_VISIBLE_CANDLES_COUNT = 150;
+
+const SCROLL_BASE_COEFFICIENT = 0.2;
 const ZOOM_BASE_COEFFICIENT = 0.999;
 
 const ohlcRecordToColor = (record: OHLCRecord): string => {
@@ -134,7 +136,7 @@ class CanvasDrawer {
     this.context.fillStyle = ohlcRecordToColor(record);
     this.context.fill();
 
-    this.context.strokeStyle = "black";
+    this.context.strokeStyle = "white";
     this.context.stroke();
   }
 }
@@ -157,25 +159,28 @@ const OHLCChart = ({ records }: OHLCFile) => {
     canvasDrawer.prepare();
     canvasDrawer.draw(0, INITIAL_VISIBLE_CANDLES_COUNT);
 
-    let zoomCoefficient = 1;
+    const transform = { k: 1, x: 0, y: 0 };
 
     canvas.addEventListener("wheel", (event) => {
       event.preventDefault();
 
-      zoomCoefficient *= ZOOM_BASE_COEFFICIENT ** event.deltaY;
-
-      const deltaVisibleCandlesCount =
-        INITIAL_VISIBLE_CANDLES_COUNT * (zoomCoefficient - 1);
+      if (event.ctrlKey) {
+        transform.k *= ZOOM_BASE_COEFFICIENT ** event.deltaY;
+      } else {
+        transform.x -= transform.k * SCROLL_BASE_COEFFICIENT * event.deltaY;
+      }
 
       canvasDrawer.draw(
-        -deltaVisibleCandlesCount / 2,
-        +deltaVisibleCandlesCount / 2 + INITIAL_VISIBLE_CANDLES_COUNT
+        transform.x - INITIAL_VISIBLE_CANDLES_COUNT * (transform.k - 1) * 0.5,
+        transform.x +
+          INITIAL_VISIBLE_CANDLES_COUNT +
+          INITIAL_VISIBLE_CANDLES_COUNT * (transform.k - 1) * 0.5
       );
     });
   }, [records]);
 
   return (
-    <div ref={containerRef} style={{ background: "lightgray", flex: 1 }}>
+    <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }}>
       <canvas ref={canvasRef} />
     </div>
   );
