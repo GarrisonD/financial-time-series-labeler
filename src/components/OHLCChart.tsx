@@ -2,13 +2,9 @@ import React from "react";
 import * as d3 from "d3";
 
 const INITIAL_FIRST_VISIBLE_CANDLE_INDEX = 0;
-const INITIAL_LAST_VISIBLE_CANDLE_INDEX = 10;
-
-const INITIAL_VISIBLE_CANDLES_COUNT =
-  INITIAL_LAST_VISIBLE_CANDLE_INDEX - INITIAL_FIRST_VISIBLE_CANDLE_INDEX;
+const INITIAL_LAST_VISIBLE_CANDLE_INDEX = 9;
 
 const SCROLL_BASE_COEFFICIENT = 0.999;
-const SPACE_BETWEEN_CANDLES = 0.5;
 
 const ohlcRecordToColor = (record: OHLCRecord): string => {
   if (record.Open === record.Close) return "silver";
@@ -31,6 +27,9 @@ class CanvasDrawer {
   private records: readonly OHLCRecord[];
 
   private yScale: any;
+  private xScale: any;
+
+  private candleStickWidth = 0;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -45,7 +44,8 @@ class CanvasDrawer {
 
     this.records = records;
 
-    this.yScale = d3.scaleLinear().range([height, 0]).nice();
+    this.yScale = d3.scaleLinear().range([height, 0]);
+    this.xScale = d3.scaleLinear().range([0, width]);
   }
 
   prepare(scale = window.devicePixelRatio) {
@@ -65,17 +65,12 @@ class CanvasDrawer {
     }
   }
 
-  draw(
-    candleWidth: number,
-    firstVisibleCandleIndex: number,
-    lastVisibleCandleIndex: number,
-    offsetLeft: number = 0
-  ) {
+  draw(firstVisibleCandleIndex: number, lastVisibleCandleIndex: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     const records = this.records.slice(
-      firstVisibleCandleIndex < 0 ? 0 : firstVisibleCandleIndex,
-      lastVisibleCandleIndex
+      Math.max(Math.floor(firstVisibleCandleIndex), 0),
+      Math.min(Math.ceil(lastVisibleCandleIndex + 1), this.records.length)
     );
 
     this.yScale.domain([
@@ -83,47 +78,40 @@ class CanvasDrawer {
       d3.max(records.map((record) => record.High))!,
     ]);
 
+    this.xScale.domain([firstVisibleCandleIndex, lastVisibleCandleIndex + 1]);
+
+    this.candleStickWidth =
+      this.width / (lastVisibleCandleIndex - firstVisibleCandleIndex + 1);
+
     this.context.clearRect(0, 0, this.width, this.height);
 
     records.forEach((record, i) => {
-      this.drawCandleStick(record, i, candleWidth, offsetLeft);
+      this.drawCandleStick(
+        record,
+        i + Math.max(Math.floor(firstVisibleCandleIndex), 0)
+      );
     });
   }
 
-  private drawCandleStick(
-    record: OHLCRecord,
-    i: number,
-    candleWidth: number,
-    offsetLeft: number
-  ) {
+  private drawCandleStick(record: OHLCRecord, i: number) {
     const color = ohlcRecordToColor(record);
 
-    this.drawStick(record, i, candleWidth, color, offsetLeft);
-    this.drawCandle(record, i, candleWidth, color, offsetLeft);
+    this.drawStick(record, i, color);
+    this.drawCandle(record, i, color);
   }
 
-  private drawStick(
-    record: OHLCRecord,
-    i: number,
-    candleWidth: number,
-    color: string,
-    offsetLeft: number
-  ) {
+  private drawStick(record: OHLCRecord, i: number, color: string) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.moveTo(
-      offsetLeft +
-        i * candleWidth * (1 + SPACE_BETWEEN_CANDLES) +
-        candleWidth / 2,
+      this.xScale(i) + this.candleStickWidth / 2,
       this.yScale(Math.max(record.High, record.Low))
     );
 
     this.context.lineTo(
-      offsetLeft +
-        i * candleWidth * (1 + SPACE_BETWEEN_CANDLES) +
-        candleWidth / 2,
+      this.xScale(i) + this.candleStickWidth / 2,
       this.yScale(Math.min(record.High, record.Low))
     );
 
@@ -132,21 +120,15 @@ class CanvasDrawer {
     this.context.stroke();
   }
 
-  private drawCandle(
-    record: OHLCRecord,
-    i: number,
-    candleWidth: number,
-    color: string,
-    offsetLeft: number
-  ) {
+  private drawCandle(record: OHLCRecord, i: number, color: string) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.rect(
-      offsetLeft + i * candleWidth * (1 + SPACE_BETWEEN_CANDLES),
+      this.xScale(i),
       this.yScale(Math.max(record.Open, record.Close)),
-      candleWidth,
+      this.candleStickWidth,
       record.Open === record.Close
         ? 1
         : this.yScale(Math.min(record.Open, record.Close)) -
@@ -172,21 +154,13 @@ const OHLCChart = ({ records }: OHLCFile) => {
 
     const canvas = canvasRef.current!;
 
-    const initialCandleWidth =
-      (width - 1) /
-      (INITIAL_VISIBLE_CANDLES_COUNT +
-        (INITIAL_VISIBLE_CANDLES_COUNT - 1) * SPACE_BETWEEN_CANDLES);
-
-    let zoomCoefficient = 1,
-      deltaWidthLeft = 0,
-      deltaWidthRight = 0;
+    let zoomCoefficient = 1;
 
     const canvasDrawer = new CanvasDrawer(canvas, width, height, records);
 
     canvasDrawer.prepare();
 
     canvasDrawer.draw(
-      initialCandleWidth,
       INITIAL_FIRST_VISIBLE_CANDLE_INDEX,
       INITIAL_LAST_VISIBLE_CANDLE_INDEX
     );
@@ -194,39 +168,16 @@ const OHLCChart = ({ records }: OHLCFile) => {
     canvas.addEventListener("wheel", (e) => {
       e.preventDefault();
 
-      const prevWidth = width * zoomCoefficient;
       zoomCoefficient *= SCROLL_BASE_COEFFICIENT ** e.deltaY;
-      const currentWidth = width * zoomCoefficient;
 
-      const deltaWidth = prevWidth - currentWidth;
-      deltaWidthLeft += deltaWidth * (e.offsetX / width);
-      deltaWidthRight += deltaWidth * (1 - e.offsetX / width);
-
-      const candleWidth = initialCandleWidth * zoomCoefficient;
-
-      const deltaCandlesLeft = Math.ceil(
-        (deltaWidthLeft - candleWidth * SPACE_BETWEEN_CANDLES) /
-          (candleWidth * (1 + SPACE_BETWEEN_CANDLES))
-      );
-
-      const deltaCandlesRight = Math.ceil(
-        (deltaWidthRight - candleWidth * SPACE_BETWEEN_CANDLES) /
-          (candleWidth * (1 + SPACE_BETWEEN_CANDLES))
-      );
-
-      console.log(
-        INITIAL_FIRST_VISIBLE_CANDLE_INDEX - deltaCandlesLeft,
-        INITIAL_LAST_VISIBLE_CANDLE_INDEX + deltaCandlesRight
-      );
+      const tmp =
+        (INITIAL_LAST_VISIBLE_CANDLE_INDEX -
+          INITIAL_FIRST_VISIBLE_CANDLE_INDEX) *
+        (zoomCoefficient - 1);
 
       canvasDrawer.draw(
-        candleWidth,
-        INITIAL_FIRST_VISIBLE_CANDLE_INDEX - deltaCandlesLeft,
-        INITIAL_LAST_VISIBLE_CANDLE_INDEX + deltaCandlesRight,
-        deltaWidthLeft -
-          (deltaCandlesLeft < 0
-            ? deltaCandlesLeft * (candleWidth * (1 + SPACE_BETWEEN_CANDLES))
-            : 0)
+        INITIAL_FIRST_VISIBLE_CANDLE_INDEX - tmp / 2,
+        INITIAL_LAST_VISIBLE_CANDLE_INDEX + tmp / 2
       );
     });
   }, [records]);
