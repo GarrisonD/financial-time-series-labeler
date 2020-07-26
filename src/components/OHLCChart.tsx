@@ -1,10 +1,8 @@
 import React from "react";
 import * as d3 from "d3";
 
-const INITIAL_FIRST_VISIBLE_CANDLE_INDEX = 0;
-const INITIAL_LAST_VISIBLE_CANDLE_INDEX = 9;
-
-const SCROLL_BASE_COEFFICIENT = 0.999;
+const INITIAL_VISIBLE_CANDLES_COUNT = 150;
+const ZOOM_BASE_COEFFICIENT = 0.999;
 
 const ohlcRecordToColor = (record: OHLCRecord): string => {
   if (record.Open === record.Close) return "silver";
@@ -94,13 +92,11 @@ class CanvasDrawer {
   }
 
   private drawCandleStick(record: OHLCRecord, i: number) {
-    const color = ohlcRecordToColor(record);
-
-    this.drawStick(record, i, color);
-    this.drawCandle(record, i, color);
+    this.drawStick(record, i);
+    this.drawCandle(record, i);
   }
 
-  private drawStick(record: OHLCRecord, i: number, color: string) {
+  private drawStick(record: OHLCRecord, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
@@ -115,12 +111,12 @@ class CanvasDrawer {
       this.yScale(Math.min(record.High, record.Low))
     );
 
-    this.context.strokeStyle = color;
+    this.context.strokeStyle = ohlcRecordToColor(record);
 
     this.context.stroke();
   }
 
-  private drawCandle(record: OHLCRecord, i: number, color: string) {
+  private drawCandle(record: OHLCRecord, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
@@ -135,7 +131,7 @@ class CanvasDrawer {
             this.yScale(Math.max(record.Open, record.Close))
     );
 
-    this.context.fillStyle = color;
+    this.context.fillStyle = ohlcRecordToColor(record);
     this.context.fill();
 
     this.context.strokeStyle = "black";
@@ -149,35 +145,31 @@ const OHLCChart = ({ records }: OHLCFile) => {
 
   React.useEffect(() => {
     const container = containerRef.current!;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
     const canvas = canvasRef.current!;
+
+    const canvasDrawer = new CanvasDrawer(
+      canvas,
+      container.clientWidth,
+      container.clientHeight,
+      records
+    );
+
+    canvasDrawer.prepare();
+    canvasDrawer.draw(0, INITIAL_VISIBLE_CANDLES_COUNT);
 
     let zoomCoefficient = 1;
 
-    const canvasDrawer = new CanvasDrawer(canvas, width, height, records);
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
 
-    canvasDrawer.prepare();
+      zoomCoefficient *= ZOOM_BASE_COEFFICIENT ** event.deltaY;
 
-    canvasDrawer.draw(
-      INITIAL_FIRST_VISIBLE_CANDLE_INDEX,
-      INITIAL_LAST_VISIBLE_CANDLE_INDEX
-    );
-
-    canvas.addEventListener("wheel", (e) => {
-      e.preventDefault();
-
-      zoomCoefficient *= SCROLL_BASE_COEFFICIENT ** e.deltaY;
-
-      const tmp =
-        (INITIAL_LAST_VISIBLE_CANDLE_INDEX -
-          INITIAL_FIRST_VISIBLE_CANDLE_INDEX) *
-        (zoomCoefficient - 1);
+      const deltaVisibleCandlesCount =
+        INITIAL_VISIBLE_CANDLES_COUNT * (zoomCoefficient - 1);
 
       canvasDrawer.draw(
-        INITIAL_FIRST_VISIBLE_CANDLE_INDEX - tmp / 2,
-        INITIAL_LAST_VISIBLE_CANDLE_INDEX + tmp / 2
+        -deltaVisibleCandlesCount / 2,
+        +deltaVisibleCandlesCount / 2 + INITIAL_VISIBLE_CANDLES_COUNT
       );
     });
   }, [records]);
