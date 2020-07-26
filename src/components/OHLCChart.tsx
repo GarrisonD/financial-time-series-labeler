@@ -43,10 +43,6 @@ const OHLCChart = ({ records }: OHLCFile) => {
           INITIAL_VISIBLE_CANDLES_COUNT * (transform.k - 1) * 0.5
       );
     });
-
-    canvas.addEventListener("click", (event) => {
-      console.log(canvasDrawer.xScale.invert(event.offsetX));
-    });
   }, [records]);
 
   return (
