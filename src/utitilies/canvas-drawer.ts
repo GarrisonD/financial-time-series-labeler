@@ -79,31 +79,28 @@ class CanvasDrawer {
 
     this.context.clearRect(0, 0, this.width, this.height);
 
-    candlesticks.forEach((candlestick, i) => {
-      this.drawCandleStick(
-        candlestick,
-        i + Math.max(Math.floor(firstVisibleCandleIndex), 0)
-      );
+    candlesticks.forEach((candlestick) => {
+      this.drawCandleStick(candlestick);
     });
   }
 
-  private drawCandleStick(candlestick: Candlestick, i: number) {
-    this.drawCandle(candlestick, i);
-    this.drawStick(candlestick, i);
+  private drawCandleStick(candlestick: Candlestick) {
+    this.drawCandle(candlestick);
+    this.drawStick(candlestick);
   }
 
-  private drawStick(candlestick: Candlestick, i: number) {
+  private drawStick(candlestick: Candlestick) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.moveTo(
-      this.xScale(i) + this.candleStickWidth / 2,
+      this.xScale(candlestick.index) + this.candleStickWidth / 2,
       this.yScale(Math.max(candlestick.high, candlestick.low))
     );
 
     this.context.lineTo(
-      this.xScale(i) + this.candleStickWidth / 2,
+      this.xScale(candlestick.index) + this.candleStickWidth / 2,
       this.yScale(Math.min(candlestick.high, candlestick.low))
     );
 
@@ -112,13 +109,13 @@ class CanvasDrawer {
     this.context.stroke();
   }
 
-  private drawCandle(candlestick: Candlestick, i: number) {
+  private drawCandle(candlestick: Candlestick) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.rect(
-      this.xScale(i),
+      this.xScale(candlestick.index),
       this.yScale(Math.max(candlestick.open, candlestick.close)),
       this.candleStickWidth,
       candlestick.open === candlestick.close
