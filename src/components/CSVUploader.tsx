@@ -6,7 +6,7 @@ import Dropzone from "./Dropzone";
 const CSVUploader = ({
   onFileParsed,
 }: {
-  onFileParsed: (file: OHLCFile) => void;
+  onFileParsed: (file: NamedCandlesticks) => void;
 }) => {
   const handleParseComplete = React.useCallback<
     Required<Papa.ParseConfig<Candlestick>>["complete"]

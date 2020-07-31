@@ -7,4 +7,4 @@ type Candlestick = {
   Volume: number;
 };
 
-type OHLCFile = { name: string; records: Candlestick[] };
+type NamedCandlesticks = { name: string; records: Candlestick[] };

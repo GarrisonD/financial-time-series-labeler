@@ -4,7 +4,7 @@ import OHLCChart from "components/OHLCChart";
 import CSVUploader from "components/CSVUploader";
 
 const App = () => {
-  const [ohlcFile, setOHLCFile] = React.useState<OHLCFile>();
+  const [ohlcFile, setOHLCFile] = React.useState<NamedCandlesticks>();
 
   return (
     <div style={{ display: "flex", flex: 1, padding: "10px" }}>
