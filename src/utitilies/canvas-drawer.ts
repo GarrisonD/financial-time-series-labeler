@@ -23,7 +23,7 @@ class CanvasDrawer {
   public xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
 
-  private candleStickWidth = 0;
+  private candlestickWidth = 0;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -74,7 +74,7 @@ class CanvasDrawer {
 
     this.xScale.domain([firstVisibleCandleIndex, lastVisibleCandleIndex + 1]);
 
-    this.candleStickWidth =
+    this.candlestickWidth =
       this.width / (lastVisibleCandleIndex - firstVisibleCandleIndex + 1);
 
     this.context.clearRect(0, 0, this.width, this.height);
@@ -95,12 +95,12 @@ class CanvasDrawer {
     this.context.beginPath();
 
     this.context.moveTo(
-      this.xScale(candlestick.index) + this.candleStickWidth / 2,
+      this.xScale(candlestick.index) + this.candlestickWidth / 2,
       this.yScale(Math.max(candlestick.high, candlestick.low))
     );
 
     this.context.lineTo(
-      this.xScale(candlestick.index) + this.candleStickWidth / 2,
+      this.xScale(candlestick.index) + this.candlestickWidth / 2,
       this.yScale(Math.min(candlestick.high, candlestick.low))
     );
 
@@ -117,7 +117,7 @@ class CanvasDrawer {
     this.context.rect(
       this.xScale(candlestick.index),
       this.yScale(Math.max(candlestick.open, candlestick.close)),
-      this.candleStickWidth,
+      this.candlestickWidth,
       candlestick.open === candlestick.close
         ? 1
         : this.yScale(Math.min(candlestick.open, candlestick.close)) -
