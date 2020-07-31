@@ -88,8 +88,8 @@ class CanvasDrawer {
   }
 
   private drawCandleStick(record: OHLCRecord, i: number) {
-    this.drawStick(record, i);
     this.drawCandle(record, i);
+    this.drawStick(record, i);
   }
 
   private drawStick(record: OHLCRecord, i: number) {
