@@ -1,8 +1,8 @@
 import { scaleLinear } from "d3-scale";
 
 const candlestickToColor = (candlestick: Candlestick): string => {
-  if (candlestick.Open === candlestick.Close) return "silver";
-  return candlestick.Open > candlestick.Close ? "red" : "green";
+  if (candlestick.open === candlestick.close) return "silver";
+  return candlestick.open > candlestick.close ? "red" : "green";
 };
 
 class CanvasDrawer {
@@ -68,8 +68,8 @@ class CanvasDrawer {
     );
 
     this.yScale.domain([
-      Math.min(...candlesticks.map((candlestick) => candlestick.Low)),
-      Math.max(...candlesticks.map((candlestick) => candlestick.High)),
+      Math.min(...candlesticks.map((candlestick) => candlestick.low)),
+      Math.max(...candlesticks.map((candlestick) => candlestick.high)),
     ]);
 
     this.xScale.domain([firstVisibleCandleIndex, lastVisibleCandleIndex + 1]);
@@ -99,12 +99,12 @@ class CanvasDrawer {
 
     this.context.moveTo(
       this.xScale(i) + this.candleStickWidth / 2,
-      this.yScale(Math.max(candlestick.High, candlestick.Low))
+      this.yScale(Math.max(candlestick.high, candlestick.low))
     );
 
     this.context.lineTo(
       this.xScale(i) + this.candleStickWidth / 2,
-      this.yScale(Math.min(candlestick.High, candlestick.Low))
+      this.yScale(Math.min(candlestick.high, candlestick.low))
     );
 
     this.context.strokeStyle = candlestickToColor(candlestick);
@@ -119,12 +119,12 @@ class CanvasDrawer {
 
     this.context.rect(
       this.xScale(i),
-      this.yScale(Math.max(candlestick.Open, candlestick.Close)),
+      this.yScale(Math.max(candlestick.open, candlestick.close)),
       this.candleStickWidth,
-      candlestick.Open === candlestick.Close
+      candlestick.open === candlestick.close
         ? 1
-        : this.yScale(Math.min(candlestick.Open, candlestick.Close)) -
-            this.yScale(Math.max(candlestick.Open, candlestick.Close))
+        : this.yScale(Math.min(candlestick.open, candlestick.close)) -
+            this.yScale(Math.max(candlestick.open, candlestick.close))
     );
 
     this.context.fillStyle = candlestickToColor(candlestick);
