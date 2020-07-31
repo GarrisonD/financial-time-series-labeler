@@ -1,8 +1,8 @@
 import { scaleLinear } from "d3-scale";
 
-const ohlcRecordToColor = (record: Candlestick): string => {
-  if (record.Open === record.Close) return "silver";
-  return record.Open > record.Close ? "red" : "green";
+const candlestickToColor = (candlestick: Candlestick): string => {
+  if (candlestick.Open === candlestick.Close) return "silver";
+  return candlestick.Open > candlestick.Close ? "red" : "green";
 };
 
 class CanvasDrawer {
@@ -18,7 +18,7 @@ class CanvasDrawer {
   private width: number;
   private height: number;
 
-  private records: readonly Candlestick[];
+  private candlesticks: readonly Candlestick[];
 
   public xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
@@ -29,14 +29,14 @@ class CanvasDrawer {
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
-    records: Candlestick[]
+    candlesticks: Candlestick[]
   ) {
     this.canvas = canvas;
 
     this.width = width;
     this.height = height;
 
-    this.records = records;
+    this.candlesticks = candlesticks;
 
     this.xScale = scaleLinear().range([0, width]);
     this.yScale = scaleLinear().range([height, 0]);
@@ -62,14 +62,14 @@ class CanvasDrawer {
   draw(firstVisibleCandleIndex: number, lastVisibleCandleIndex: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
-    const records = this.records.slice(
+    const candlesticks = this.candlesticks.slice(
       Math.max(Math.floor(firstVisibleCandleIndex), 0),
-      Math.min(Math.ceil(lastVisibleCandleIndex + 1), this.records.length)
+      Math.min(Math.ceil(lastVisibleCandleIndex + 1), this.candlesticks.length)
     );
 
     this.yScale.domain([
-      Math.min(...records.map((record) => record.Low)),
-      Math.max(...records.map((record) => record.High)),
+      Math.min(...candlesticks.map((candlestick) => candlestick.Low)),
+      Math.max(...candlesticks.map((candlestick) => candlestick.High)),
     ]);
 
     this.xScale.domain([firstVisibleCandleIndex, lastVisibleCandleIndex + 1]);
@@ -79,55 +79,55 @@ class CanvasDrawer {
 
     this.context.clearRect(0, 0, this.width, this.height);
 
-    records.forEach((record, i) => {
+    candlesticks.forEach((candlestick, i) => {
       this.drawCandleStick(
-        record,
+        candlestick,
         i + Math.max(Math.floor(firstVisibleCandleIndex), 0)
       );
     });
   }
 
-  private drawCandleStick(record: Candlestick, i: number) {
-    this.drawCandle(record, i);
-    this.drawStick(record, i);
+  private drawCandleStick(candlestick: Candlestick, i: number) {
+    this.drawCandle(candlestick, i);
+    this.drawStick(candlestick, i);
   }
 
-  private drawStick(record: Candlestick, i: number) {
+  private drawStick(candlestick: Candlestick, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.moveTo(
       this.xScale(i) + this.candleStickWidth / 2,
-      this.yScale(Math.max(record.High, record.Low))
+      this.yScale(Math.max(candlestick.High, candlestick.Low))
     );
 
     this.context.lineTo(
       this.xScale(i) + this.candleStickWidth / 2,
-      this.yScale(Math.min(record.High, record.Low))
+      this.yScale(Math.min(candlestick.High, candlestick.Low))
     );
 
-    this.context.strokeStyle = ohlcRecordToColor(record);
+    this.context.strokeStyle = candlestickToColor(candlestick);
 
     this.context.stroke();
   }
 
-  private drawCandle(record: Candlestick, i: number) {
+  private drawCandle(candlestick: Candlestick, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
 
     this.context.rect(
       this.xScale(i),
-      this.yScale(Math.max(record.Open, record.Close)),
+      this.yScale(Math.max(candlestick.Open, candlestick.Close)),
       this.candleStickWidth,
-      record.Open === record.Close
+      candlestick.Open === candlestick.Close
         ? 1
-        : this.yScale(Math.min(record.Open, record.Close)) -
-            this.yScale(Math.max(record.Open, record.Close))
+        : this.yScale(Math.min(candlestick.Open, candlestick.Close)) -
+            this.yScale(Math.max(candlestick.Open, candlestick.Close))
     );
 
-    this.context.fillStyle = ohlcRecordToColor(record);
+    this.context.fillStyle = candlestickToColor(candlestick);
     this.context.fill();
 
     this.context.strokeStyle = "white";

@@ -7,7 +7,7 @@ const INITIAL_VISIBLE_CANDLES_COUNT = 150;
 const SCROLL_BASE_COEFFICIENT = 0.2;
 const ZOOM_BASE_COEFFICIENT = 0.999;
 
-const OHLCChart = ({ records }: NamedCandlesticks) => {
+const OHLCChart = ({ candlesticks }: NamedCandlesticks) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -19,7 +19,7 @@ const OHLCChart = ({ records }: NamedCandlesticks) => {
       canvas,
       container.clientWidth,
       container.clientHeight,
-      records
+      candlesticks
     );
 
     canvasDrawer.prepare();
@@ -43,7 +43,7 @@ const OHLCChart = ({ records }: NamedCandlesticks) => {
           INITIAL_VISIBLE_CANDLES_COUNT * (transform.k - 1) * 0.5
       );
     });
-  }, [records]);
+  }, [candlesticks]);
 
   return (
     <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }}>
