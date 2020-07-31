@@ -1,4 +1,4 @@
-type OHLCRecord = {
+type Candlestick = {
   Timestamp: number;
   Open: number;
   High: number;
@@ -7,4 +7,4 @@ type OHLCRecord = {
   Volume: number;
 };
 
-type OHLCFile = { name: string; records: OHLCRecord[] };
+type NamedCandlesticks = { name: string; candlesticks: Candlestick[] };

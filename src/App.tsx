@@ -1,17 +1,19 @@
 import React from "react";
 
-import OHLCChart from "components/OHLCChart";
+import CandlesticksChart from "components/CandlesticksChart";
 import CSVUploader from "components/CSVUploader";
 
 const App = () => {
-  const [ohlcFile, setOHLCFile] = React.useState<OHLCFile>();
+  const [namedCandlesticks, setNamedCandlesticks] = React.useState<
+    NamedCandlesticks
+  >();
 
   return (
     <div style={{ display: "flex", flex: 1, padding: "10px" }}>
-      {ohlcFile ? (
-        <OHLCChart {...ohlcFile} />
+      {namedCandlesticks ? (
+        <CandlesticksChart {...namedCandlesticks} />
       ) : (
-        <CSVUploader onFileParsed={setOHLCFile} />
+        <CSVUploader onFileParsed={setNamedCandlesticks} />
       )}
     </div>
   );
