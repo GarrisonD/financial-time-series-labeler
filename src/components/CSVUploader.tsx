@@ -9,7 +9,7 @@ const CSVUploader = ({
   onFileParsed: (file: OHLCFile) => void;
 }) => {
   const handleParseComplete = React.useCallback<
-    Required<Papa.ParseConfig<OHLCRecord>>["complete"]
+    Required<Papa.ParseConfig<Candlestick>>["complete"]
   >(
     (result, file) => {
       if (result.errors.length > 0) {
@@ -28,7 +28,7 @@ const CSVUploader = ({
       // CSV file is being uploaded at once
       const file = files[0];
 
-      Papa.parse<OHLCRecord>(file, {
+      Papa.parse<Candlestick>(file, {
         complete: handleParseComplete,
         dynamicTyping: true,
         header: true,

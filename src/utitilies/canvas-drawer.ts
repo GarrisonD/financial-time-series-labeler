@@ -1,6 +1,6 @@
 import { scaleLinear } from "d3-scale";
 
-const ohlcRecordToColor = (record: OHLCRecord): string => {
+const ohlcRecordToColor = (record: Candlestick): string => {
   if (record.Open === record.Close) return "silver";
   return record.Open > record.Close ? "red" : "green";
 };
@@ -18,7 +18,7 @@ class CanvasDrawer {
   private width: number;
   private height: number;
 
-  private records: readonly OHLCRecord[];
+  private records: readonly Candlestick[];
 
   public xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
@@ -29,7 +29,7 @@ class CanvasDrawer {
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
-    records: OHLCRecord[]
+    records: Candlestick[]
   ) {
     this.canvas = canvas;
 
@@ -87,12 +87,12 @@ class CanvasDrawer {
     });
   }
 
-  private drawCandleStick(record: OHLCRecord, i: number) {
+  private drawCandleStick(record: Candlestick, i: number) {
     this.drawCandle(record, i);
     this.drawStick(record, i);
   }
 
-  private drawStick(record: OHLCRecord, i: number) {
+  private drawStick(record: Candlestick, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
@@ -112,7 +112,7 @@ class CanvasDrawer {
     this.context.stroke();
   }
 
-  private drawCandle(record: OHLCRecord, i: number) {
+  private drawCandle(record: Candlestick, i: number) {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     this.context.beginPath();
