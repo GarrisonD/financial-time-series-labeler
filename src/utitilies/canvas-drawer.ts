@@ -42,7 +42,7 @@ class CanvasDrawer {
     this.yScale = scaleLinear().range([height, 0]);
   }
 
-  prepare(scale = window.devicePixelRatio) {
+  prepare({ scale } = { scale: window.devicePixelRatio }) {
     this.canvas.width = this.width * scale;
     this.canvas.height = this.height * scale;
 
