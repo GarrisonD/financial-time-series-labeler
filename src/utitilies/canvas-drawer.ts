@@ -6,14 +6,10 @@ const candlestickToColor = (candlestick: Candlestick): string => {
 };
 
 class CanvasDrawer {
-  static readonly GET_CONTEXT_2D_FAILED_MSG =
-    "Getting of 2D Context failed... May your browser not support it?..";
-
   static readonly CONTEXT_2D_MISSING_MSG =
     "2D Context is missing... I suppose you forget to call #prepare...";
 
-  private canvas: HTMLCanvasElement;
-  private context?: CanvasRenderingContext2D;
+  private context: CanvasRenderingContext2D;
 
   private width: number;
   private height: number;
@@ -26,12 +22,12 @@ class CanvasDrawer {
   private candlestickWidth = 0;
 
   constructor(
-    canvas: HTMLCanvasElement,
+    context: CanvasRenderingContext2D,
     width: number,
     height: number,
     candlesticks: Candlestick[]
   ) {
-    this.canvas = canvas;
+    this.context = context;
 
     this.width = width;
     this.height = height;
@@ -43,23 +39,6 @@ class CanvasDrawer {
 
     this.yScale = new LinearScale();
     this.yScale.range = [height, 0];
-  }
-
-  prepare({ scale } = { scale: window.devicePixelRatio }) {
-    this.canvas.width = this.width * scale;
-    this.canvas.height = this.height * scale;
-
-    this.canvas.style.width = `${this.width}px`;
-    this.canvas.style.height = `${this.height}px`;
-
-    const context = this.canvas.getContext("2d");
-
-    if (context) {
-      this.context = context;
-      this.context.scale(scale, scale);
-    } else {
-      throw CanvasDrawer.GET_CONTEXT_2D_FAILED_MSG;
-    }
   }
 
   draw(firstVisibleCandleIndex: number, lastVisibleCandleIndex: number) {
