@@ -1,4 +1,4 @@
-import { scaleLinear } from "d3-scale";
+import LinearScale from "./linear-scale";
 
 const candlestickToColor = (candlestick: Candlestick): string => {
   if (candlestick.open === candlestick.close) return "silver";
@@ -20,8 +20,8 @@ class CanvasDrawer {
 
   private candlesticks: readonly Candlestick[];
 
-  public xScale: d3.ScaleLinear<number, number>;
-  private yScale: d3.ScaleLinear<number, number>;
+  public xScale: LinearScale;
+  private yScale: LinearScale;
 
   private candlestickWidth = 0;
 
@@ -38,8 +38,11 @@ class CanvasDrawer {
 
     this.candlesticks = candlesticks;
 
-    this.xScale = scaleLinear().range([0, width]);
-    this.yScale = scaleLinear().range([height, 0]);
+    this.xScale = new LinearScale();
+    this.xScale.range = [0, width];
+
+    this.yScale = new LinearScale();
+    this.yScale.range = [height, 0];
   }
 
   prepare({ scale } = { scale: window.devicePixelRatio }) {
@@ -67,12 +70,12 @@ class CanvasDrawer {
       Math.min(Math.ceil(lastVisibleCandleIndex + 1), this.candlesticks.length)
     );
 
-    this.yScale.domain([
+    this.yScale.domain = [
       Math.min(...candlesticks.map((candlestick) => candlestick.low)),
       Math.max(...candlesticks.map((candlestick) => candlestick.high)),
-    ]);
+    ];
 
-    this.xScale.domain([firstVisibleCandleIndex, lastVisibleCandleIndex + 1]);
+    this.xScale.domain = [firstVisibleCandleIndex, lastVisibleCandleIndex + 1];
 
     this.candlestickWidth =
       this.width / (lastVisibleCandleIndex - firstVisibleCandleIndex + 1);
@@ -95,13 +98,13 @@ class CanvasDrawer {
     this.context.beginPath();
 
     this.context.moveTo(
-      this.xScale(candlestick.index) + this.candlestickWidth / 2,
-      this.yScale(Math.max(candlestick.high, candlestick.low))
+      this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
+      this.yScale.domainToRange(Math.max(candlestick.high, candlestick.low))
     );
 
     this.context.lineTo(
-      this.xScale(candlestick.index) + this.candlestickWidth / 2,
-      this.yScale(Math.min(candlestick.high, candlestick.low))
+      this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
+      this.yScale.domainToRange(Math.min(candlestick.high, candlestick.low))
     );
 
     this.context.strokeStyle = candlestickToColor(candlestick);
@@ -115,13 +118,17 @@ class CanvasDrawer {
     this.context.beginPath();
 
     this.context.rect(
-      this.xScale(candlestick.index),
-      this.yScale(Math.max(candlestick.open, candlestick.close)),
+      this.xScale.domainToRange(candlestick.index),
+      this.yScale.domainToRange(Math.max(candlestick.open, candlestick.close)),
       this.candlestickWidth,
       candlestick.open === candlestick.close
         ? 1
-        : this.yScale(Math.min(candlestick.open, candlestick.close)) -
-            this.yScale(Math.max(candlestick.open, candlestick.close))
+        : this.yScale.domainToRange(
+            Math.min(candlestick.open, candlestick.close)
+          ) -
+            this.yScale.domainToRange(
+              Math.max(candlestick.open, candlestick.close)
+            )
     );
 
     this.context.fillStyle = candlestickToColor(candlestick);
