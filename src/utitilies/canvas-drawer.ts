@@ -6,7 +6,7 @@ const candlestickToColor = (candlestick: Candlestick): string => {
 };
 
 class CanvasDrawer {
-  static readonly GET_CONTEXT_2D_FAIL_MSG =
+  static readonly GET_CONTEXT_2D_FAILED_MSG =
     "Getting of 2D Context failed... May your browser not support it?..";
 
   static readonly CONTEXT_2D_MISSING_MSG =
@@ -55,7 +55,7 @@ class CanvasDrawer {
       this.context = context;
       this.context.scale(scale, scale);
     } else {
-      throw CanvasDrawer.GET_CONTEXT_2D_FAIL_MSG;
+      throw CanvasDrawer.GET_CONTEXT_2D_FAILED_MSG;
     }
   }
 
