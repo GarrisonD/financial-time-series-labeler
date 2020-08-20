@@ -14,10 +14,6 @@ const transform = { k: 1, x: 0, y: 0 };
 
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
-
-  const containerHeight = containerDimensions?.height;
-  const containerWidth = containerDimensions?.width;
-
   const [canvasDrawer, setCanvasDrawer] = React.useState<CanvasDrawer>();
 
   const handleContextReady = React.useCallback<
@@ -26,8 +22,8 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     (context) => {
       const canvasDrawer = new CanvasDrawer(
         context,
-        containerWidth!,
-        containerHeight!,
+        containerDimensions!.width,
+        containerDimensions!.height,
         candlesticks
       );
 
@@ -35,7 +31,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
 
       setCanvasDrawer(canvasDrawer);
     },
-    [candlesticks, containerHeight, containerWidth]
+    [candlesticks, containerDimensions]
   );
 
   const handleCanvasOnSteroidsWheel = React.useCallback<
