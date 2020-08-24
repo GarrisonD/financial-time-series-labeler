@@ -22,7 +22,7 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
 }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const canvas = canvasRef.current!;
 
     // Turn off the transparency feature. According to MSN it
