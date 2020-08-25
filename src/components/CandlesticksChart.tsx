@@ -1,6 +1,6 @@
 import React from "react";
 
-import CanvasDrawer from "utitilies/canvas-drawer";
+import CanvasDrawer from "utils/canvas-drawer";
 import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
 
 import useDimensions from "hooks/useDimensions";
