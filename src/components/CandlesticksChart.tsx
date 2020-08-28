@@ -1,6 +1,7 @@
 import React from "react";
 
 import CanvasDrawer from "utils/canvas-drawer";
+import InfiniteDrawer from "utils/infinite-drawer";
 import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
 
 import useDimensions from "hooks/useDimensions";
@@ -18,12 +19,26 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [scale, changeScaleBy] = useScale();
 
   React.useEffect(() => {
-    const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (scale - 1);
+    if (canvasDrawer) {
+      const infiniteDrawer = new InfiniteDrawer(canvasDrawer);
 
-    canvasDrawer?.draw(
-      offset - tmp / 2 + 0,
-      offset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT
-    );
+      infiniteDrawer.play();
+
+      return () => {
+        infiniteDrawer.stop();
+      };
+    }
+  }, [canvasDrawer]);
+
+  React.useEffect(() => {
+    if (canvasDrawer) {
+      const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (scale - 1);
+
+      canvasDrawer.firstVisibleCandleIndex = offset - tmp / 2 + 0;
+
+      canvasDrawer.lastVisibleCandleIndex =
+        offset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
+    }
   }, [canvasDrawer, offset, scale]);
 
   const handleContextReady = React.useCallback<

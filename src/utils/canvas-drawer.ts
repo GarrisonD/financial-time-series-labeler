@@ -1,25 +1,29 @@
 import LinearScale from "./linear-scale";
+import { Drawer } from "./infinite-drawer";
 
 const candlestickToColor = (candlestick: Candlestick): string => {
   if (candlestick.open === candlestick.close) return "silver";
   return candlestick.open > candlestick.close ? "red" : "green";
 };
 
-class CanvasDrawer {
+class CanvasDrawer implements Drawer {
   static readonly CONTEXT_2D_MISSING_MSG =
     "2D Context is missing... I suppose you forget to call #prepare...";
 
-  private context: CanvasRenderingContext2D;
+  private readonly context: CanvasRenderingContext2D;
 
-  private width: number;
-  private height: number;
+  private readonly width: number;
+  private readonly height: number;
 
-  private candlesticks: readonly Candlestick[];
+  private readonly candlesticks: readonly Candlestick[];
 
-  public xScale: LinearScale;
-  private yScale: LinearScale;
+  public readonly xScale: LinearScale;
+  private readonly yScale: LinearScale;
 
   private candlestickWidth = 0;
+
+  firstVisibleCandleIndex = 0;
+  lastVisibleCandleIndex = 0;
 
   constructor(
     context: CanvasRenderingContext2D,
@@ -41,12 +45,15 @@ class CanvasDrawer {
     this.yScale.range = [height, 0];
   }
 
-  draw(firstVisibleCandleIndex: number, lastVisibleCandleIndex: number) {
+  draw() {
     if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
 
     const candlesticks = this.candlesticks.slice(
-      Math.max(Math.floor(firstVisibleCandleIndex), 0),
-      Math.min(Math.ceil(lastVisibleCandleIndex + 1), this.candlesticks.length)
+      Math.max(Math.floor(this.firstVisibleCandleIndex), 0),
+      Math.min(
+        Math.ceil(this.lastVisibleCandleIndex + 1),
+        this.candlesticks.length
+      )
     );
 
     this.yScale.domain = [
@@ -54,10 +61,14 @@ class CanvasDrawer {
       Math.max(...candlesticks.map((candlestick) => candlestick.high)),
     ];
 
-    this.xScale.domain = [firstVisibleCandleIndex, lastVisibleCandleIndex + 1];
+    this.xScale.domain = [
+      this.firstVisibleCandleIndex,
+      this.lastVisibleCandleIndex + 1,
+    ];
 
     this.candlestickWidth =
-      this.width / (lastVisibleCandleIndex - firstVisibleCandleIndex + 1);
+      this.width /
+      (this.lastVisibleCandleIndex - this.firstVisibleCandleIndex + 1);
 
     this.context.clearRect(0, 0, this.width, this.height);
 
@@ -87,7 +98,6 @@ class CanvasDrawer {
     );
 
     this.context.strokeStyle = candlestickToColor(candlestick);
-
     this.context.stroke();
   }
 

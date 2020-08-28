@@ -2,8 +2,8 @@ class LinearScale {
   static readonly DOMAIN_NOT_SPECIFIED = "Domain is not specified!";
   static readonly RANGE_NOT_SPECIFIED = "Range is not specified!";
 
-  public domain: [number, number] | undefined;
-  public range: [number, number] | undefined;
+  public domain?: [number, number];
+  public range?: [number, number];
 
   private get domainToRangeScale() {
     if (this.domain == null) throw LinearScale.DOMAIN_NOT_SPECIFIED;
