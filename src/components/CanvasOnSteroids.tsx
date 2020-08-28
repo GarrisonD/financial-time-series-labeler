@@ -25,9 +25,10 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current!;
 
-    // Turn off the transparency feature. According to MSN it
-    // allows some browsers to optimize and speed up the rendering
-    const context = canvas.getContext("2d", { alpha: false });
+    const context = canvas.getContext("2d", {
+      alpha: false,
+      desynchronized: true,
+    });
 
     if (context == null) {
       throw new Error(GET_CONTEXT_2D_FAILED_MSG);
