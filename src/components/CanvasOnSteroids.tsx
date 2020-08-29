@@ -4,7 +4,7 @@ const GET_CONTEXT_2D_FAILED_MSG =
   "Getting of 2D Context failed... May your browser not support it?..";
 
 type CanvasOnSteroidsProps = {
-  onContextReady: (context: CanvasRenderingContext2D) => void;
+  onContextReady: (context: OffscreenCanvasRenderingContext2D) => void;
   onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
   scale?: number;
   // Keep these two props grouped:
@@ -25,7 +25,7 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current!;
 
-    const context = canvas.getContext("2d", {
+    const context = canvas.transferControlToOffscreen().getContext("2d", {
       alpha: false,
       desynchronized: true,
     });

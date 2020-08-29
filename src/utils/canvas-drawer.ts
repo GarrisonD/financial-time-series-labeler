@@ -10,7 +10,7 @@ class CanvasDrawer implements Drawer {
   static readonly CONTEXT_2D_MISSING_MSG =
     "2D Context is missing... I suppose you forget to call #prepare...";
 
-  private readonly context: CanvasRenderingContext2D;
+  private readonly context: OffscreenCanvasRenderingContext2D;
 
   private readonly width: number;
   private readonly height: number;
@@ -26,7 +26,7 @@ class CanvasDrawer implements Drawer {
   lastVisibleCandleIndex = 0;
 
   constructor(
-    context: CanvasRenderingContext2D,
+    context: OffscreenCanvasRenderingContext2D,
     width: number,
     height: number,
     candlesticks: Candlestick[]
