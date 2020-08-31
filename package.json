@@ -12,7 +12,8 @@
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.3",
     "react-scripts": "3.4.3",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "worker-loader": "^3.0.2"
   },
   "devDependencies": {
     "husky": "^4.2.5",

@@ -9,6 +9,12 @@ import useDimensions from "hooks/useDimensions";
 import useOffset from "hooks/charting/useOffset";
 import useScale from "hooks/charting/useScale";
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import TestWorker from "worker-loader!workers/test";
+
+const worker = new TestWorker();
+worker.postMessage({ something: 123 });
+
 const INITIAL_VISIBLE_CANDLES_COUNT = 150;
 
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
