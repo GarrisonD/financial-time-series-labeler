@@ -53,7 +53,7 @@ class InfiniteDrawer {
    * Starts the infinite drawing loop.
    */
   play() {
-    this.requestId = window.requestAnimationFrame((...args) => {
+    this.requestId = requestAnimationFrame((...args) => {
       this.drawer.draw(...args);
 
       this.play();
@@ -81,7 +81,7 @@ class InfiniteDrawer {
    */
   stop() {
     if (this.requestId) {
-      window.cancelAnimationFrame(this.requestId);
+      cancelAnimationFrame(this.requestId);
 
       this.requestId = undefined;
     }
