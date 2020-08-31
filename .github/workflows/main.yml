@@ -12,12 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Git name and email
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "no-reply@github-actions-bot"
-
-      - name: Install, build and deploy
+      - name: Install dependencies and build
         run: |
           npm i --only=prod
-          npm run deploy
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.5.9
+        with:
+          BRANCH: gh-pages
+          FOLDER: build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
