@@ -1,10 +1,13 @@
 import React from "react";
 
-const GET_CONTEXT_2D_FAILED_MSG =
-  "Getting of 2D Context failed... May your browser not support it?..";
+type ScaledRenderingContextProvider = (HTMLCanvasElement | OffscreenCanvas) & {
+  scale: number;
+};
 
 type CanvasOnSteroidsProps = {
-  onContextReady: (context: OffscreenCanvasRenderingContext2D) => void;
+  onScaledRenderingContextProviderReady: (
+    scaledRenderingContextProvider: ScaledRenderingContextProvider
+  ) => void;
   onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
   scale?: number;
   // Keep these two props grouped:
@@ -13,36 +16,31 @@ type CanvasOnSteroidsProps = {
 };
 
 const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
-  onContextReady,
+  onScaledRenderingContextProviderReady,
   scale = window.devicePixelRatio,
-  onWheel,
   // Keep these two props grouped:
   height,
   width,
+  ...rest
 }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current!;
 
-    const context = canvas.transferControlToOffscreen().getContext("2d", {
-      alpha: false,
-      desynchronized: true,
-    });
+    const scaledRenderingContextProvider = Object.assign(
+      "transferControlToOffscreen" in canvas
+        ? canvas.transferControlToOffscreen()
+        : canvas,
+      { scale }
+    );
 
-    if (context == null) {
-      throw new Error(GET_CONTEXT_2D_FAILED_MSG);
-    }
-
-    // Fix issue with blurry canvas on Retina
-    context.scale(scale, scale);
-
-    onContextReady(context);
-  }, [scale, onContextReady]);
+    onScaledRenderingContextProviderReady(scaledRenderingContextProvider);
+  }, [scale, onScaledRenderingContextProviderReady]);
 
   return (
     <canvas
-      onWheel={onWheel}
+      {...rest}
       ref={canvasRef}
       style={{ height, width }}
       // Keep these two props grouped:
@@ -54,4 +52,4 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
 
 export default React.memo(CanvasOnSteroids);
 
-export type { CanvasOnSteroidsProps };
+export type { CanvasOnSteroidsProps, ScaledRenderingContextProvider };

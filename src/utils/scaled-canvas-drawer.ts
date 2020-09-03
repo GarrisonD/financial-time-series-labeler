@@ -1,3 +1,5 @@
+import { ScaledRenderingContextProvider } from "components/CanvasOnSteroids";
+
 import LinearScale from "./linear-scale";
 import { Drawer } from "./infinite-drawer";
 
@@ -6,19 +8,23 @@ const candlestickToColor = (candlestick: Candlestick): string => {
   return candlestick.open > candlestick.close ? "red" : "green";
 };
 
-class CanvasDrawer implements Drawer {
-  static readonly CONTEXT_2D_MISSING_MSG =
-    "2D Context is missing... I suppose you forget to call #prepare...";
+class ScaledCanvasDrawer implements Drawer {
+  // TODO: make me private
+  public readonly scaledRenderingContextProvider: ScaledRenderingContextProvider;
 
-  private readonly context: OffscreenCanvasRenderingContext2D;
+  private context?:
+    | OffscreenCanvasRenderingContext2D
+    | CanvasRenderingContext2D;
 
-  private readonly width: number;
   private readonly height: number;
+  private readonly width: number;
 
   private readonly candlesticks: readonly Candlestick[];
 
-  public readonly xScale: LinearScale;
-  private readonly yScale: LinearScale;
+  private readonly scale: number;
+
+  public readonly xScale = new LinearScale();
+  private readonly yScale = new LinearScale();
 
   private candlestickWidth = 0;
 
@@ -26,28 +32,26 @@ class CanvasDrawer implements Drawer {
   lastVisibleCandleIndex = 0;
 
   constructor(
-    context: OffscreenCanvasRenderingContext2D,
-    width: number,
+    scaledRenderingContextProvider: ScaledRenderingContextProvider,
     height: number,
-    candlesticks: Candlestick[]
+    width: number,
+    candlesticks: readonly Candlestick[],
+    scale: number
   ) {
-    this.context = context;
+    this.scaledRenderingContextProvider = scaledRenderingContextProvider;
 
-    this.width = width;
     this.height = height;
+    this.width = width;
 
     this.candlesticks = candlesticks;
 
-    this.xScale = new LinearScale();
-    this.xScale.range = [0, width];
+    this.scale = scale;
 
-    this.yScale = new LinearScale();
+    this.xScale.range = [0, width];
     this.yScale.range = [height, 0];
   }
 
   draw() {
-    if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
-
     const candlesticks = this.candlesticks.slice(
       Math.max(Math.floor(this.firstVisibleCandleIndex), 0),
       Math.min(
@@ -70,7 +74,7 @@ class CanvasDrawer implements Drawer {
       this.width /
       (this.lastVisibleCandleIndex - this.firstVisibleCandleIndex + 1);
 
-    this.context.clearRect(0, 0, this.width, this.height);
+    this.getContext().clearRect(0, 0, this.width, this.height);
 
     candlesticks.forEach((candlestick) => {
       this.drawCandleStick(candlestick);
@@ -83,30 +87,26 @@ class CanvasDrawer implements Drawer {
   }
 
   private drawStick(candlestick: Candlestick) {
-    if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
+    this.getContext().beginPath();
 
-    this.context.beginPath();
-
-    this.context.moveTo(
+    this.getContext().moveTo(
       this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
       this.yScale.domainToRange(Math.max(candlestick.high, candlestick.low))
     );
 
-    this.context.lineTo(
+    this.getContext().lineTo(
       this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
       this.yScale.domainToRange(Math.min(candlestick.high, candlestick.low))
     );
 
-    this.context.strokeStyle = candlestickToColor(candlestick);
-    this.context.stroke();
+    this.getContext().strokeStyle = candlestickToColor(candlestick);
+    this.getContext().stroke();
   }
 
   private drawCandle(candlestick: Candlestick) {
-    if (this.context == null) throw CanvasDrawer.CONTEXT_2D_MISSING_MSG;
+    this.getContext().beginPath();
 
-    this.context.beginPath();
-
-    this.context.rect(
+    this.getContext().rect(
       this.xScale.domainToRange(candlestick.index),
       this.yScale.domainToRange(Math.max(candlestick.open, candlestick.close)),
       this.candlestickWidth,
@@ -120,12 +120,32 @@ class CanvasDrawer implements Drawer {
             )
     );
 
-    this.context.fillStyle = candlestickToColor(candlestick);
-    this.context.fill();
+    this.getContext().fillStyle = candlestickToColor(candlestick);
+    this.getContext().fill();
 
-    this.context.strokeStyle = "white";
-    this.context.stroke();
+    this.getContext().strokeStyle = "white";
+    this.getContext().stroke();
+  }
+
+  private getContext() {
+    if (this.context == null) {
+      const context = this.scaledRenderingContextProvider.getContext("2d", {
+        alpha: true,
+        desynchronized: true,
+      });
+
+      if (context == null) {
+        // TODO: specify the error message!!!
+        throw new Error("Some error here!");
+      }
+
+      context.scale(this.scale, this.scale);
+
+      this.context = context;
+    }
+
+    return this.context;
   }
 }
 
-export default CanvasDrawer;
+export default ScaledCanvasDrawer;
