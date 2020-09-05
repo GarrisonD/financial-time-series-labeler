@@ -19,7 +19,7 @@ const useInfiniteDrawerWorker = () => {
   return {
     init: (args: Omit<MessageData, "type">) => {
       const message: MessageData = { type: "INIT", ...args };
-      worker?.postMessage(message, [args.scaledRenderingContextProvider]);
+      worker?.postMessage(message, [args.renderingContextProvider]);
     },
   };
 };

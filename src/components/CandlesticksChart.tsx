@@ -1,9 +1,6 @@
 import React from "react";
 
-import CanvasOnSteroids, {
-  CanvasOnSteroidsProps,
-  ScaledRenderingContextProvider,
-} from "./CanvasOnSteroids";
+import CanvasScaleContext from "contexts/CanvasScale";
 
 import useDimensions from "hooks/useDimensions";
 import useInfiniteDrawerWorker from "hooks/useInfiniteDrawerWorker";
@@ -11,33 +8,46 @@ import useInfiniteDrawerWorker from "hooks/useInfiniteDrawerWorker";
 import useOffset from "hooks/charting/useOffset";
 import useScale from "hooks/charting/useScale";
 
+import CanvasOnSteroids, {
+  CanvasOnSteroidsProps,
+  RenderingContextProvider,
+} from "./CanvasOnSteroids";
+
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
 
   const [
-    scaledRenderingContextProvider,
-    setScaledRenderingContextProvider,
-  ] = React.useState<ScaledRenderingContextProvider>();
+    renderingContextProvider,
+    setRenderingContextProvider,
+  ] = React.useState<RenderingContextProvider>();
 
-  const [offset, changeOffsetBy] = useOffset();
-  const [scale, changeScaleBy] = useScale();
+  const [chartOffset, changeChartOffsetBy] = useOffset();
+  const [chartScale, changeChartScaleBy] = useScale();
+
+  const canvasScale = React.useContext(CanvasScaleContext);
 
   const { init } = useInfiniteDrawerWorker();
 
   React.useEffect(() => {
     if (containerDimensions) {
-      if (scaledRenderingContextProvider instanceof OffscreenCanvas) {
+      if (renderingContextProvider instanceof OffscreenCanvas) {
         init({
           candlesticks,
-          scale: scaledRenderingContextProvider.scale,
-          scaledRenderingContextProvider,
+          scale: canvasScale,
+          renderingContextProvider,
           ...containerDimensions,
         });
       }
     }
-  }, [candlesticks, containerDimensions, init, scaledRenderingContextProvider]);
+  }, [
+    candlesticks,
+    canvasScale,
+    containerDimensions,
+    init,
+    renderingContextProvider,
+  ]);
 
-  if (candlesticks && offset) {
+  if (candlesticks && chartOffset) {
   }
 
   const handleCanvasOnSteroidsWheel = React.useCallback<
@@ -45,23 +55,21 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   >(
     (event) => {
       if (event.ctrlKey) {
-        changeScaleBy(event.deltaY);
+        changeChartScaleBy(event.deltaY);
       } else {
-        changeOffsetBy(event.deltaY * scale);
+        changeChartOffsetBy(event.deltaY * chartScale);
       }
     },
-    [changeOffsetBy, changeScaleBy, scale]
+    [changeChartOffsetBy, changeChartScaleBy, chartScale]
   );
 
   return (
     <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }}>
       {containerDimensions != null && (
         <CanvasOnSteroids
-          {...containerDimensions}
-          onScaledRenderingContextProviderReady={
-            setScaledRenderingContextProvider
-          }
+          onRenderingContextProviderReady={setRenderingContextProvider}
           onWheel={handleCanvasOnSteroidsWheel}
+          {...containerDimensions}
         />
       )}
     </div>

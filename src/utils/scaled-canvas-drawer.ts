@@ -1,4 +1,4 @@
-import { ScaledRenderingContextProvider } from "components/CanvasOnSteroids";
+import { RenderingContextProvider } from "components/CanvasOnSteroids";
 
 import LinearScale from "./linear-scale";
 import { Drawer } from "./infinite-drawer";
@@ -10,7 +10,7 @@ const candlestickToColor = (candlestick: Candlestick): string => {
 
 class ScaledCanvasDrawer implements Drawer {
   // TODO: make me private
-  public readonly scaledRenderingContextProvider: ScaledRenderingContextProvider;
+  public readonly scaledRenderingContextProvider: RenderingContextProvider;
 
   private context?:
     | OffscreenCanvasRenderingContext2D
@@ -32,7 +32,7 @@ class ScaledCanvasDrawer implements Drawer {
   lastVisibleCandleIndex = 0;
 
   constructor(
-    scaledRenderingContextProvider: ScaledRenderingContextProvider,
+    scaledRenderingContextProvider: RenderingContextProvider,
     height: number,
     width: number,
     candlesticks: readonly Candlestick[],

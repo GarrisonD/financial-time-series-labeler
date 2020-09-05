@@ -3,7 +3,7 @@ import ScaledCanvasDrawer from "utils/scaled-canvas-drawer";
 type MessageData = {
   readonly type: "INIT";
 
-  readonly scaledRenderingContextProvider: OffscreenCanvas & { scale: number };
+  readonly renderingContextProvider: OffscreenCanvas;
 
   readonly scale: number;
 
@@ -23,7 +23,7 @@ onmessage = ({ data }: MessageArgs) => {
   switch (data.type) {
     case "INIT":
       const scaledCanvasDrawer = new ScaledCanvasDrawer(
-        data.scaledRenderingContextProvider,
+        data.renderingContextProvider,
         data.height,
         data.width,
         data.candlesticks,

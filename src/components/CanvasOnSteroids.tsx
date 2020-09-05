@@ -1,42 +1,36 @@
 import React from "react";
 
-type ScaledRenderingContextProvider = (HTMLCanvasElement | OffscreenCanvas) & {
-  scale: number;
-};
+import CanvasScaleContext from "contexts/CanvasScale";
+
+type RenderingContextProvider = HTMLCanvasElement | OffscreenCanvas;
 
 type CanvasOnSteroidsProps = {
-  onScaledRenderingContextProviderReady: (
-    scaledRenderingContextProvider: ScaledRenderingContextProvider
-  ) => void;
+  onRenderingContextProviderReady: (rcp: RenderingContextProvider) => void;
   onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
-  scale?: number;
   // Keep these two props grouped:
   height: number;
   width: number;
 };
 
 const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
-  onScaledRenderingContextProviderReady,
-  scale = window.devicePixelRatio,
+  onRenderingContextProviderReady,
   // Keep these two props grouped:
   height,
   width,
   ...rest
 }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasScale = React.useContext(CanvasScaleContext);
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current!;
 
-    const scaledRenderingContextProvider = Object.assign(
+    onRenderingContextProviderReady(
       "transferControlToOffscreen" in canvas
         ? canvas.transferControlToOffscreen()
-        : canvas,
-      { scale }
+        : canvas
     );
-
-    onScaledRenderingContextProviderReady(scaledRenderingContextProvider);
-  }, [scale, onScaledRenderingContextProviderReady]);
+  }, [onRenderingContextProviderReady]);
 
   return (
     <canvas
@@ -44,12 +38,12 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
       ref={canvasRef}
       style={{ height, width }}
       // Keep these two props grouped:
-      height={height * scale}
-      width={width * scale}
+      height={height * canvasScale}
+      width={width * canvasScale}
     />
   );
 };
 
 export default React.memo(CanvasOnSteroids);
 
-export type { CanvasOnSteroidsProps, ScaledRenderingContextProvider };
+export type { CanvasOnSteroidsProps, RenderingContextProvider };
