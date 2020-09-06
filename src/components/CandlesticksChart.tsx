@@ -13,6 +13,8 @@ import CanvasOnSteroids, {
   RenderingContextProvider,
 } from "./CanvasOnSteroids";
 
+const INITIAL_VISIBLE_CANDLES_COUNT = 150;
+
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
 
@@ -26,15 +28,26 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
 
   const canvasScale = React.useContext(CanvasScaleContext);
 
-  const { init } = useInfiniteDrawerWorker();
+  const [
+    isWorkerReady,
+    isScaledCanvasDrawerReady,
+    isInfiniteDrawingLoopPlaying,
+    {
+      initScaledCanvasDrawer,
+      updateScaledCanvasDrawer,
+      playInfiniteDrawingLoop,
+    },
+  ] = useInfiniteDrawerWorker();
 
   React.useEffect(() => {
-    if (containerDimensions) {
-      if (renderingContextProvider instanceof OffscreenCanvas) {
-        init({
+    if (renderingContextProvider instanceof OffscreenCanvas) {
+      const offscreenCanvas = renderingContextProvider;
+
+      if (containerDimensions) {
+        initScaledCanvasDrawer({
+          canvasScale,
+          offscreenCanvas,
           candlesticks,
-          scale: canvasScale,
-          renderingContextProvider,
           ...containerDimensions,
         });
       }
@@ -43,12 +56,33 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     candlesticks,
     canvasScale,
     containerDimensions,
-    init,
+    initScaledCanvasDrawer,
     renderingContextProvider,
   ]);
 
-  if (candlesticks && chartOffset) {
-  }
+  React.useEffect(() => {
+    if (!isWorkerReady || !isScaledCanvasDrawerReady) return;
+
+    const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
+
+    updateScaledCanvasDrawer({
+      firstVisibleCandleIndex: chartOffset - tmp / 2 + 0,
+      lastVisibleCandleIndex:
+        chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT,
+    });
+
+    if (!isInfiniteDrawingLoopPlaying) {
+      playInfiniteDrawingLoop();
+    }
+  }, [
+    chartOffset,
+    chartScale,
+    isInfiniteDrawingLoopPlaying,
+    isScaledCanvasDrawerReady,
+    isWorkerReady,
+    playInfiniteDrawingLoop,
+    updateScaledCanvasDrawer,
+  ]);
 
   const handleCanvasOnSteroidsWheel = React.useCallback<
     CanvasOnSteroidsProps["onWheel"]

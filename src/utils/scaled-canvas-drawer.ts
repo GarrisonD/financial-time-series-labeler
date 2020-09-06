@@ -10,7 +10,7 @@ const candlestickToColor = (candlestick: Candlestick): string => {
 
 class ScaledCanvasDrawer implements Drawer {
   // TODO: make me private
-  public readonly scaledRenderingContextProvider: RenderingContextProvider;
+  public readonly renderingContextProvider: RenderingContextProvider;
 
   private context?:
     | OffscreenCanvasRenderingContext2D
@@ -31,14 +31,20 @@ class ScaledCanvasDrawer implements Drawer {
   firstVisibleCandleIndex = 0;
   lastVisibleCandleIndex = 0;
 
-  constructor(
-    scaledRenderingContextProvider: RenderingContextProvider,
-    height: number,
-    width: number,
-    candlesticks: readonly Candlestick[],
-    scale: number
-  ) {
-    this.scaledRenderingContextProvider = scaledRenderingContextProvider;
+  constructor({
+    renderingContextProvider,
+    height,
+    width,
+    candlesticks,
+    scale,
+  }: {
+    renderingContextProvider: RenderingContextProvider;
+    height: number;
+    width: number;
+    candlesticks: readonly Candlestick[];
+    scale: number;
+  }) {
+    this.renderingContextProvider = renderingContextProvider;
 
     this.height = height;
     this.width = width;
@@ -129,7 +135,7 @@ class ScaledCanvasDrawer implements Drawer {
 
   private getContext() {
     if (this.context == null) {
-      const context = this.scaledRenderingContextProvider.getContext("2d", {
+      const context = this.renderingContextProvider.getContext("2d", {
         alpha: true,
         desynchronized: true,
       });

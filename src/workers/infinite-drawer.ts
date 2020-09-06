@@ -1,11 +1,11 @@
+import InfiniteDrawer from "utils/infinite-drawer";
 import ScaledCanvasDrawer from "utils/scaled-canvas-drawer";
 
-type MessageData = {
-  readonly type: "INIT";
+type InitScaledCanvasDrawerMessageData = {
+  readonly type: "SCALED_CANVAS_DRAWER/INIT";
 
-  readonly renderingContextProvider: OffscreenCanvas;
-
-  readonly scale: number;
+  readonly canvasScale: number;
+  readonly offscreenCanvas: OffscreenCanvas;
 
   readonly height: number;
   readonly width: number;
@@ -13,37 +13,62 @@ type MessageData = {
   readonly candlesticks: readonly Candlestick[];
 };
 
+type UpdateScaledCanvasDrawerMessageData = {
+  readonly type: "SCALED_CANVAS_DRAWER/UPDATE";
+
+  readonly firstVisibleCandleIndex: number;
+  readonly lastVisibleCandleIndex: number;
+};
+
+type PlayInfiniteDrawingLoopMessageData = {
+  type: "INFINITE_DRAWING_LOOP/PLAY";
+};
+
+type StopInfiniteDrawingLoopMessageData = {
+  type: "INFINITE_DRAWING_LOOP/STOP";
+};
+
 interface MessageArgs extends MessageEvent {
-  readonly data: MessageData;
+  readonly data:
+    | InitScaledCanvasDrawerMessageData
+    | UpdateScaledCanvasDrawerMessageData
+    | PlayInfiniteDrawingLoopMessageData
+    | StopInfiniteDrawingLoopMessageData;
 }
 
-const INITIAL_VISIBLE_CANDLES_COUNT = 150;
+let scaledCanvasDrawer: ScaledCanvasDrawer | undefined;
+let infiniteDrawer: InfiniteDrawer | undefined;
 
 onmessage = ({ data }: MessageArgs) => {
   switch (data.type) {
-    case "INIT":
-      const scaledCanvasDrawer = new ScaledCanvasDrawer(
-        data.renderingContextProvider,
-        data.height,
-        data.width,
-        data.candlesticks,
-        data.scale
-      );
+    case "SCALED_CANVAS_DRAWER/INIT":
+      scaledCanvasDrawer = new ScaledCanvasDrawer({
+        renderingContextProvider: data.offscreenCanvas,
+        height: data.height,
+        width: data.width,
+        candlesticks: data.candlesticks,
+        scale: data.canvasScale,
+      });
 
-      const scale = 1;
-      const offset = 0;
-
-      const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (scale - 1);
-
-      scaledCanvasDrawer.firstVisibleCandleIndex = offset - tmp / 2 + 0;
-
-      scaledCanvasDrawer.lastVisibleCandleIndex =
-        offset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
-
-      scaledCanvasDrawer.draw();
-
+      infiniteDrawer = new InfiniteDrawer(scaledCanvasDrawer);
+      break;
+    case "SCALED_CANVAS_DRAWER/UPDATE":
+      scaledCanvasDrawer!.firstVisibleCandleIndex =
+        data.firstVisibleCandleIndex;
+      scaledCanvasDrawer!.lastVisibleCandleIndex = data.lastVisibleCandleIndex;
+      break;
+    case "INFINITE_DRAWING_LOOP/PLAY":
+      infiniteDrawer!.play(); // throw an error!
+      break;
+    case "INFINITE_DRAWING_LOOP/STOP":
+      infiniteDrawer!.stop(); // throw an error!
       break;
   }
 };
 
-export type { MessageData };
+export type {
+  InitScaledCanvasDrawerMessageData,
+  UpdateScaledCanvasDrawerMessageData,
+  PlayInfiniteDrawingLoopMessageData,
+  StopInfiniteDrawingLoopMessageData,
+};
