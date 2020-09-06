@@ -53,21 +53,21 @@ class InfiniteDrawer {
    * Starts the infinite drawing loop.
    */
   play() {
-    this.requestId = requestAnimationFrame((...args) => {
-      this.drawer.draw(...args);
+    this.requestId = requestAnimationFrame((timestamp: number) => {
+      this.drawer.draw(timestamp);
 
       this.play();
-
-      const timestamp = args[0];
 
       if (this.prevTimestamp) {
         const timestampDiff = timestamp - this.prevTimestamp;
 
         if (timestampDiff > 1000 / 55) {
           console.warn(
-            `Frame rate drop! ${Math.round(timestampDiff)} ms = ${Math.round(
-              1000 / timestampDiff
-            )} FPS`
+            [
+              "FPS drop detected!",
+              "Frame took " + Math.round(timestampDiff) + " ms.",
+              "It's about " + Math.round(1000 / timestampDiff) + " FPS.",
+            ].join(" ")
           );
         }
       }

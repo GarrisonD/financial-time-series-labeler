@@ -1,10 +1,12 @@
 import React from "react";
 
 import {
+  // ScaledCanvasDrawer-related:
   InitScaledCanvasDrawerMessageData,
   UpdateScaledCanvasDrawerMessageData,
-  PlayInfiniteDrawingLoopMessageData,
-  StopInfiniteDrawingLoopMessageData,
+  // InfiniteDrawer-related:
+  PlayInfiniteDrawerMessageData,
+  StopInfiniteDrawerMessageData,
 } from "workers/infinite-drawer";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -20,17 +22,13 @@ const useInfiniteDrawerWorker = () => {
     setScaledCanvasDrawerReady,
   ] = React.useState(false);
 
-  const [
-    isInfiniteDrawingLoopPlaying,
-    setInfiniteDrawingLoopPlaying,
-  ] = React.useState(false);
+  const [isInfiniteDrawerPlaying, setInfiniteDrawerPlaying] = React.useState(
+    false
+  );
 
   React.useEffect(() => {
     const infiniteDrawerWorker = new InfiniteDrawerWorker();
-
-    // cache to have an ability to terminate it later
-    setWorker(infiniteDrawerWorker);
-
+    setWorker(infiniteDrawerWorker); // to terminate later
     return () => infiniteDrawerWorker.terminate();
   }, []);
 
@@ -60,35 +58,37 @@ const useInfiniteDrawerWorker = () => {
     [worker]
   );
 
-  const playInfiniteDrawingLoop = React.useCallback(() => {
-    const message: PlayInfiniteDrawingLoopMessageData = {
+  const playInfiniteDrawer = React.useCallback(() => {
+    const message: PlayInfiniteDrawerMessageData = {
       type: "INFINITE_DRAWING_LOOP/PLAY",
     };
 
     worker!.postMessage(message);
 
-    setInfiniteDrawingLoopPlaying(true);
+    setInfiniteDrawerPlaying(true);
   }, [worker]);
 
-  const stopInfiniteDrawingLoop = React.useCallback(() => {
-    const message: StopInfiniteDrawingLoopMessageData = {
+  const stopInfiniteDrawer = React.useCallback(() => {
+    const message: StopInfiniteDrawerMessageData = {
       type: "INFINITE_DRAWING_LOOP/STOP",
     };
 
     worker!.postMessage(message);
 
-    setInfiniteDrawingLoopPlaying(false);
+    setInfiniteDrawerPlaying(false);
   }, [worker]);
 
   return [
     isWorkerReady,
     isScaledCanvasDrawerReady,
-    isInfiniteDrawingLoopPlaying,
+    isInfiniteDrawerPlaying,
     {
+      // ScaledCanvasDrawer-related:
       initScaledCanvasDrawer,
       updateScaledCanvasDrawer,
-      playInfiniteDrawingLoop,
-      stopInfiniteDrawingLoop,
+      // InfiniteDrawer-related:
+      playInfiniteDrawer,
+      stopInfiniteDrawer,
     },
   ] as const;
 };

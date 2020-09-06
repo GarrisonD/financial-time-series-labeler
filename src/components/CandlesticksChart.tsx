@@ -33,9 +33,11 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     isScaledCanvasDrawerReady,
     isInfiniteDrawingLoopPlaying,
     {
+      // ScaledCanvasDrawer-related:
       initScaledCanvasDrawer,
       updateScaledCanvasDrawer,
-      playInfiniteDrawingLoop,
+      // InfiniteDrawer-related:
+      playInfiniteDrawer,
     },
   ] = useInfiniteDrawerWorker();
 
@@ -72,7 +74,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     });
 
     if (!isInfiniteDrawingLoopPlaying) {
-      playInfiniteDrawingLoop();
+      playInfiniteDrawer();
     }
   }, [
     chartOffset,
@@ -80,7 +82,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     isInfiniteDrawingLoopPlaying,
     isScaledCanvasDrawerReady,
     isWorkerReady,
-    playInfiniteDrawingLoop,
+    playInfiniteDrawer,
     updateScaledCanvasDrawer,
   ]);
 

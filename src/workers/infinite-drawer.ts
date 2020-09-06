@@ -1,6 +1,10 @@
 import InfiniteDrawer from "utils/infinite-drawer";
 import ScaledCanvasDrawer from "utils/scaled-canvas-drawer";
 
+//-----------------------------------------------------------
+// Type definitions for ScaledCanvasDrawer-related messages:
+//-----------------------------------------------------------
+
 type InitScaledCanvasDrawerMessageData = {
   readonly type: "SCALED_CANVAS_DRAWER/INIT";
 
@@ -20,26 +24,38 @@ type UpdateScaledCanvasDrawerMessageData = {
   readonly lastVisibleCandleIndex: number;
 };
 
-type PlayInfiniteDrawingLoopMessageData = {
-  type: "INFINITE_DRAWING_LOOP/PLAY";
+type ScaledCanvasDrawerMessageData =
+  | InitScaledCanvasDrawerMessageData
+  | UpdateScaledCanvasDrawerMessageData;
+
+//-----------------------------------------------------------
+// Type definitions for InfiniteDrawer-related messages:
+//-----------------------------------------------------------
+
+type PlayInfiniteDrawerMessageData = {
+  readonly type: "INFINITE_DRAWING_LOOP/PLAY";
 };
 
-type StopInfiniteDrawingLoopMessageData = {
-  type: "INFINITE_DRAWING_LOOP/STOP";
+type StopInfiniteDrawerMessageData = {
+  readonly type: "INFINITE_DRAWING_LOOP/STOP";
 };
 
-interface MessageArgs extends MessageEvent {
-  readonly data:
-    | InitScaledCanvasDrawerMessageData
-    | UpdateScaledCanvasDrawerMessageData
-    | PlayInfiniteDrawingLoopMessageData
-    | StopInfiniteDrawingLoopMessageData;
+type InfiniteDrawerMessageData =
+  | PlayInfiniteDrawerMessageData
+  | StopInfiniteDrawerMessageData;
+
+//-----------------------------------------------------------
+// Global variables and web worker function:
+//-----------------------------------------------------------
+
+let infiniteDrawer: InfiniteDrawer | undefined;
+let scaledCanvasDrawer: ScaledCanvasDrawer | undefined;
+
+interface Message extends MessageEvent {
+  readonly data: InfiniteDrawerMessageData | ScaledCanvasDrawerMessageData;
 }
 
-let scaledCanvasDrawer: ScaledCanvasDrawer | undefined;
-let infiniteDrawer: InfiniteDrawer | undefined;
-
-onmessage = ({ data }: MessageArgs) => {
+onmessage = ({ data }: Message) => {
   switch (data.type) {
     case "SCALED_CANVAS_DRAWER/INIT":
       scaledCanvasDrawer = new ScaledCanvasDrawer({
@@ -53,9 +69,9 @@ onmessage = ({ data }: MessageArgs) => {
       infiniteDrawer = new InfiniteDrawer(scaledCanvasDrawer);
       break;
     case "SCALED_CANVAS_DRAWER/UPDATE":
-      scaledCanvasDrawer!.firstVisibleCandleIndex =
-        data.firstVisibleCandleIndex;
-      scaledCanvasDrawer!.lastVisibleCandleIndex = data.lastVisibleCandleIndex;
+      const { firstVisibleCandleIndex, lastVisibleCandleIndex } = data;
+      scaledCanvasDrawer!.firstVisibleCandleIndex = firstVisibleCandleIndex;
+      scaledCanvasDrawer!.lastVisibleCandleIndex = lastVisibleCandleIndex;
       break;
     case "INFINITE_DRAWING_LOOP/PLAY":
       infiniteDrawer!.play(); // throw an error!
@@ -67,8 +83,10 @@ onmessage = ({ data }: MessageArgs) => {
 };
 
 export type {
+  // ScaledCanvasDrawer-related:
   InitScaledCanvasDrawerMessageData,
   UpdateScaledCanvasDrawerMessageData,
-  PlayInfiniteDrawingLoopMessageData,
-  StopInfiniteDrawingLoopMessageData,
+  // InfiniteDrawer-related:
+  PlayInfiniteDrawerMessageData,
+  StopInfiniteDrawerMessageData,
 };
