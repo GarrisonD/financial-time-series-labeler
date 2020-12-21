@@ -26,40 +26,32 @@ interface Drawer {
  */
 class InfiniteDrawer {
   /**
-   * Anything that implements {@link Drawer} interface.
-   *
-   * Method `draw` will be invoked in the infinite drawing loop.
-   */
-  private drawer: Drawer;
-
-  /**
    * Identifier of the last request of animation frame.
    *
    * Used to stop the infinite drawing loop by canceling the last
    * requested animation frame.
    */
-  private requestId?: number;
+  #requestId?: number;
 
-  private prevTimestamp?: number;
+  #prevTimestamp?: number;
 
   /**
    * @param drawer Anything that implements {@link Drawer} interface.
+   *               `drawer.draw` will be invoked in the infinite drawing loop.
    */
-  constructor(drawer: Drawer) {
-    this.drawer = drawer;
-  }
+  constructor(readonly drawer: Drawer) {}
 
   /**
    * Starts the infinite drawing loop.
    */
   play() {
-    this.requestId = requestAnimationFrame((timestamp: number) => {
+    this.#requestId = requestAnimationFrame((timestamp: number) => {
       this.drawer.draw(timestamp);
 
       this.play();
 
-      if (this.prevTimestamp) {
-        const timestampDiff = timestamp - this.prevTimestamp;
+      if (this.#prevTimestamp) {
+        const timestampDiff = timestamp - this.#prevTimestamp;
 
         if (timestampDiff > 1000 / 55) {
           console.warn(
@@ -72,7 +64,7 @@ class InfiniteDrawer {
         }
       }
 
-      this.prevTimestamp = timestamp;
+      this.#prevTimestamp = timestamp;
     });
   }
 
@@ -80,10 +72,10 @@ class InfiniteDrawer {
    * Stops the infinite drawing loop.
    */
   stop() {
-    if (this.requestId) {
-      cancelAnimationFrame(this.requestId);
+    if (this.#requestId) {
+      cancelAnimationFrame(this.#requestId);
 
-      this.requestId = undefined;
+      this.#requestId = undefined;
     }
   }
 }
