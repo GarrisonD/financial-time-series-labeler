@@ -33,28 +33,24 @@ class ScaledCanvasDrawer implements Drawer {
 
   constructor({
     renderingContextProvider,
-    height,
-    width,
     candlesticks,
     scale,
   }: {
     renderingContextProvider: RenderingContextProvider;
-    height: number;
-    width: number;
     candlesticks: readonly Candlestick[];
     scale: number;
   }) {
     this.renderingContextProvider = renderingContextProvider;
 
-    this.height = height;
-    this.width = width;
+    this.height = renderingContextProvider.height / scale;
+    this.width = renderingContextProvider.width / scale;
 
     this.candlesticks = candlesticks;
 
     this.scale = scale;
 
-    this.xScale.range = [0, width];
-    this.yScale.range = [height, 0];
+    this.xScale.range = [0, this.width];
+    this.yScale.range = [this.height, 0];
   }
 
   draw() {

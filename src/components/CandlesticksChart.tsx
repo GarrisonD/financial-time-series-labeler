@@ -8,6 +8,9 @@ import useInfiniteDrawerWorker from "hooks/useInfiniteDrawerWorker";
 import useOffset from "hooks/charting/useOffset";
 import useScale from "hooks/charting/useScale";
 
+import InfiniteDrawer from "utils/infinite-drawer";
+import ScaledCanvasDrawer from "utils/scaled-canvas-drawer";
+
 import CanvasOnSteroids, {
   CanvasOnSteroidsProps,
   RenderingContextProvider,
@@ -29,60 +32,87 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const canvasScale = React.useContext(CanvasScaleContext);
 
   const [
-    isWorkerReady,
     isScaledCanvasDrawerReady,
-    isInfiniteDrawingLoopPlaying,
     {
       // ScaledCanvasDrawer-related:
       initScaledCanvasDrawer,
       updateScaledCanvasDrawer,
       // InfiniteDrawer-related:
       playInfiniteDrawer,
+      stopInfiniteDrawer,
     },
   ] = useInfiniteDrawerWorker();
 
-  React.useEffect(() => {
-    if (renderingContextProvider instanceof OffscreenCanvas) {
-      const offscreenCanvas = renderingContextProvider;
+  const [scaledCanvasDrawer, setScaledCanvasDrawer] = React.useState<
+    ScaledCanvasDrawer
+  >();
 
-      if (containerDimensions) {
+  React.useEffect(() => {
+    if (renderingContextProvider) {
+      if (renderingContextProvider instanceof OffscreenCanvas) {
+        const offscreenCanvas = renderingContextProvider;
+
         initScaledCanvasDrawer({
           canvasScale,
           offscreenCanvas,
           candlesticks,
-          ...containerDimensions,
         });
+
+        playInfiniteDrawer();
+
+        return () => {
+          stopInfiniteDrawer();
+        };
+      } else {
+        const scaledCanvasDrawer = new ScaledCanvasDrawer({
+          scale: canvasScale,
+          renderingContextProvider,
+          candlesticks,
+        });
+
+        setScaledCanvasDrawer(scaledCanvasDrawer);
+
+        const infiniteDrawer = new InfiniteDrawer(scaledCanvasDrawer);
+
+        infiniteDrawer.play();
+
+        return () => {
+          infiniteDrawer.stop();
+        };
       }
     }
   }, [
     candlesticks,
     canvasScale,
-    containerDimensions,
     initScaledCanvasDrawer,
+    playInfiniteDrawer,
     renderingContextProvider,
+    stopInfiniteDrawer,
   ]);
 
   React.useEffect(() => {
-    if (!isWorkerReady || !isScaledCanvasDrawerReady) return;
-
     const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
+    const firstVisibleCandleIndex = chartOffset - tmp / 2 + 0;
+    const lastVisibleCandleIndex =
+      chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
 
-    updateScaledCanvasDrawer({
-      firstVisibleCandleIndex: chartOffset - tmp / 2 + 0,
-      lastVisibleCandleIndex:
-        chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT,
-    });
+    if (isScaledCanvasDrawerReady) {
+      updateScaledCanvasDrawer({
+        firstVisibleCandleIndex,
+        lastVisibleCandleIndex,
+      });
+    }
 
-    if (!isInfiniteDrawingLoopPlaying) {
-      playInfiniteDrawer();
+    if (scaledCanvasDrawer) {
+      scaledCanvasDrawer.firstVisibleCandleIndex = firstVisibleCandleIndex;
+      scaledCanvasDrawer.lastVisibleCandleIndex = lastVisibleCandleIndex;
     }
   }, [
     chartOffset,
     chartScale,
-    isInfiniteDrawingLoopPlaying,
     isScaledCanvasDrawerReady,
-    isWorkerReady,
     playInfiniteDrawer,
+    scaledCanvasDrawer,
     updateScaledCanvasDrawer,
   ]);
 

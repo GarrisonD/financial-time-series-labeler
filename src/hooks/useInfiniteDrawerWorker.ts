@@ -15,16 +15,10 @@ import InfiniteDrawerWorker from "worker-loader!workers/infinite-drawer";
 const useInfiniteDrawerWorker = () => {
   const [worker, setWorker] = React.useState<InfiniteDrawerWorker>();
 
-  const isWorkerReady = !!worker;
-
   const [
     isScaledCanvasDrawerReady,
     setScaledCanvasDrawerReady,
   ] = React.useState(false);
-
-  const [isInfiniteDrawerPlaying, setInfiniteDrawerPlaying] = React.useState(
-    false
-  );
 
   React.useEffect(() => {
     const infiniteDrawerWorker = new InfiniteDrawerWorker();
@@ -64,8 +58,6 @@ const useInfiniteDrawerWorker = () => {
     };
 
     worker!.postMessage(message);
-
-    setInfiniteDrawerPlaying(true);
   }, [worker]);
 
   const stopInfiniteDrawer = React.useCallback(() => {
@@ -74,14 +66,10 @@ const useInfiniteDrawerWorker = () => {
     };
 
     worker!.postMessage(message);
-
-    setInfiniteDrawerPlaying(false);
   }, [worker]);
 
   return [
-    isWorkerReady,
     isScaledCanvasDrawerReady,
-    isInfiniteDrawerPlaying,
     {
       // ScaledCanvasDrawer-related:
       initScaledCanvasDrawer,

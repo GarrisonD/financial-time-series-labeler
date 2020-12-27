@@ -10,10 +10,6 @@ type InitScaledCanvasDrawerMessageData = {
 
   readonly canvasScale: number;
   readonly offscreenCanvas: OffscreenCanvas;
-
-  readonly height: number;
-  readonly width: number;
-
   readonly candlesticks: readonly Candlestick[];
 };
 
@@ -60,8 +56,6 @@ onmessage = ({ data }: Message) => {
     case "SCALED_CANVAS_DRAWER/INIT":
       scaledCanvasDrawer = new ScaledCanvasDrawer({
         renderingContextProvider: data.offscreenCanvas,
-        height: data.height,
-        width: data.width,
         candlesticks: data.candlesticks,
         scale: data.canvasScale,
       });
