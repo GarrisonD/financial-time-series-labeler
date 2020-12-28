@@ -2,7 +2,7 @@ import React from "react";
 
 import CanvasScaleContext from "contexts/CanvasScale";
 
-type RenderingContextProvider = HTMLCanvasElement | OffscreenCanvas;
+type RenderingContextProvider = HTMLCanvasElement;
 
 type CanvasOnSteroidsProps = {
   onRenderingContextProviderReady: (rcp: RenderingContextProvider) => void;
@@ -23,13 +23,7 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   const canvasScale = React.useContext(CanvasScaleContext);
 
   React.useLayoutEffect(() => {
-    const canvas = canvasRef.current!;
-
-    onRenderingContextProviderReady(
-      "transferControlToOffscreen" in canvas
-        ? canvas.transferControlToOffscreen()
-        : canvas
-    );
+    onRenderingContextProviderReady(canvasRef.current!);
   }, [onRenderingContextProviderReady]);
 
   return (

@@ -1,7 +1,8 @@
-import { RenderingContextProvider } from "components/CanvasOnSteroids";
+import type { RenderingContextProvider } from "components/CanvasOnSteroids";
 
 import LinearScale from "./linear-scale";
-import { Drawer } from "./infinite-drawer";
+
+import type { Drawer } from "./infinite-drawer";
 
 const candlestickToColor = (candlestick: Candlestick): string => {
   if (candlestick.open === candlestick.close) return "silver";
@@ -12,16 +13,14 @@ class ScaledCanvasDrawer implements Drawer {
   // TODO: make me private
   public readonly renderingContextProvider: RenderingContextProvider;
 
-  private context?:
-    | OffscreenCanvasRenderingContext2D
-    | CanvasRenderingContext2D;
+  private context?: CanvasRenderingContext2D;
 
-  private readonly height: number;
-  private readonly width: number;
+  public readonly height: number;
+  public readonly width: number;
 
-  private readonly candlesticks: readonly Candlestick[];
+  public readonly candlesticks: readonly Candlestick[];
 
-  private readonly scale: number;
+  public readonly scale: number;
 
   public readonly xScale = new LinearScale();
   private readonly yScale = new LinearScale();
