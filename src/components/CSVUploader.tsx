@@ -1,4 +1,5 @@
-import React from "react";
+import { memo, useCallback } from "react";
+
 import Papa from "papaparse";
 
 import Dropzone from "./Dropzone";
@@ -8,7 +9,7 @@ const CSVUploader = ({
 }: {
   onFileParsed: (file: NamedCandlesticks) => void;
 }) => {
-  const handleParseComplete = React.useCallback<
+  const handleParseComplete = useCallback<
     Required<Papa.ParseConfig<Candlestick>>["complete"]
   >(
     (result, file) => {
@@ -22,7 +23,7 @@ const CSVUploader = ({
     [onFileParsed]
   );
 
-  const handleDrop = React.useCallback(
+  const handleDrop = useCallback(
     (files: File[]) => {
       // for now it's assumed that only one
       // CSV file is being uploaded at once
@@ -41,4 +42,4 @@ const CSVUploader = ({
   return <Dropzone onDropAccepted={handleDrop} />;
 };
 
-export default React.memo(CSVUploader);
+export default memo(CSVUploader);

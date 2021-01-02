@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 
 import { useDropzone, DropzoneOptions } from "react-dropzone";
 
@@ -16,4 +16,4 @@ const Dropzone = ({
   );
 };
 
-export default React.memo(Dropzone);
+export default memo(Dropzone);

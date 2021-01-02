@@ -1,4 +1,4 @@
-import React from "react";
+import { memo, useContext, useLayoutEffect, useRef } from "react";
 
 import CanvasScaleContext from "contexts/CanvasScale";
 
@@ -19,10 +19,10 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   width,
   ...rest
 }) => {
-  const canvasScale = React.useContext(CanvasScaleContext);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasScale = useContext(CanvasScaleContext);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     // prettier-ignore
     onCanvasDrawerReady(
       new CanvasDrawer(
@@ -44,6 +44,6 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   );
 };
 
-export default React.memo(CanvasOnSteroids);
+export default memo(CanvasOnSteroids);
 
 export type { CanvasOnSteroidsProps };
