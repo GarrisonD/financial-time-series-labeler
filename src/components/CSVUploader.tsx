@@ -14,7 +14,7 @@ const CSVUploader = ({
   >(
     (result, file) => {
       if (result.errors.length > 0) {
-        console.log(file!.name, result.errors);
+        console.error(file!.name, result.errors);
         alert("Errors while parsing! Check dev console!");
       }
 
@@ -39,7 +39,7 @@ const CSVUploader = ({
     [handleParseComplete]
   );
 
-  return <Dropzone onDropAccepted={handleDrop} />;
+  return <Dropzone accept=".csv" onDropAccepted={handleDrop} />;
 };
 
 export default memo(CSVUploader);
