@@ -1,4 +1,4 @@
-import React from "react";
+import { memo, useState } from "react";
 
 import CandlesticksChart from "components/CandlesticksChart";
 import CSVUploader from "components/CSVUploader";
@@ -6,9 +6,10 @@ import CSVUploader from "components/CSVUploader";
 import CanvasScaleContext, { DEFAULT_CANVAS_SCALE } from "contexts/CanvasScale";
 
 const App = () => {
-  const [namedCandlesticks, setNamedCandlesticks] = React.useState<
-    NamedCandlesticks
-  >();
+  const [
+    namedCandlesticks,
+    setNamedCandlesticks,
+  ] = useState<NamedCandlesticks>();
 
   return (
     <CanvasScaleContext.Provider value={DEFAULT_CANVAS_SCALE}>
@@ -23,4 +24,4 @@ const App = () => {
   );
 };
 
-export default React.memo(App);
+export default memo(App);

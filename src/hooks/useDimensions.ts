@@ -1,4 +1,4 @@
-import React from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 const REFERENCE_IS_EMPTY = "Reference is empty but expected to be present!";
 
@@ -8,14 +8,14 @@ const useDimensions = <
     clientWidth: number;
   }
 >() => {
-  const ref = React.useRef<T>(null);
+  const ref = useRef<T>(null);
 
-  const [dimensions, setDimensions] = React.useState<{
+  const [dimensions, setDimensions] = useState<{
     height: number;
     width: number;
   }>();
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current == null) {
       throw new Error(REFERENCE_IS_EMPTY);
     }

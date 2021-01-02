@@ -1,5 +1,5 @@
-import React from "react";
+import { createContext } from "react";
 
 export const DEFAULT_CANVAS_SCALE = window.devicePixelRatio;
 
-export default React.createContext(DEFAULT_CANVAS_SCALE);
+export default createContext(DEFAULT_CANVAS_SCALE);

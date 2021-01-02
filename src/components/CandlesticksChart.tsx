@@ -1,4 +1,4 @@
-import React from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import useDimensions from "hooks/useDimensions";
 
@@ -18,11 +18,12 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [chartOffset, changeChartOffsetBy] = useOffset();
   const [chartScale, changeChartScaleBy] = useScale();
 
-  const [candlesticksDrawer, setCandlesticksDrawer] = React.useState<
-    CandlesticksDrawer
-  >();
+  const [
+    candlesticksDrawer,
+    setCandlesticksDrawer,
+  ] = useState<CandlesticksDrawer>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (candlesticksDrawer) {
       const infiniteDrawer = new InfiniteDrawer(candlesticksDrawer);
 
@@ -34,7 +35,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     }
   }, [candlesticksDrawer]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // prettier-ignore
     if (candlesticksDrawer) {
       const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
@@ -43,7 +44,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     }
   }, [chartOffset, chartScale, candlesticksDrawer]);
 
-  const handleCanvasDrawerReady = React.useCallback<
+  const handleCanvasDrawerReady = useCallback<
     CanvasOnSteroidsProps["onCanvasDrawerReady"]
   >(
     (canvasDrawer) => {
@@ -58,7 +59,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     [candlesticks]
   );
 
-  const handleCanvasOnSteroidsWheel = React.useCallback<
+  const handleCanvasOnSteroidsWheel = useCallback<
     CanvasOnSteroidsProps["onWheel"]
   >(
     (event) => {
@@ -84,4 +85,4 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   );
 };
 
-export default React.memo(CandlesticksChart);
+export default memo(CandlesticksChart);

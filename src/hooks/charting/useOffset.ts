@@ -1,9 +1,9 @@
-import React from "react";
+import { useCallback, useState } from "react";
 
 const useOffset = () => {
-  const [offset, setOffset] = React.useState(0);
+  const [offset, setOffset] = useState(0);
 
-  const changeOffsetBy = React.useCallback((by: number) => {
+  const changeOffsetBy = useCallback((by: number) => {
     setOffset((prevOffset) => prevOffset - 0.2 * by);
   }, []);
 
