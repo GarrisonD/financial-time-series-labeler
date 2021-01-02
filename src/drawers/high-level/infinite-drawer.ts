@@ -1,4 +1,4 @@
-interface Drawer {
+interface Drawerable {
   draw: FrameRequestCallback;
 }
 
@@ -6,11 +6,11 @@ class InfiniteDrawer {
   #requestId?: number;
   #prevTimestamp?: number;
 
-  constructor(readonly drawer: Drawer) {}
+  constructor(readonly drawerable: Drawerable) {}
 
   play(): void {
     this.#requestId = requestAnimationFrame((timestamp: number) => {
-      this.drawer.draw(timestamp);
+      this.drawerable.draw(timestamp);
 
       this.play();
 
@@ -43,4 +43,4 @@ class InfiniteDrawer {
 
 export default InfiniteDrawer;
 
-export type { Drawer };
+export type { Drawerable };

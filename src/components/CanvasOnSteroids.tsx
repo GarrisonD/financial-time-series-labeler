@@ -2,10 +2,10 @@ import React from "react";
 
 import CanvasScaleContext from "contexts/CanvasScale";
 
-type RenderingContextProvider = HTMLCanvasElement;
+import CanvasDrawer from "drawers/low-level/canvas-drawer";
 
 type CanvasOnSteroidsProps = {
-  onRenderingContextProviderReady: (rcp: RenderingContextProvider) => void;
+  onCanvasDrawerReady: (canvasDrawer: CanvasDrawer) => void;
   onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
   // Keep these two props grouped:
   height: number;
@@ -13,18 +13,24 @@ type CanvasOnSteroidsProps = {
 };
 
 const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
-  onRenderingContextProviderReady,
+  onCanvasDrawerReady,
   // Keep these two props grouped:
   height,
   width,
   ...rest
 }) => {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const canvasScale = React.useContext(CanvasScaleContext);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useLayoutEffect(() => {
-    onRenderingContextProviderReady(canvasRef.current!);
-  }, [onRenderingContextProviderReady]);
+    // prettier-ignore
+    onCanvasDrawerReady(
+      new CanvasDrawer(
+        canvasRef.current!,
+        { scale: canvasScale }
+      )
+    );
+  }, [onCanvasDrawerReady, canvasScale]);
 
   return (
     <canvas
@@ -40,4 +46,4 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
 
 export default React.memo(CanvasOnSteroids);
 
-export type { CanvasOnSteroidsProps, RenderingContextProvider };
+export type { CanvasOnSteroidsProps };

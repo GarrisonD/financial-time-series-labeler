@@ -1,68 +1,62 @@
 import React from "react";
 
-import CanvasScaleContext from "contexts/CanvasScale";
-
 import useDimensions from "hooks/useDimensions";
 
 import useOffset from "hooks/charting/useOffset";
 import useScale from "hooks/charting/useScale";
 
-import InfiniteDrawer from "utils/infinite-drawer";
-import ScaledCanvasDrawer from "utils/scaled-canvas-drawer";
+import InfiniteDrawer from "drawers/high-level/infinite-drawer";
+import CandlesticksDrawer from "drawers/high-level/candlesticks-drawer";
 
-import CanvasOnSteroids, {
-  CanvasOnSteroidsProps,
-  RenderingContextProvider,
-} from "./CanvasOnSteroids";
+import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
 
 const INITIAL_VISIBLE_CANDLES_COUNT = 150;
 
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
 
-  const [
-    renderingContextProvider,
-    setRenderingContextProvider,
-  ] = React.useState<RenderingContextProvider>();
-
   const [chartOffset, changeChartOffsetBy] = useOffset();
   const [chartScale, changeChartScaleBy] = useScale();
 
-  const canvasScale = React.useContext(CanvasScaleContext);
-
-  const [scaledCanvasDrawer, setScaledCanvasDrawer] = React.useState<
-    ScaledCanvasDrawer
+  const [candlesticksDrawer, setCandlesticksDrawer] = React.useState<
+    CandlesticksDrawer
   >();
 
   React.useEffect(() => {
-    if (renderingContextProvider) {
-      const scaledCanvasDrawer = new ScaledCanvasDrawer({
-        scale: canvasScale,
-        renderingContextProvider,
-        candlesticks,
-      });
-
-      setScaledCanvasDrawer(scaledCanvasDrawer);
-
-      const infiniteDrawer = new InfiniteDrawer(scaledCanvasDrawer);
+    if (candlesticksDrawer) {
+      const infiniteDrawer = new InfiniteDrawer(candlesticksDrawer);
 
       infiniteDrawer.play();
 
-      return () => infiniteDrawer.stop();
+      return () => {
+        infiniteDrawer.stop();
+      };
     }
-  }, [candlesticks, canvasScale, renderingContextProvider]);
+  }, [candlesticksDrawer]);
 
   React.useEffect(() => {
-    const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
-    const firstVisibleCandleIndex = chartOffset - tmp / 2 + 0;
-    const lastVisibleCandleIndex =
-      chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
-
-    if (scaledCanvasDrawer) {
-      scaledCanvasDrawer.firstVisibleCandleIndex = firstVisibleCandleIndex;
-      scaledCanvasDrawer.lastVisibleCandleIndex = lastVisibleCandleIndex;
+    // prettier-ignore
+    if (candlesticksDrawer) {
+      const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
+      candlesticksDrawer.firstVisibleCandleIndex = chartOffset - tmp / 2 + 0;
+      candlesticksDrawer.lastVisibleCandleIndex = chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
     }
-  }, [chartOffset, chartScale, scaledCanvasDrawer]);
+  }, [chartOffset, chartScale, candlesticksDrawer]);
+
+  const handleCanvasDrawerReady = React.useCallback<
+    CanvasOnSteroidsProps["onCanvasDrawerReady"]
+  >(
+    (canvasDrawer) => {
+      setCandlesticksDrawer(
+        // prettier-ignore
+        new CandlesticksDrawer(
+          canvasDrawer,
+          candlesticks
+        )
+      );
+    },
+    [candlesticks]
+  );
 
   const handleCanvasOnSteroidsWheel = React.useCallback<
     CanvasOnSteroidsProps["onWheel"]
@@ -81,7 +75,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
     <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }}>
       {containerDimensions != null && (
         <CanvasOnSteroids
-          onRenderingContextProviderReady={setRenderingContextProvider}
+          onCanvasDrawerReady={handleCanvasDrawerReady}
           onWheel={handleCanvasOnSteroidsWheel}
           {...containerDimensions}
         />

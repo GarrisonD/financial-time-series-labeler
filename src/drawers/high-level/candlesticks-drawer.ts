@@ -1,55 +1,29 @@
-import type { RenderingContextProvider } from "components/CanvasOnSteroids";
+import CanvasDrawer from "drawers/low-level/canvas-drawer";
 
-import LinearScale from "./linear-scale";
+import LinearScale from "utils/linear-scale";
 
-import type { Drawer } from "./infinite-drawer";
+import type { Drawerable } from "./infinite-drawer";
 
 const candlestickToColor = (candlestick: Candlestick): string => {
   if (candlestick.open === candlestick.close) return "silver";
   return candlestick.open > candlestick.close ? "red" : "green";
 };
 
-class ScaledCanvasDrawer implements Drawer {
-  // TODO: make me private
-  public readonly renderingContextProvider: RenderingContextProvider;
-
-  private context?: CanvasRenderingContext2D;
-
-  public readonly height: number;
-  public readonly width: number;
-
-  public readonly candlesticks: readonly Candlestick[];
-
-  public readonly scale: number;
-
+class CandlesticksDrawer implements Drawerable {
   public readonly xScale = new LinearScale();
   private readonly yScale = new LinearScale();
 
-  private candlestickWidth = 0;
+  #candlestickWidth = 0;
 
   firstVisibleCandleIndex = 0;
   lastVisibleCandleIndex = 0;
 
-  constructor({
-    renderingContextProvider,
-    candlesticks,
-    scale,
-  }: {
-    renderingContextProvider: RenderingContextProvider;
-    candlesticks: readonly Candlestick[];
-    scale: number;
-  }) {
-    this.renderingContextProvider = renderingContextProvider;
-
-    this.height = renderingContextProvider.height / scale;
-    this.width = renderingContextProvider.width / scale;
-
-    this.candlesticks = candlesticks;
-
-    this.scale = scale;
-
-    this.xScale.range = [0, this.width];
-    this.yScale.range = [this.height, 0];
+  constructor(
+    private readonly canvasDrawer: CanvasDrawer,
+    private readonly candlesticks: readonly Candlestick[]
+  ) {
+    this.xScale.range = [0, canvasDrawer.width];
+    this.yScale.range = [canvasDrawer.height, 0];
   }
 
   draw() {
@@ -71,11 +45,11 @@ class ScaledCanvasDrawer implements Drawer {
       this.lastVisibleCandleIndex + 1,
     ];
 
-    this.candlestickWidth =
-      this.width /
+    this.#candlestickWidth =
+      this.canvasDrawer.width /
       (this.lastVisibleCandleIndex - this.firstVisibleCandleIndex + 1);
 
-    this.getContext().clearRect(0, 0, this.width, this.height);
+    this.canvasDrawer.clear();
 
     candlesticks.forEach((candlestick) => {
       this.drawCandleStick(candlestick);
@@ -91,12 +65,12 @@ class ScaledCanvasDrawer implements Drawer {
     this.getContext().beginPath();
 
     this.getContext().moveTo(
-      this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
+      this.xScale.domainToRange(candlestick.index) + this.#candlestickWidth / 2,
       this.yScale.domainToRange(Math.max(candlestick.high, candlestick.low))
     );
 
     this.getContext().lineTo(
-      this.xScale.domainToRange(candlestick.index) + this.candlestickWidth / 2,
+      this.xScale.domainToRange(candlestick.index) + this.#candlestickWidth / 2,
       this.yScale.domainToRange(Math.min(candlestick.high, candlestick.low))
     );
 
@@ -110,7 +84,7 @@ class ScaledCanvasDrawer implements Drawer {
     this.getContext().rect(
       this.xScale.domainToRange(candlestick.index),
       this.yScale.domainToRange(Math.max(candlestick.open, candlestick.close)),
-      this.candlestickWidth,
+      this.#candlestickWidth,
       candlestick.open === candlestick.close
         ? 1
         : this.yScale.domainToRange(
@@ -129,24 +103,8 @@ class ScaledCanvasDrawer implements Drawer {
   }
 
   private getContext() {
-    if (this.context == null) {
-      const context = this.renderingContextProvider.getContext("2d", {
-        alpha: true,
-        desynchronized: true,
-      });
-
-      if (context == null) {
-        // TODO: specify the error message!!!
-        throw new Error("Some error here!");
-      }
-
-      context.scale(this.scale, this.scale);
-
-      this.context = context;
-    }
-
-    return this.context;
+    return this.canvasDrawer.context;
   }
 }
 
-export default ScaledCanvasDrawer;
+export default CandlesticksDrawer;
