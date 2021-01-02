@@ -1,53 +1,45 @@
 import React from "react";
 
-const GET_CONTEXT_2D_FAILED_MSG =
-  "Getting of 2D Context failed... May your browser not support it?..";
+import CanvasScaleContext from "contexts/CanvasScale";
+
+import CanvasDrawer from "drawers/low-level/canvas-drawer";
 
 type CanvasOnSteroidsProps = {
-  onContextReady: (context: OffscreenCanvasRenderingContext2D) => void;
+  onCanvasDrawerReady: (canvasDrawer: CanvasDrawer) => void;
   onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
-  scale?: number;
   // Keep these two props grouped:
   height: number;
   width: number;
 };
 
 const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
-  onContextReady,
-  scale = window.devicePixelRatio,
-  onWheel,
+  onCanvasDrawerReady,
   // Keep these two props grouped:
   height,
   width,
+  ...rest
 }) => {
+  const canvasScale = React.useContext(CanvasScaleContext);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useLayoutEffect(() => {
-    const canvas = canvasRef.current!;
-
-    const context = canvas.transferControlToOffscreen().getContext("2d", {
-      alpha: false,
-      desynchronized: true,
-    });
-
-    if (context == null) {
-      throw new Error(GET_CONTEXT_2D_FAILED_MSG);
-    }
-
-    // Fix issue with blurry canvas on Retina
-    context.scale(scale, scale);
-
-    onContextReady(context);
-  }, [scale, onContextReady]);
+    // prettier-ignore
+    onCanvasDrawerReady(
+      new CanvasDrawer(
+        canvasRef.current!,
+        { scale: canvasScale }
+      )
+    );
+  }, [onCanvasDrawerReady, canvasScale]);
 
   return (
     <canvas
-      onWheel={onWheel}
+      {...rest}
       ref={canvasRef}
       style={{ height, width }}
       // Keep these two props grouped:
-      height={height * scale}
-      width={width * scale}
+      height={height * canvasScale}
+      width={width * canvasScale}
     />
   );
 };

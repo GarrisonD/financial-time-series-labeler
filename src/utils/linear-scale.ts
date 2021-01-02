@@ -1,6 +1,6 @@
 class LinearScale {
-  static readonly DOMAIN_NOT_SPECIFIED = "Domain is not specified!";
-  static readonly RANGE_NOT_SPECIFIED = "Range is not specified!";
+  private static readonly DOMAIN_NOT_SPECIFIED = "Domain is not specified!";
+  private static readonly RANGE_NOT_SPECIFIED = "Range is not specified!";
 
   public domain?: [number, number];
   public range?: [number, number];

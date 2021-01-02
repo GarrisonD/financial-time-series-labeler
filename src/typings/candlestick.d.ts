@@ -4,7 +4,7 @@ type Candlestick = {
   timestamp: number;
 
   // DO NOT SORT THE PROPERTIES BELOW!
-  // It corresponds OHLC abbreviation:
+  // They correspond OHLC abbreviation:
   open: number;
   high: number;
   low: number;

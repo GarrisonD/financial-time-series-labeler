@@ -1,32 +1,30 @@
 import React from "react";
 
-import CanvasDrawer from "utils/canvas-drawer";
-import InfiniteDrawer from "utils/infinite-drawer";
-import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
-
 import useDimensions from "hooks/useDimensions";
 
 import useOffset from "hooks/charting/useOffset";
 import useScale from "hooks/charting/useScale";
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import TestWorker from "worker-loader!workers/test";
+import InfiniteDrawer from "drawers/high-level/infinite-drawer";
+import CandlesticksDrawer from "drawers/high-level/candlesticks-drawer";
 
-const worker = new TestWorker();
-worker.postMessage({ something: 123 });
+import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
 
 const INITIAL_VISIBLE_CANDLES_COUNT = 150;
 
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
-  const [canvasDrawer, setCanvasDrawer] = React.useState<CanvasDrawer>();
 
-  const [offset, changeOffsetBy] = useOffset();
-  const [scale, changeScaleBy] = useScale();
+  const [chartOffset, changeChartOffsetBy] = useOffset();
+  const [chartScale, changeChartScaleBy] = useScale();
+
+  const [candlesticksDrawer, setCandlesticksDrawer] = React.useState<
+    CandlesticksDrawer
+  >();
 
   React.useEffect(() => {
-    if (canvasDrawer) {
-      const infiniteDrawer = new InfiniteDrawer(canvasDrawer);
+    if (candlesticksDrawer) {
+      const infiniteDrawer = new InfiniteDrawer(candlesticksDrawer);
 
       infiniteDrawer.play();
 
@@ -34,33 +32,30 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
         infiniteDrawer.stop();
       };
     }
-  }, [canvasDrawer]);
+  }, [candlesticksDrawer]);
 
   React.useEffect(() => {
-    if (canvasDrawer) {
-      const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (scale - 1);
-
-      canvasDrawer.firstVisibleCandleIndex = offset - tmp / 2 + 0;
-
-      canvasDrawer.lastVisibleCandleIndex =
-        offset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
+    // prettier-ignore
+    if (candlesticksDrawer) {
+      const tmp = INITIAL_VISIBLE_CANDLES_COUNT * (chartScale - 1);
+      candlesticksDrawer.firstVisibleCandleIndex = chartOffset - tmp / 2 + 0;
+      candlesticksDrawer.lastVisibleCandleIndex = chartOffset + tmp / 2 + INITIAL_VISIBLE_CANDLES_COUNT;
     }
-  }, [canvasDrawer, offset, scale]);
+  }, [chartOffset, chartScale, candlesticksDrawer]);
 
-  const handleContextReady = React.useCallback<
-    CanvasOnSteroidsProps["onContextReady"]
+  const handleCanvasDrawerReady = React.useCallback<
+    CanvasOnSteroidsProps["onCanvasDrawerReady"]
   >(
-    (context) => {
-      setCanvasDrawer(
-        new CanvasDrawer(
-          context,
-          containerDimensions!.width,
-          containerDimensions!.height,
+    (canvasDrawer) => {
+      setCandlesticksDrawer(
+        // prettier-ignore
+        new CandlesticksDrawer(
+          canvasDrawer,
           candlesticks
         )
       );
     },
-    [candlesticks, containerDimensions]
+    [candlesticks]
   );
 
   const handleCanvasOnSteroidsWheel = React.useCallback<
@@ -68,21 +63,21 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   >(
     (event) => {
       if (event.ctrlKey) {
-        changeScaleBy(event.deltaY);
+        changeChartScaleBy(event.deltaY);
       } else {
-        changeOffsetBy(event.deltaY * scale);
+        changeChartOffsetBy(event.deltaY * chartScale);
       }
     },
-    [changeOffsetBy, changeScaleBy, scale]
+    [changeChartOffsetBy, changeChartScaleBy, chartScale]
   );
 
   return (
     <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }}>
       {containerDimensions != null && (
         <CanvasOnSteroids
-          {...containerDimensions}
-          onContextReady={handleContextReady}
+          onCanvasDrawerReady={handleCanvasDrawerReady}
           onWheel={handleCanvasOnSteroidsWheel}
+          {...containerDimensions}
         />
       )}
     </div>
