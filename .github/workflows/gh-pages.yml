@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Deploy to GitHub Pages 🚀
 
 on:
   push:
@@ -17,9 +17,8 @@ jobs:
           npm i --only=prod
           npm run build
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.5.9
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          BRANCH: gh-pages
-          FOLDER: build
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
