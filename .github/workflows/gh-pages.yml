@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages 🚀
+name: GitHub Pages
 
 on:
   push:
@@ -6,16 +6,15 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install dependencies and build
-        run: |
-          npm i --only=prod
-          npm run build
+      - run: npm install --only=prod
+      - run: npm run build
 
       - name: Deploy to GitHub Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
