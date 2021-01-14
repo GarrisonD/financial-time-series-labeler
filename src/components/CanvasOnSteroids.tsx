@@ -19,18 +19,21 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   width,
   ...rest
 }) => {
-  const canvasScale = useContext(CanvasScaleContext);
+  const scale = useContext(CanvasScaleContext);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useLayoutEffect(() => {
-    // prettier-ignore
+    const canvas = canvasRef.current!;
+
     onCanvasDrawerReady(
       new CanvasDrawer(
-        canvasRef.current!,
-        { scale: canvasScale }
+        "transferControlToOffscreen" in canvas
+          ? canvas.transferControlToOffscreen()
+          : canvas,
+        { scale }
       )
     );
-  }, [onCanvasDrawerReady, canvasScale]);
+  }, [onCanvasDrawerReady, scale]);
 
   return (
     <canvas
@@ -38,8 +41,8 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
       ref={canvasRef}
       style={{ height, width }}
       // Keep these two props grouped:
-      height={height * canvasScale}
-      width={width * canvasScale}
+      height={height * scale}
+      width={width * scale}
     />
   );
 };

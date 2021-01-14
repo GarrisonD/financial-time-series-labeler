@@ -1,19 +1,19 @@
-type CanvasDrawerOpts = { scale: number };
+type Canvas = HTMLCanvasElement | OffscreenCanvas;
 
 class CanvasDrawer {
   private static readonly GET_CONTEXT_FAILED =
     "Failed to get Canvas 2D rendering context!";
 
-  #context?: CanvasRenderingContext2D;
+  #context?: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
   constructor(
-    private readonly hce: HTMLCanvasElement,
-    private readonly opts: CanvasDrawerOpts
+    private readonly canvas: Canvas,
+    private readonly opts: { scale: number }
   ) {}
 
   get context() {
     if (this.#context == null) {
-      const context = this.hce.getContext("2d", {
+      const context = this.canvas.getContext("2d", {
         desynchronized: true,
         alpha: true,
       });
@@ -33,11 +33,11 @@ class CanvasDrawer {
   }
 
   get height() {
-    return this.hce.height / this.opts.scale;
+    return this.canvas.height / this.opts.scale;
   }
 
   get width() {
-    return this.hce.width / this.opts.scale;
+    return this.canvas.width / this.opts.scale;
   }
 
   clear() {
@@ -46,5 +46,3 @@ class CanvasDrawer {
 }
 
 export default CanvasDrawer;
-
-export type { CanvasDrawerOpts };
