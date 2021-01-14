@@ -15,7 +15,7 @@ class CanvasDrawer {
     if (this.#context == null) {
       const context = this.canvas.getContext("2d", {
         desynchronized: true,
-        alpha: true,
+        alpha: false,
       });
 
       if (context == null) throw new Error(CanvasDrawer.GET_CONTEXT_FAILED);
