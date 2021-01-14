@@ -57,7 +57,12 @@ class CandlesticksDrawer implements Drawerable {
   }
 
   private drawCandleStick(candlestick: Candlestick) {
-    this.drawCandle(candlestick);
+    if (this.#candlestickWidth > 5) {
+      // Stop drawing candles to improve performance
+      // when a lot of objects appear on the scene:
+      this.drawCandle(candlestick);
+    }
+
     this.drawStick(candlestick);
   }
 
