@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css",
-    "main.js": "/financial-time-series-labeler/static/js/main.6bb563b7.chunk.js",
-    "main.js.map": "/financial-time-series-labeler/static/js/main.6bb563b7.chunk.js.map",
+    "main.js": "/financial-time-series-labeler/static/js/main.afa9af70.chunk.js",
+    "main.js.map": "/financial-time-series-labeler/static/js/main.afa9af70.chunk.js.map",
     "runtime-main.js": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js",
     "runtime-main.js.map": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js.map",
     "static/js/2.31da3444.chunk.js": "/financial-time-series-labeler/static/js/2.31da3444.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.431b983d.js",
     "static/js/2.31da3444.chunk.js",
     "static/css/main.1385192e.chunk.css",
-    "static/js/main.6bb563b7.chunk.js"
+    "static/js/main.afa9af70.chunk.js"
   ]
 }
