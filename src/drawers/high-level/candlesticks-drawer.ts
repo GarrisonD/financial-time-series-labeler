@@ -57,17 +57,20 @@ class CandlesticksDrawer implements Drawerable {
   }
 
   private drawCandleStick(candlestick: Candlestick) {
-    if (this.#candlestickWidth > 5) {
+    this.getContext().strokeStyle = candlestickToColor(candlestick);
+
+    this.drawStick(candlestick);
+
+    if (this.#candlestickWidth > 3) {
       // Stop drawing candles to improve performance
       // when a lot of objects appear on the scene:
       this.drawCandle(candlestick);
     }
-
-    this.drawStick(candlestick);
   }
 
   private drawStick(candlestick: Candlestick) {
     this.getContext().beginPath();
+    this.getContext().lineWidth = 1;
 
     this.getContext().moveTo(
       this.xScale.domainToRange(candlestick.index) + this.#candlestickWidth / 2,
@@ -79,31 +82,23 @@ class CandlesticksDrawer implements Drawerable {
       this.yScale.domainToRange(Math.min(candlestick.high, candlestick.low))
     );
 
-    this.getContext().strokeStyle = candlestickToColor(candlestick);
     this.getContext().stroke();
   }
 
   private drawCandle(candlestick: Candlestick) {
     this.getContext().beginPath();
+    this.getContext().lineWidth = this.#candlestickWidth - 1;
 
-    this.getContext().rect(
-      this.xScale.domainToRange(candlestick.index),
-      this.yScale.domainToRange(Math.max(candlestick.open, candlestick.close)),
-      this.#candlestickWidth,
-      candlestick.open === candlestick.close
-        ? 1
-        : this.yScale.domainToRange(
-            Math.min(candlestick.open, candlestick.close)
-          ) -
-            this.yScale.domainToRange(
-              Math.max(candlestick.open, candlestick.close)
-            )
+    this.getContext().moveTo(
+      this.xScale.domainToRange(candlestick.index) + this.#candlestickWidth / 2,
+      this.yScale.domainToRange(Math.max(candlestick.open, candlestick.close))
     );
 
-    this.getContext().fillStyle = candlestickToColor(candlestick);
-    this.getContext().fill();
+    this.getContext().lineTo(
+      this.xScale.domainToRange(candlestick.index) + this.#candlestickWidth / 2,
+      this.yScale.domainToRange(Math.min(candlestick.open, candlestick.close))
+    );
 
-    this.getContext().strokeStyle = "white";
     this.getContext().stroke();
   }
 

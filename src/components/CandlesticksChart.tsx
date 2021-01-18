@@ -10,7 +10,7 @@ import CandlesticksDrawer from "drawers/high-level/candlesticks-drawer";
 
 import CanvasOnSteroids, { CanvasOnSteroidsProps } from "./CanvasOnSteroids";
 
-const INITIAL_VISIBLE_CANDLES_COUNT = 500;
+const INITIAL_VISIBLE_CANDLES_COUNT = 450;
 
 const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [containerRef, containerDimensions] = useDimensions<HTMLDivElement>();
