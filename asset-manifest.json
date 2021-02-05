@@ -5,15 +5,15 @@
     "main.js.map": "/financial-time-series-labeler/static/js/main.c247b4e2.chunk.js.map",
     "runtime-main.js": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js",
     "runtime-main.js.map": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js.map",
-    "static/js/2.74ffaeec.chunk.js": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js",
-    "static/js/2.74ffaeec.chunk.js.map": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js.map",
+    "static/js/2.4d6454bf.chunk.js": "/financial-time-series-labeler/static/js/2.4d6454bf.chunk.js",
+    "static/js/2.4d6454bf.chunk.js.map": "/financial-time-series-labeler/static/js/2.4d6454bf.chunk.js.map",
     "index.html": "/financial-time-series-labeler/index.html",
     "static/css/main.1385192e.chunk.css.map": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css.map",
-    "static/js/2.74ffaeec.chunk.js.LICENSE.txt": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js.LICENSE.txt"
+    "static/js/2.4d6454bf.chunk.js.LICENSE.txt": "/financial-time-series-labeler/static/js/2.4d6454bf.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.431b983d.js",
-    "static/js/2.74ffaeec.chunk.js",
+    "static/js/2.4d6454bf.chunk.js",
     "static/css/main.1385192e.chunk.css",
     "static/js/main.c247b4e2.chunk.js"
   ]
