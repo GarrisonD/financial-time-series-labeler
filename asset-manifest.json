@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css",
-    "main.js": "/financial-time-series-labeler/static/js/main.8d2434b2.chunk.js",
-    "main.js.map": "/financial-time-series-labeler/static/js/main.8d2434b2.chunk.js.map",
+    "main.js": "/financial-time-series-labeler/static/js/main.c247b4e2.chunk.js",
+    "main.js.map": "/financial-time-series-labeler/static/js/main.c247b4e2.chunk.js.map",
     "runtime-main.js": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js",
     "runtime-main.js.map": "/financial-time-series-labeler/static/js/runtime-main.431b983d.js.map",
-    "static/js/2.d1cc2ccc.chunk.js": "/financial-time-series-labeler/static/js/2.d1cc2ccc.chunk.js",
-    "static/js/2.d1cc2ccc.chunk.js.map": "/financial-time-series-labeler/static/js/2.d1cc2ccc.chunk.js.map",
+    "static/js/2.74ffaeec.chunk.js": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js",
+    "static/js/2.74ffaeec.chunk.js.map": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js.map",
     "index.html": "/financial-time-series-labeler/index.html",
     "static/css/main.1385192e.chunk.css.map": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css.map",
-    "static/js/2.d1cc2ccc.chunk.js.LICENSE.txt": "/financial-time-series-labeler/static/js/2.d1cc2ccc.chunk.js.LICENSE.txt"
+    "static/js/2.74ffaeec.chunk.js.LICENSE.txt": "/financial-time-series-labeler/static/js/2.74ffaeec.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.431b983d.js",
-    "static/js/2.d1cc2ccc.chunk.js",
+    "static/js/2.74ffaeec.chunk.js",
     "static/css/main.1385192e.chunk.css",
-    "static/js/main.8d2434b2.chunk.js"
+    "static/js/main.c247b4e2.chunk.js"
   ]
 }
