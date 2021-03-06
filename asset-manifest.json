@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css",
+    "main.css": "/financial-time-series-labeler/static/css/main.f7d8274a.chunk.css",
     "main.js": "/financial-time-series-labeler/static/js/main.e01e72ce.chunk.js",
     "main.js.map": "/financial-time-series-labeler/static/js/main.e01e72ce.chunk.js.map",
     "runtime-main.js": "/financial-time-series-labeler/static/js/runtime-main.fc54b867.js",
@@ -8,13 +8,13 @@
     "static/js/2.b9edcf36.chunk.js": "/financial-time-series-labeler/static/js/2.b9edcf36.chunk.js",
     "static/js/2.b9edcf36.chunk.js.map": "/financial-time-series-labeler/static/js/2.b9edcf36.chunk.js.map",
     "index.html": "/financial-time-series-labeler/index.html",
-    "static/css/main.1385192e.chunk.css.map": "/financial-time-series-labeler/static/css/main.1385192e.chunk.css.map",
+    "static/css/main.f7d8274a.chunk.css.map": "/financial-time-series-labeler/static/css/main.f7d8274a.chunk.css.map",
     "static/js/2.b9edcf36.chunk.js.LICENSE.txt": "/financial-time-series-labeler/static/js/2.b9edcf36.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.fc54b867.js",
     "static/js/2.b9edcf36.chunk.js",
-    "static/css/main.1385192e.chunk.css",
+    "static/css/main.f7d8274a.chunk.css",
     "static/js/main.e01e72ce.chunk.js"
   ]
 }
