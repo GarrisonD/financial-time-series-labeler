@@ -1,29 +1,34 @@
-import { memo, useContext, useLayoutEffect, useRef } from "react";
-
-import CanvasScaleContext from "contexts/CanvasScale";
+import { memo, useLayoutEffect, useRef } from "react";
 
 import CanvasDrawer from "drawers/low-level/canvas-drawer";
 
-type CanvasOnSteroidsProps = {
+type CanvasOnSteroidsProps = Pick<
+  React.DOMAttributes<HTMLCanvasElement>,
+  "onMouseMove" | "onWheel"
+> & {
   onCanvasDrawerReady: (canvasDrawer: CanvasDrawer) => void;
-  onWheel: Required<React.DOMAttributes<HTMLCanvasElement>>["onWheel"];
-  // Keep these two props grouped:
+  //
+  //
   height: number;
   width: number;
+  //
+  scale: number;
 };
 
 const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   onCanvasDrawerReady,
-  // Keep these two props grouped:
+  //
   height,
   width,
+  //
+  scale,
+  //
   ...rest
 }) => {
-  const scale = useContext(CanvasScaleContext);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ref = useRef<HTMLCanvasElement>(null);
 
   useLayoutEffect(() => {
-    const canvas = canvasRef.current!;
+    const canvas = ref.current!;
 
     onCanvasDrawerReady(
       new CanvasDrawer(
@@ -38,9 +43,11 @@ const CanvasOnSteroids: React.FC<CanvasOnSteroidsProps> = ({
   return (
     <canvas
       {...rest}
-      ref={canvasRef}
+      //
+      ref={ref}
+      //
       style={{ height, width }}
-      // Keep these two props grouped:
+      //
       height={height * scale}
       width={width * scale}
     />

@@ -60,7 +60,7 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   );
 
   const handleCanvasOnSteroidsWheel = useCallback<
-    CanvasOnSteroidsProps["onWheel"]
+    Required<CanvasOnSteroidsProps>["onWheel"]
   >(
     (event) => {
       if (event.ctrlKey) {
@@ -77,7 +77,11 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
       {containerDimensions != null && (
         <CanvasOnSteroids
           onCanvasDrawerReady={handleCanvasDrawerReady}
+          //
           onWheel={handleCanvasOnSteroidsWheel}
+          //
+          scale={window.devicePixelRatio}
+          //
           {...containerDimensions}
         />
       )}
