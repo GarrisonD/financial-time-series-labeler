@@ -12,5 +12,3 @@ type Candlestick = {
 
   volume: number;
 };
-
-type NamedCandlesticks = { name: string; candlesticks: Candlestick[] };
