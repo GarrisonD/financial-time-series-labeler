@@ -18,10 +18,8 @@ const CandlesticksChart = ({ candlesticks }: NamedCandlesticks) => {
   const [chartOffset, changeChartOffsetBy] = useOffset();
   const [chartScale, changeChartScaleBy] = useScale();
 
-  const [
-    candlesticksDrawer,
-    setCandlesticksDrawer,
-  ] = useState<CandlesticksDrawer>();
+  const [candlesticksDrawer, setCandlesticksDrawer] =
+    useState<CandlesticksDrawer>();
 
   useEffect(() => {
     if (candlesticksDrawer) {
