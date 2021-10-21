@@ -10,15 +10,15 @@ const CSVUploader = ({
   onFileParsed: (file: NamedCandlesticks) => void;
 }) => {
   const handleParseComplete = useCallback<
-    Required<Papa.ParseConfig<Candlestick>>["complete"]
+    Required<Papa.ParseConfig<Candlestick, File>>["complete"]
   >(
     (result, file) => {
       if (result.errors.length > 0) {
-        console.error(file!.name, result.errors);
+        console.error(file.name, result.errors);
         alert("Errors while parsing! Check dev console!");
       }
 
-      onFileParsed({ name: file!.name, candlesticks: result.data });
+      onFileParsed({ name: file.name, candlesticks: result.data });
     },
     [onFileParsed]
   );
