@@ -1,20 +1,28 @@
 import { memo, useState } from "react";
 
 import CandlesticksChart from "components/CandlesticksChart";
+import CandlesticksSettings from "components/CandlesticksSettings";
+
 import CSVUploader from "components/CSVUploader";
+
+import NamedCandlesticksContext from "contexts/NamedCandlesticks";
 
 const App = () => {
   const [namedCandlesticks, setNamedCandlesticks] =
     useState<NamedCandlesticks>();
 
   return (
-    <div style={{ display: "flex", flex: 1, padding: 10 }}>
-      {namedCandlesticks ? (
-        <CandlesticksChart {...namedCandlesticks} />
-      ) : (
-        <CSVUploader onFileParsed={setNamedCandlesticks} />
-      )}
-    </div>
+    <CandlesticksSettings>
+      <div style={{ display: "flex", flex: 1, padding: 10 }}>
+        {namedCandlesticks ? (
+          <NamedCandlesticksContext.Provider value={namedCandlesticks}>
+            <CandlesticksChart />
+          </NamedCandlesticksContext.Provider>
+        ) : (
+          <CSVUploader onFileParsed={setNamedCandlesticks} />
+        )}
+      </div>
+    </CandlesticksSettings>
   );
 };
 
