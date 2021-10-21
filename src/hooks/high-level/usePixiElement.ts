@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import * as PIXI from "pixi.js";
 
-import usePixiApplication from "./usePixiApplication";
+import usePixiContainer from "./usePixiContainer";
 
 // ----------------------------------------------------------------------------
 
@@ -31,20 +31,20 @@ const usePixiElement = (
     onPointerOut?: () => void;
   } = {}
 ) => {
-  const app = usePixiApplication();
+  const container = usePixiContainer();
 
   useEffect(() => {
-    app.stage.addChild(element);
+    container.addChild(element);
 
     return () => {
-      console.warn("PIXI.Application changed!"); // TODO: test on chart scrolling
+      container.removeChild(element);
     };
-  }, [app, element]);
+  }, [container, element]);
 
   useEffect(() => {
     element.buttonMode = element.interactive =
       !!listeners.onPointerOver || !!listeners.onPointerOut;
-  }, [listeners.onPointerOver, listeners.onPointerOut, element]);
+  }, [element, listeners.onPointerOut, listeners.onPointerOver]);
 
   usePixiListener(element, "pointerover", listeners.onPointerOver);
   usePixiListener(element, "pointerout", listeners.onPointerOut);

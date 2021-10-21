@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import * as PIXI from "pixi.js";
 
 import PIXIApplicationContext from "contexts/PIXIApplication";
+import PIXIContainerContext from "contexts/PIXIContainer";
 
 const PIXIApplication = (props: { children: ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -46,9 +47,13 @@ const PIXIApplication = (props: { children: ReactNode }) => {
     <>
       <div ref={containerRef} style={{ border: "1px solid black", flex: 1 }} />
 
-      <PIXIApplicationContext.Provider value={app}>
-        {app && props.children}
-      </PIXIApplicationContext.Provider>
+      {app && (
+        <PIXIApplicationContext.Provider value={app}>
+          <PIXIContainerContext.Provider value={app.stage}>
+            {props.children}
+          </PIXIContainerContext.Provider>
+        </PIXIApplicationContext.Provider>
+      )}
     </>
   );
 };

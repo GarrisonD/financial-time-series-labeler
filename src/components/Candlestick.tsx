@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
+import PIXIContainer from "./PIXIContainer";
 import PIXILine from "./PIXILine";
 import PIXIRectangle from "./PIXIRectangle";
 
@@ -28,12 +29,12 @@ const Candlestick = (props: Candlestick) => {
   const xOffset = xScale.domainToRange(props.index);
 
   return (
-    <>
+    <PIXIContainer x={xOffset}>
       <PIXIRectangle
-        x1={xOffset}
+        x1={0}
         y1={0}
         //
-        x2={xOffset + candlestickPlaceholderWidth}
+        x2={candlestickPlaceholderWidth}
         y2={height}
         //
         color={color}
@@ -43,10 +44,10 @@ const Candlestick = (props: Candlestick) => {
       />
 
       <PIXILine
-        x1={xOffset + candlestickPlaceholderWidth * 0.5}
+        x1={candlestickPlaceholderWidth * 0.5}
         y1={yScale.domainToRange(props.low)}
         //
-        x2={xOffset + candlestickPlaceholderWidth * 0.5}
+        x2={candlestickPlaceholderWidth * 0.5}
         y2={yScale.domainToRange(props.high)}
         //
         color={0x000}
@@ -54,16 +55,16 @@ const Candlestick = (props: Candlestick) => {
       />
 
       <PIXIRectangle
-        x1={xOffset + candlestickPlaceholderWidth * 0.2}
+        x1={candlestickPlaceholderWidth * 0.2}
         y1={yScale.domainToRange(isBullish ? props.open : props.close)}
         //
-        x2={xOffset + candlestickPlaceholderWidth * 0.8}
+        x2={candlestickPlaceholderWidth * 0.8}
         y2={yScale.domainToRange(isBullish ? props.close : props.open)}
         //
         color={isBullish ? 0x2a9d8f : 0xe76f51}
       />
-    </>
+    </PIXIContainer>
   );
 };
 
-export default Candlestick;
+export default memo(Candlestick);
