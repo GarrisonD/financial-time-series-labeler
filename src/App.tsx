@@ -7,12 +7,9 @@ import CSVUploader from "components/CSVUploader";
 
 import NamedCandlesticksContext from "contexts/NamedCandlesticks";
 
-import * as NamedCandlesticks from "utils/named-candlesticks";
-
 const App = () => {
-  const [namedCandlesticks, setNamedCandlesticks] = useState<NamedCandlesticks>(
-    NamedCandlesticks.Dummy.Set2
-  );
+  const [namedCandlesticks, setNamedCandlesticks] =
+    useState<NamedCandlesticks>();
 
   return (
     <CandlesticksSettings>
