@@ -5,21 +5,20 @@ import CandlesticksSettings from "components/CandlesticksSettings";
 
 import CSVUploader from "components/CSVUploader";
 
-import NamedCandlesticksContext from "contexts/NamedCandlesticks";
+import CandlesticksFileContext from "contexts/CandlesticksFile";
 
 const App = () => {
-  const [namedCandlesticks, setNamedCandlesticks] =
-    useState<NamedCandlesticks>();
+  const [candlesticksFile, setCandlesticksFile] = useState<CandlesticksFile>();
 
   return (
     <CandlesticksSettings>
       <div style={{ display: "flex", flex: 1, padding: 10 }}>
-        {namedCandlesticks ? (
-          <NamedCandlesticksContext.Provider value={namedCandlesticks}>
+        {candlesticksFile ? (
+          <CandlesticksFileContext.Provider value={candlesticksFile}>
             <CandlesticksChart />
-          </NamedCandlesticksContext.Provider>
+          </CandlesticksFileContext.Provider>
         ) : (
-          <CSVUploader onFileParsed={setNamedCandlesticks} />
+          <CSVUploader onFileParsed={setCandlesticksFile} />
         )}
       </div>
     </CandlesticksSettings>

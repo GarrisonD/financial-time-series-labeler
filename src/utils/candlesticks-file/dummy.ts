@@ -1,4 +1,4 @@
-const Set1: NamedCandlesticks = {
+const File1: CandlesticksFile = {
   name: "Untitled",
   candlesticks: [
     {
@@ -13,7 +13,7 @@ const Set1: NamedCandlesticks = {
   ],
 };
 
-const Set2: NamedCandlesticks = {
+const File2: CandlesticksFile = {
   name: "Untitled",
   candlesticks: [
     {
@@ -46,4 +46,4 @@ const Set2: NamedCandlesticks = {
   ],
 };
 
-export { Set1, Set2 };
+export { File1 as Set1, File2 as Set2 };

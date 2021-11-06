@@ -2,14 +2,14 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import CandlesticksViewPointContext from "contexts/CandlesticksViewPoint";
 
-import useNamedCandlesticks from "hooks/high-level/useNamedCandlesticks";
+import useCandlesticksFile from "hooks/high-level/useCandlesticksFile";
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
 
 import usePixiApplication from "hooks/high-level/usePixiApplication";
 import usePixiDimensions from "hooks/high-level/usePixiDimensions";
 
 const CandlesticksViewPoint = (props: { children: ReactNode }) => {
-  const { candlesticks } = useNamedCandlesticks();
+  const { candlesticks } = useCandlesticksFile();
 
   const app = usePixiApplication();
   const { width } = usePixiDimensions();

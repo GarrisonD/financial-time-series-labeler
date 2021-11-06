@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
+import useCandlesticksFile from "./useCandlesticksFile";
 import useCandlesticksViewPoint from "./useCandlesticksViewPoint";
-import useNamedCandlesticks from "./useNamedCandlesticks";
 
 const useVisibleCandlesticks = () => {
-  const { candlesticks } = useNamedCandlesticks();
+  const { candlesticks } = useCandlesticksFile();
   const viewPoint = useCandlesticksViewPoint();
 
   return useMemo(() => {

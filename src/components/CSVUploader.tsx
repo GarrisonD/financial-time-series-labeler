@@ -7,7 +7,7 @@ import Dropzone from "./Dropzone";
 const CSVUploader = ({
   onFileParsed,
 }: {
-  onFileParsed: (file: NamedCandlesticks) => void;
+  onFileParsed: (file: CandlesticksFile) => void;
 }) => {
   const handleParseComplete = useCallback<
     Required<Papa.ParseConfig<Candlestick, File>>["complete"]
