@@ -8,7 +8,7 @@ const Candlesticks = () => {
   return (
     <>
       {candlesticks.map((candlestick) => (
-        <Candlestick key={candlestick.index} {...candlestick} />
+        <Candlestick key={candlestick.index} index={candlestick.index} />
       ))}
     </>
   );

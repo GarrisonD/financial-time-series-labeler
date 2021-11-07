@@ -6,11 +6,12 @@ import PIXIRectangle from "./PIXIRectangle";
 
 import usePixiDimensions from "hooks/high-level/usePixiDimensions";
 
+import useCandlestick from "hooks/high-level/useCandlestick";
 import useCandlesticksScales from "hooks/high-level/useCandlesticksScales";
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
 
-const Candlestick = (props: Candlestick) => {
-  const isBullish = props.close > props.open;
+const Candlestick = (props: { index: number }) => {
+  const candlestick = useCandlestick(props.index);
 
   const { height } = usePixiDimensions();
   const { xScale, yScale } = useCandlesticksScales();
@@ -45,10 +46,10 @@ const Candlestick = (props: Candlestick) => {
 
       <PIXILine
         x1={candlestickPlaceholderWidth * 0.5}
-        y1={yScale.domainToRange(props.low)}
+        y1={yScale.domainToRange(candlestick.low)}
         //
         x2={candlestickPlaceholderWidth * 0.5}
-        y2={yScale.domainToRange(props.high)}
+        y2={yScale.domainToRange(candlestick.high)}
         //
         color={0x000}
         width={1}
@@ -56,12 +57,16 @@ const Candlestick = (props: Candlestick) => {
 
       <PIXIRectangle
         x1={candlestickPlaceholderWidth * 0.2}
-        y1={yScale.domainToRange(isBullish ? props.open : props.close)}
+        y1={yScale.domainToRange(
+          candlestick.isBullish ? candlestick.open : candlestick.close
+        )}
         //
         x2={candlestickPlaceholderWidth * 0.8}
-        y2={yScale.domainToRange(isBullish ? props.close : props.open)}
+        y2={yScale.domainToRange(
+          candlestick.isBullish ? candlestick.close : candlestick.open
+        )}
         //
-        color={isBullish ? 0x2a9d8f : 0xe76f51}
+        color={candlestick.isBullish ? 0x2a9d8f : 0xe76f51}
       />
     </PIXIContainer>
   );
