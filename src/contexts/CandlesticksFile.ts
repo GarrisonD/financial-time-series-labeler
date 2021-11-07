@@ -1,8 +1,12 @@
 import { createContext } from "react";
 
-const CandlesticksFileContext = createContext<CandlesticksFile | undefined>(
-  undefined
-);
+const CandlesticksFileContext = createContext<
+  | {
+      file: CandlesticksFile;
+      setFile: (file: CandlesticksFile) => void;
+    }
+  | undefined
+>(undefined);
 
 CandlesticksFileContext.displayName = "CandlesticksFileContext";
 

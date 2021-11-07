@@ -14,7 +14,12 @@ const App = () => {
     <CandlesticksSettings>
       <div style={{ display: "flex", flex: 1, padding: 10 }}>
         {candlesticksFile ? (
-          <CandlesticksFileContext.Provider value={candlesticksFile}>
+          <CandlesticksFileContext.Provider
+            value={{
+              file: candlesticksFile,
+              setFile: setCandlesticksFile,
+            }}
+          >
             <CandlesticksChart />
           </CandlesticksFileContext.Provider>
         ) : (
