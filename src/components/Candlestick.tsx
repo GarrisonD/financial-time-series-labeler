@@ -17,14 +17,14 @@ const Candlestick = (props: { index: number }) => {
   const { xScale, yScale } = useCandlesticksScales();
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
 
-  const [color, setColor] = useState(0xffffff);
+  const [pointerOver, setPointerOver] = useState(false);
 
   const handlePointerOver = useCallback(() => {
-    setColor(0xffd6a5);
+    setPointerOver(true);
   }, []);
 
   const handlePointerOut = useCallback(() => {
-    setColor(0xffffff);
+    setPointerOver(false);
   }, []);
 
   const xOffset = xScale.domainToRange(props.index);
@@ -38,10 +38,14 @@ const Candlestick = (props: { index: number }) => {
         x2={candlestickPlaceholderWidth}
         y2={height}
         //
-        color={color}
+        color={
+          pointerOver ? 0xe0e0e0 : candlestick.labeled ? 0xeeeeee : 0xffffff
+        }
         //
-        onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
+        onPointerOver={handlePointerOver}
+        //
+        onPointerDown={candlestick.toggleLabeled}
       />
 
       <PIXILine
@@ -58,15 +62,15 @@ const Candlestick = (props: { index: number }) => {
       <PIXIRectangle
         x1={candlestickPlaceholderWidth * 0.2}
         y1={yScale.domainToRange(
-          candlestick.isBullish ? candlestick.open : candlestick.close
+          candlestick.bullish ? candlestick.open : candlestick.close
         )}
         //
         x2={candlestickPlaceholderWidth * 0.8}
         y2={yScale.domainToRange(
-          candlestick.isBullish ? candlestick.close : candlestick.open
+          candlestick.bullish ? candlestick.close : candlestick.open
         )}
-        //
-        color={candlestick.isBullish ? 0x2a9d8f : 0xe76f51}
+        // https://material.io/design/color/the-color-system.html#tools-for-picking-colors:
+        color={candlestick.bullish ? 0x16bf6a : 0xbf166a}
       />
     </PIXIContainer>
   );

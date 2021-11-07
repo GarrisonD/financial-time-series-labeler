@@ -3,7 +3,9 @@ import { createContext } from "react";
 const CandlesticksFileContext = createContext<
   | {
       file: CandlesticksFile;
-      setFile: (file: CandlesticksFile) => void;
+      setFile: React.Dispatch<
+        React.SetStateAction<CandlesticksFile | undefined>
+      >;
     }
   | undefined
 >(undefined);
