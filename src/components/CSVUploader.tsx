@@ -18,7 +18,13 @@ const CSVUploader = ({
         alert("Errors while parsing! Check dev console!");
       }
 
-      onFileParsed({ name: file.name, candlesticks: result.data });
+      onFileParsed({
+        name: file.name,
+        candlesticks: result.data.map((candlestick) => ({
+          ...candlestick,
+          labeled: false,
+        })),
+      });
     },
     [onFileParsed]
   );

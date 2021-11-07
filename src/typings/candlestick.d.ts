@@ -1,5 +1,6 @@
 type Candlestick = {
   index: number;
+  labeled: boolean;
 
   timestamp: number;
 
