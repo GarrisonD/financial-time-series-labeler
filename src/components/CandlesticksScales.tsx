@@ -35,7 +35,7 @@ const CandlesticksScales = (props: { children: ReactNode }) => {
         : [0, width];
 
     return xScale;
-  }, [candlestickPlaceholderWidth, candlesticks, viewPoint, width]);
+  }, [candlestickPlaceholderWidth, candlesticks.length, viewPoint, width]);
 
   const yScale = useMemo(() => {
     const yScale = new LinearScale();
