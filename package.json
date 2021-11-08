@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/file-saver": "^2.0.3",
     "@types/node": "^16.11.6",
     "@types/papaparse": "^5.2.5",
     "@types/react": "^17.0.3",
@@ -18,7 +19,6 @@
     "typescript": "^4.2.3"
   },
   "devDependencies": {
-    "@types/file-saver": "^2.0.3",
     "gh-pages": "^3.1.0",
     "husky": "^7.0.4",
     "lint-staged": "^11.2.3",
