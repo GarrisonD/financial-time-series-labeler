@@ -1,5 +1,6 @@
 type Candlestick = {
   index: number;
+  labeled?: boolean;
 
   timestamp: number;
 
@@ -9,6 +10,4 @@ type Candlestick = {
   high: number;
   low: number;
   close: number;
-
-  volume: number;
 };

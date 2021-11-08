@@ -8,7 +8,7 @@ import usePixiContainer from "./usePixiContainer";
 
 const usePixiListener = (
   element: PIXI.Container,
-  event: "pointerover" | "pointerout",
+  event: "pointerdown" | "pointerout" | "pointerover",
   listener?: () => void
 ) => {
   useEffect(() => {
@@ -27,8 +27,10 @@ const usePixiListener = (
 const usePixiElement = (
   element: PIXI.Container,
   listeners: {
-    onPointerOver?: () => void;
+    onPointerDown?: () => void;
+    //
     onPointerOut?: () => void;
+    onPointerOver?: () => void;
   } = {}
 ) => {
   const container = usePixiContainer();
@@ -43,11 +45,23 @@ const usePixiElement = (
 
   useEffect(() => {
     element.buttonMode = element.interactive =
-      !!listeners.onPointerOver || !!listeners.onPointerOut;
-  }, [element, listeners.onPointerOut, listeners.onPointerOver]);
+      !!listeners.onPointerDown ||
+      //
+      !!listeners.onPointerOut ||
+      !!listeners.onPointerOver;
+  }, [
+    element,
+    //
+    listeners.onPointerDown,
+    //
+    listeners.onPointerOut,
+    listeners.onPointerOver,
+  ]);
 
-  usePixiListener(element, "pointerover", listeners.onPointerOver);
+  usePixiListener(element, "pointerdown", listeners.onPointerDown);
+  //
   usePixiListener(element, "pointerout", listeners.onPointerOut);
+  usePixiListener(element, "pointerover", listeners.onPointerOver);
 };
 
 export default usePixiElement;

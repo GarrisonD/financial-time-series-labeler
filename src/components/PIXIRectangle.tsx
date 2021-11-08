@@ -4,26 +4,27 @@ import * as PIXI from "pixi.js";
 
 import usePixiElement from "hooks/high-level/usePixiElement";
 
-const PIXIRectangle = (props: {
-  x1: number;
-  y1: number;
+const PIXIRectangle = (
+  props: {
+    x1: number;
+    y1: number;
 
-  x2: number;
-  y2: number;
+    x2: number;
+    y2: number;
 
-  color: number;
-
-  onPointerOver?: () => void;
-  onPointerOut?: () => void;
-}) => {
+    color: number;
+  } & Parameters<typeof usePixiElement>[1]
+) => {
   const graphics = useMemo(() => new PIXI.Graphics(), []);
 
   const x = useMemo(() => Math.min(props.x1, props.x2), [props.x1, props.x2]);
   const y = useMemo(() => Math.min(props.y1, props.y2), [props.y1, props.y2]);
 
   usePixiElement(graphics, {
-    onPointerOver: props.onPointerOver,
+    onPointerDown: props.onPointerDown,
+    //
     onPointerOut: props.onPointerOut,
+    onPointerOver: props.onPointerOver,
   });
 
   useEffect(() => {

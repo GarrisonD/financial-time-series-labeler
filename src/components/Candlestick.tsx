@@ -6,24 +6,25 @@ import PIXIRectangle from "./PIXIRectangle";
 
 import usePixiDimensions from "hooks/high-level/usePixiDimensions";
 
+import useCandlestick from "hooks/high-level/useCandlestick";
 import useCandlesticksScales from "hooks/high-level/useCandlesticksScales";
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
 
-const Candlestick = (props: Candlestick) => {
-  const isBullish = props.close > props.open;
+const Candlestick = (props: { index: number }) => {
+  const candlestick = useCandlestick(props.index);
 
   const { height } = usePixiDimensions();
   const { xScale, yScale } = useCandlesticksScales();
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
 
-  const [color, setColor] = useState(0xffffff);
+  const [pointerOver, setPointerOver] = useState(false);
 
   const handlePointerOver = useCallback(() => {
-    setColor(0xffd6a5);
+    setPointerOver(true);
   }, []);
 
   const handlePointerOut = useCallback(() => {
-    setColor(0xffffff);
+    setPointerOver(false);
   }, []);
 
   const xOffset = xScale.domainToRange(props.index);
@@ -37,18 +38,22 @@ const Candlestick = (props: Candlestick) => {
         x2={candlestickPlaceholderWidth}
         y2={height}
         //
-        color={color}
+        color={
+          pointerOver ? 0xe0e0e0 : candlestick.labeled ? 0xeeeeee : 0xffffff
+        }
         //
-        onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
+        onPointerOver={handlePointerOver}
+        //
+        onPointerDown={candlestick.toggleLabeled}
       />
 
       <PIXILine
         x1={candlestickPlaceholderWidth * 0.5}
-        y1={yScale.domainToRange(props.low)}
+        y1={yScale.domainToRange(candlestick.low)}
         //
         x2={candlestickPlaceholderWidth * 0.5}
-        y2={yScale.domainToRange(props.high)}
+        y2={yScale.domainToRange(candlestick.high)}
         //
         color={0x000}
         width={1}
@@ -56,12 +61,16 @@ const Candlestick = (props: Candlestick) => {
 
       <PIXIRectangle
         x1={candlestickPlaceholderWidth * 0.2}
-        y1={yScale.domainToRange(isBullish ? props.open : props.close)}
+        y1={yScale.domainToRange(
+          candlestick.bullish ? candlestick.open : candlestick.close
+        )}
         //
         x2={candlestickPlaceholderWidth * 0.8}
-        y2={yScale.domainToRange(isBullish ? props.close : props.open)}
-        //
-        color={isBullish ? 0x2a9d8f : 0xe76f51}
+        y2={yScale.domainToRange(
+          candlestick.bullish ? candlestick.close : candlestick.open
+        )}
+        // https://material.io/design/color/the-color-system.html#tools-for-picking-colors:
+        color={candlestick.bullish ? 0x16bf6a : 0xbf166a}
       />
     </PIXIContainer>
   );
