@@ -1,17 +1,18 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { saveAs } from "file-saver";
+import Papa from "papaparse";
 
 import CandlesticksViewPointContext from "contexts/CandlesticksViewPoint";
 
-import useCandlesticks from "hooks/high-level/useCandlesticks";
+import useCandlesticksFile from "hooks/high-level/useCandlesticksFile";
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
 
 import usePixiDimensions from "hooks/high-level/usePixiDimensions";
 
 const CandlesticksViewPoint = (props: { children: ReactNode }) => {
-  const candlesticks = useCandlesticks();
+  const { file } = useCandlesticksFile();
 
   const { width } = usePixiDimensions();
-
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
   const maxVisibleCandlesticksCount = width / candlestickPlaceholderWidth;
 
@@ -22,16 +23,25 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
     const type = "keydown";
 
     const listener = (e: KeyboardEvent) => {
-      setFirstVisibleCandlestickIndex((firstVisibleCandlestickIndex) => {
-        switch (e.code) {
-          case "ArrowRight":
-            return firstVisibleCandlestickIndex + 15;
-          case "ArrowLeft":
-            return firstVisibleCandlestickIndex - 15;
-          default:
-            return firstVisibleCandlestickIndex;
-        }
-      });
+      e.preventDefault();
+
+      switch (e.code) {
+        case "ArrowRight":
+          setFirstVisibleCandlestickIndex((index) => index + 15);
+          break;
+        case "ArrowLeft":
+          setFirstVisibleCandlestickIndex((index) => index - 15);
+          break;
+        case "KeyS":
+          if (e.ctrlKey || e.metaKey) {
+            const data = Papa.unparse(file.candlesticks, {
+              columns: "index,timestamp,open,high,low,close,labeled".split(","),
+            });
+            const blob = new Blob([data], { type: "text/csv" });
+            saveAs(blob, file.name);
+          }
+          break;
+      }
     };
 
     window.addEventListener(type, listener);
@@ -39,12 +49,12 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
     return () => {
       window.removeEventListener(type, listener);
     };
-  }, []);
+  }, [file.candlesticks, file.name]);
 
   const candlesticksViewPoint = useMemo(() => {
     const visibleCandlesticksCount = Math.min(
       maxVisibleCandlesticksCount,
-      candlesticks.length
+      file.candlesticks.length
     );
 
     const lastVisibleCandlestickIndex =
@@ -57,7 +67,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
       maxVisibleCandlesticksCount,
     };
   }, [
-    candlesticks.length,
+    file.candlesticks.length,
     firstVisibleCandlestickIndex,
     maxVisibleCandlesticksCount,
   ]);
