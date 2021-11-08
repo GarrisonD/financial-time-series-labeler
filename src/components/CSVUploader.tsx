@@ -21,8 +21,8 @@ const CSVUploader = ({
       onFileParsed({
         name: file.name,
         candlesticks: result.data.map((candlestick) => ({
-          ...candlestick,
           labeled: false,
+          ...candlestick,
         })),
       });
     },
