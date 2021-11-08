@@ -11,15 +11,9 @@ const PIXIApplication = (props: { children: ReactNode }) => {
 
   useEffect(() => {
     if (containerRef.current) {
-      // TODO: test on file re-upload
-      // if (pixiAppRef.current) console.warn("PIXI")
-
-      const height = containerRef.current.clientHeight;
-      const width = containerRef.current.clientWidth;
-
       const app = new PIXI.Application({
-        height,
-        width,
+        height: containerRef.current.clientHeight,
+        width: containerRef.current.clientWidth,
         //
         resolution: window.devicePixelRatio,
         autoDensity: true,
