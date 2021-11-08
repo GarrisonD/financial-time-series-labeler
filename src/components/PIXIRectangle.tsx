@@ -21,7 +21,7 @@ const PIXIRectangle = (
   const y = useMemo(() => Math.min(props.y1, props.y2), [props.y1, props.y2]);
 
   usePixiElement(graphics, {
-    onPointerDown: props.onPointerDown,
+    onClick: props.onClick,
     //
     onPointerOut: props.onPointerOut,
     onPointerOver: props.onPointerOver,

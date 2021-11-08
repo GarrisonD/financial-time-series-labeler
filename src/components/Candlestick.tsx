@@ -45,7 +45,7 @@ const Candlestick = (props: { index: number }) => {
         onPointerOut={handlePointerOut}
         onPointerOver={handlePointerOver}
         //
-        onPointerDown={candlestick.toggleLabeled}
+        onClick={candlestick.toggleLabeled}
       />
 
       <PIXILine
