@@ -9,7 +9,6 @@ const File1: CandlesticksFile = {
       open: 2,
       close: 3,
       high: 4,
-      volume: 1,
     },
   ],
 };
@@ -25,7 +24,6 @@ const File2: CandlesticksFile = {
       open: 1.5,
       close: 2,
       high: 3,
-      volume: 1,
     },
     {
       index: 1,
@@ -35,7 +33,6 @@ const File2: CandlesticksFile = {
       open: 2,
       close: 2.5,
       high: 2.75,
-      volume: 1,
     },
     {
       index: 2,
@@ -45,7 +42,6 @@ const File2: CandlesticksFile = {
       open: 2.5,
       close: 1.5,
       high: 2.75,
-      volume: 1,
     },
   ],
 };
