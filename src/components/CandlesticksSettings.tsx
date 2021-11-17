@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 
-import CandlesticksSettingsContext from "contexts/CandlesticksSettings";
-import { DEFAULT_VALUE } from "contexts/CandlesticksSettings";
+import CandlesticksSettingsContext, {
+  DEFAULT_VALUE,
+} from "contexts/CandlesticksSettings";
 
 const CandlesticksSettings = (props: { children: ReactNode }) => {
   return (

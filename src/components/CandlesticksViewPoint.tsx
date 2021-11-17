@@ -15,6 +15,12 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
   const { width } = usePixiDimensions();
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
   const maxVisibleCandlesticksCount = width / candlestickPlaceholderWidth;
+  const visibleCandlesticksCount = Math.min(
+    maxVisibleCandlesticksCount,
+    file.candlesticks.length
+  );
+
+  const centered = visibleCandlesticksCount < maxVisibleCandlesticksCount;
 
   const [firstVisibleCandlestickIndex, setFirstVisibleCandlestickIndex] =
     useState(0);
@@ -27,10 +33,23 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
 
       switch (e.code) {
         case "ArrowRight":
-          setFirstVisibleCandlestickIndex((index) => index + 15);
+          if (!centered) {
+            setFirstVisibleCandlestickIndex(
+              (currentFirstVisibleCandlestickIndex) =>
+                Math.min(
+                  currentFirstVisibleCandlestickIndex + 15,
+                  file.candlesticks.length - maxVisibleCandlesticksCount
+                )
+            );
+          }
           break;
         case "ArrowLeft":
-          setFirstVisibleCandlestickIndex((index) => index - 15);
+          if (!centered) {
+            setFirstVisibleCandlestickIndex(
+              (currentFirstVisibleCandlestickIndex) =>
+                Math.max(currentFirstVisibleCandlestickIndex - 15, 0)
+            );
+          }
           break;
         case "KeyS":
           if (e.ctrlKey || e.metaKey) {
@@ -49,27 +68,28 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
     return () => {
       window.removeEventListener(type, listener);
     };
-  }, [file.candlesticks, file.name]);
+  }, [centered, file.candlesticks, file.name, maxVisibleCandlesticksCount]);
 
   const candlesticksViewPoint = useMemo(() => {
-    const visibleCandlesticksCount = Math.min(
-      maxVisibleCandlesticksCount,
-      file.candlesticks.length
-    );
-
     const lastVisibleCandlestickIndex =
       firstVisibleCandlestickIndex + visibleCandlesticksCount;
 
     return {
+      centered,
+      //
       firstVisibleCandlestickIndex,
       lastVisibleCandlestickIndex,
       //
       maxVisibleCandlesticksCount,
+      visibleCandlesticksCount,
     };
   }, [
-    file.candlesticks.length,
+    centered,
+    //
     firstVisibleCandlestickIndex,
+    //
     maxVisibleCandlesticksCount,
+    visibleCandlesticksCount,
   ]);
 
   return (

@@ -26,16 +26,17 @@ const CandlesticksScales = (props: { children: ReactNode }) => {
       viewPoint.lastVisibleCandlestickIndex,
     ];
 
-    xScale.range =
-      candlesticks.length < viewPoint.maxVisibleCandlesticksCount // centered
-        ? [
-            (width - candlesticks.length * candlestickPlaceholderWidth) / 2,
-            (width + candlesticks.length * candlestickPlaceholderWidth) / 2,
-          ]
-        : [0, width];
+    // prettier-ignore
+    xScale.range = viewPoint.centered
+      ?
+        [
+          (width - viewPoint.visibleCandlesticksCount * candlestickPlaceholderWidth) / 2,
+          (width + viewPoint.visibleCandlesticksCount * candlestickPlaceholderWidth) / 2,
+        ]
+      : [0, width];
 
     return xScale;
-  }, [candlestickPlaceholderWidth, candlesticks.length, viewPoint, width]);
+  }, [candlestickPlaceholderWidth, viewPoint, width]);
 
   const yScale = useMemo(() => {
     const yScale = new LinearScale();

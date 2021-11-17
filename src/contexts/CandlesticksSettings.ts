@@ -5,7 +5,7 @@ type CandlesticksSettingsContextType = {
 };
 
 const DEFAULT_VALUE: CandlesticksSettingsContextType = {
-  candlestickPlaceholderWidth: 6, // TODO: test on 4K
+  candlestickPlaceholderWidth: 6,
 };
 
 const CandlesticksSettingsContext =
