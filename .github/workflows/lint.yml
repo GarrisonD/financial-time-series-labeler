@@ -1,0 +1,22 @@
+on: push
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: npm ci
+      - run: npx eslint --ext .ts --ext .tsx src/
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: npm ci
+      - run: npx prettier --check .
