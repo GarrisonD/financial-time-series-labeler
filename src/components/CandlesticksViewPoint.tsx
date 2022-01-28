@@ -29,10 +29,9 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
     const type = "keydown";
 
     const listener = (e: KeyboardEvent) => {
-      e.preventDefault();
-
       switch (e.code) {
         case "ArrowRight":
+          e.preventDefault();
           if (!centered) {
             setFirstVisibleCandlestickIndex(
               (currentFirstVisibleCandlestickIndex) =>
@@ -44,6 +43,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
           }
           break;
         case "ArrowLeft":
+          e.preventDefault();
           if (!centered) {
             setFirstVisibleCandlestickIndex(
               (currentFirstVisibleCandlestickIndex) =>
@@ -52,6 +52,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
           }
           break;
         case "KeyS":
+          e.preventDefault();
           if (e.ctrlKey || e.metaKey) {
             const data = Papa.unparse(file.candlesticks, {
               columns: "index,timestamp,open,high,low,close,labeled".split(","),
