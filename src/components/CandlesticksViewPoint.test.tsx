@@ -1,80 +1,51 @@
 import TestRenderer from "react-test-renderer";
 
-import * as PIXI from "pixi.js";
-
-import CandlesticksFileContext from "contexts/CandlesticksFile";
 import CandlesticksViewPointContext from "contexts/CandlesticksViewPoint";
-import PIXIApplicationContext from "contexts/PIXIApplication";
 
-import CandlesticksSettings from "./CandlesticksSettings";
+import useCandlesticksFile from "hooks/high-level/useCandlesticksFile";
+import usePixiDimensions from "hooks/high-level/usePixiDimensions";
+
 import CandlesticksViewPoint from "./CandlesticksViewPoint";
+
+jest.mock("hooks/high-level/useCandlesticksFile");
+jest.mock("hooks/high-level/usePixiDimensions");
 
 const ARROW_LEFT_EVENT = new KeyboardEvent("keydown", { code: "ArrowLeft" });
 const ARROW_RIGHT_EVENT = new KeyboardEvent("keydown", { code: "ArrowRight" });
 
 const Stub = (_: any) => null;
 
-let renderer: TestRenderer.ReactTestRenderer;
+const Test = () => (
+  <CandlesticksViewPoint>
+    <CandlesticksViewPointContext.Consumer>
+      {(viewPoint) => <Stub {...viewPoint} />}
+    </CandlesticksViewPointContext.Consumer>
+  </CandlesticksViewPoint>
+);
 
-const setUp = (opts: { candlesticks: { count: number } }) => {
-  TestRenderer.act(() => {
-    renderer = TestRenderer.create(
-      <CandlesticksSettings>
-        <CandlesticksFileContext.Provider
-          value={{
-            file: {
-              name: "Stub",
-              candlesticks: Array(opts.candlesticks.count).fill([
-                {
-                  index: 0,
-                  timestamp: 0,
-                  open: 0,
-                  high: 0,
-                  low: 0,
-                  close: 0,
-                },
-              ]),
-            },
-            setFile: jest.fn(),
-          }}
-        >
-          <PIXIApplicationContext.Provider
-            value={
-              {
-                renderer: {
-                  screen: {
-                    height: 12,
-                    width: 12,
-                  },
-                },
-              } as PIXI.Application
-            }
-          >
-            <CandlesticksViewPoint>
-              <CandlesticksViewPointContext.Consumer>
-                {(viewPoint) => <Stub {...viewPoint} />}
-              </CandlesticksViewPointContext.Consumer>
-            </CandlesticksViewPoint>
-          </PIXIApplicationContext.Provider>
-        </CandlesticksFileContext.Provider>
-      </CandlesticksSettings>
-    );
-  });
-};
+beforeEach(() => {
+  (usePixiDimensions as jest.Mock).mockReturnValue({ width: 12 });
+});
 
 describe("when candlesticks are centered", () => {
+  beforeEach(() => {
+    (useCandlesticksFile as jest.Mock).mockReturnValue({
+      file: { candlesticks: { length: 1 } },
+    });
+  });
+
   it("pressing left and right arrow keys does nothing", () => {
-    setUp({ candlesticks: { count: 1 } });
+    let renderer: TestRenderer.ReactTestRenderer;
+
+    TestRenderer.act(() => {
+      renderer = TestRenderer.create(<Test />);
+    });
 
     const stub = renderer!.root.findByType(Stub);
-    const initialStubProps = stub.props;
 
-    expect(initialStubProps).toMatchObject({
-      centered: true,
-      //
-      firstVisibleCandlestickIndex: 0,
-      lastVisibleCandlestickIndex: 1,
-    });
+    const initialStubProps = stub.props;
+    expect(initialStubProps.centered).toEqual(true);
+    expect(initialStubProps.firstVisibleCandlestickIndex).toEqual(0);
 
     TestRenderer.act(() => {
       window.dispatchEvent(ARROW_LEFT_EVENT);
@@ -89,32 +60,33 @@ describe("when candlesticks are centered", () => {
 });
 
 describe("when candlesticks are not centered", () => {
+  beforeEach(() => {
+    (useCandlesticksFile as jest.Mock).mockReturnValue({
+      file: { candlesticks: { length: 5 } },
+    });
+  });
+
   it("pressing left and right arrow keys scrolls the chart", () => {
-    setUp({ candlesticks: { count: 5 } });
+    let renderer: TestRenderer.ReactTestRenderer;
+
+    TestRenderer.act(() => {
+      renderer = TestRenderer.create(<Test />);
+    });
 
     const stub = renderer!.root.findByType(Stub);
-    const initialStubProps = stub.props;
 
-    expect(initialStubProps).toMatchObject({
-      centered: false,
-      //
-      firstVisibleCandlestickIndex: 0,
-      lastVisibleCandlestickIndex: 2,
-    });
+    const initialStubProps = stub.props;
+    expect(initialStubProps.centered).toEqual(false);
+    expect(initialStubProps.firstVisibleCandlestickIndex).toEqual(0);
 
     TestRenderer.act(() => {
       window.dispatchEvent(ARROW_RIGHT_EVENT);
     });
-    expect(stub.props).toMatchObject({
-      centered: false,
-      //
-      firstVisibleCandlestickIndex: 3,
-      lastVisibleCandlestickIndex: 5,
-    });
+    expect(stub.props.firstVisibleCandlestickIndex).toEqual(3);
 
     TestRenderer.act(() => {
       window.dispatchEvent(ARROW_LEFT_EVENT);
     });
-    expect(stub.props).toEqual(initialStubProps);
+    expect(stub.props.firstVisibleCandlestickIndex).toEqual(0);
   });
 });
