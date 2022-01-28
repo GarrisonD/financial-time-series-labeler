@@ -7,4 +7,8 @@ For the application to work correctly, your CSV file has to include **at least**
 - `low` (number)
 - `close` (number)
 
-**ATTENTION!** Order of the columns doesn't matter but order of the rows does: rows have to be sorted ascendingly by values of the `index` column.
+Optionally you can add:
+
+- `labeled` (boolean, true/false)
+
+**ATTENTION!** Order of the columns doesn't matter but order of the rows does: rows have to be sorted ascendingly `index` column.
