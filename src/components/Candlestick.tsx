@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo } from "react";
 
 import PIXIContainer from "./PIXIContainer";
 import PIXILine from "./PIXILine";
@@ -17,16 +17,6 @@ const Candlestick = (props: { index: number }) => {
   const { xScale, yScale } = useCandlesticksScales();
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
 
-  const [pointerOver, setPointerOver] = useState(false);
-
-  const handlePointerOver = useCallback(() => {
-    setPointerOver(true);
-  }, []);
-
-  const handlePointerOut = useCallback(() => {
-    setPointerOver(false);
-  }, []);
-
   const xOffset = xScale.domainToRange(props.index);
 
   return (
@@ -38,12 +28,7 @@ const Candlestick = (props: { index: number }) => {
         x2={candlestickPlaceholderWidth}
         y2={height}
         //
-        color={
-          pointerOver ? 0xe0e0e0 : candlestick.labeled ? 0xeeeeee : 0xffffff
-        }
-        //
-        onPointerOut={handlePointerOut}
-        onPointerOver={handlePointerOver}
+        color={candlestick.labeled ? 0xeeeeee : 0xffffff}
         //
         onClick={candlestick.toggleLabeled}
       />
