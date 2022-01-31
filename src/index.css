@@ -4,14 +4,8 @@ body,
   height: 100%;
 }
 
-body {
-  margin: 0;
-  overflow: hidden;
-}
-
 #root {
   display: flex;
-  font-family: sans-serif;
 }
 
 .dropzone {

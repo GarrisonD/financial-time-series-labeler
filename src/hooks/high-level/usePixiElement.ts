@@ -4,12 +4,14 @@ import * as PIXI from "pixi.js";
 
 import usePixiContainer from "./usePixiContainer";
 
+type ListenerFn = PIXI.utils.EventEmitter.ListenerFn;
+
 // ----------------------------------------------------------------------------
 
 const usePixiListener = (
   element: PIXI.Container,
-  event: "click" | "pointerout" | "pointerover",
-  listener?: () => void
+  event: "click",
+  listener?: ListenerFn
 ) => {
   useEffect(() => {
     if (listener) {
@@ -26,12 +28,7 @@ const usePixiListener = (
 
 const usePixiElement = (
   element: PIXI.Container,
-  listeners: {
-    onClick?: () => void;
-    //
-    onPointerOut?: () => void;
-    onPointerOver?: () => void;
-  } = {}
+  listeners: { onClick?: ListenerFn } = {}
 ) => {
   const container = usePixiContainer();
 
@@ -44,24 +41,10 @@ const usePixiElement = (
   }, [container, element]);
 
   useEffect(() => {
-    element.buttonMode = element.interactive =
-      !!listeners.onClick ||
-      //
-      !!listeners.onPointerOut ||
-      !!listeners.onPointerOver;
-  }, [
-    element,
-    //
-    listeners.onClick,
-    //
-    listeners.onPointerOut,
-    listeners.onPointerOver,
-  ]);
+    element.buttonMode = element.interactive = !!listeners.onClick;
+  }, [element, listeners.onClick]);
 
   usePixiListener(element, "click", listeners.onClick);
-  //
-  usePixiListener(element, "pointerout", listeners.onPointerOut);
-  usePixiListener(element, "pointerover", listeners.onPointerOver);
 };
 
 export default usePixiElement;

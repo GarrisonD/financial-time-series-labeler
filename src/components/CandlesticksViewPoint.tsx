@@ -55,7 +55,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
           e.preventDefault();
           if (e.ctrlKey || e.metaKey) {
             const data = Papa.unparse(file.candlesticks, {
-              columns: "index,timestamp,open,high,low,close,labeled".split(","),
+              columns: "index,timestamp,open,high,low,close,label".split(","),
             });
             const blob = new Blob([data], { type: "text/csv" });
             saveAs(blob, file.name);
