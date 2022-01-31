@@ -3,7 +3,6 @@ const File1: CandlesticksFile = {
   candlesticks: [
     {
       index: 0,
-      labeled: false,
       timestamp: 0,
       low: 1,
       open: 2,
@@ -18,7 +17,6 @@ const File2: CandlesticksFile = {
   candlesticks: [
     {
       index: 0,
-      labeled: false,
       timestamp: 0,
       low: 1,
       open: 1.5,
@@ -27,7 +25,6 @@ const File2: CandlesticksFile = {
     },
     {
       index: 1,
-      labeled: false,
       timestamp: 1,
       low: 1.75,
       open: 2,
@@ -36,7 +33,6 @@ const File2: CandlesticksFile = {
     },
     {
       index: 2,
-      labeled: false,
       timestamp: 2,
       low: 1.25,
       open: 2.5,

@@ -11,19 +11,20 @@ const useCandlestick = (index: number) => {
 
   const bullish = candlestick.close > candlestick.open;
 
-  const toggleLabeled = useCallback(() => {
-    setFile((file) => {
-      const { candlesticks, ...rest } = file!;
+  const setLabel = useCallback(
+    (label?: string) => {
+      setFile((file) => {
+        const { candlesticks, ...rest } = file!;
+        const newCandlestick = { ...candlesticks[index], label };
 
-      const newCandlestick = { ...candlesticks[index] };
-      newCandlestick.labeled = !newCandlestick.labeled;
+        const newCandlesticks = [...candlesticks];
+        newCandlesticks.splice(index, 1, newCandlestick);
 
-      const newCandlesticks = [...candlesticks];
-      newCandlesticks.splice(index, 1, newCandlestick);
-
-      return { candlesticks: newCandlesticks, ...rest };
-    });
-  }, [index, setFile]);
+        return { candlesticks: newCandlesticks, ...rest };
+      });
+    },
+    [index, setFile]
+  );
 
   return {
     ...candlestick,
@@ -31,7 +32,7 @@ const useCandlestick = (index: number) => {
     bullish,
     bearish: !bullish,
     //
-    toggleLabeled,
+    setLabel,
   };
 };
 

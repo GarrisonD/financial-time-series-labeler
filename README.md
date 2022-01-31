@@ -9,6 +9,6 @@ For the application to work correctly, your CSV file has to include **at least**
 
 Optionally you can add:
 
-- `labeled` (boolean, true/false)
+- `label` (string)
 
 **ATTENTION!** Order of the columns doesn't matter but order of the rows does: rows have to be sorted ascendingly `index` column.
