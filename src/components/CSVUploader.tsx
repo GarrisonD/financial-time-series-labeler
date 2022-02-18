@@ -39,7 +39,7 @@ const CSVUploader = ({
     [handleParseComplete]
   );
 
-  return <Dropzone accept=".csv" onDropAccepted={handleDrop} />;
+  return <Dropzone accept=".csv" maxFiles={1} onDropAccepted={handleDrop} />;
 };
 
 export default memo(CSVUploader);
