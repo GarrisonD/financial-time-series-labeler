@@ -4,6 +4,8 @@ import Papa from "papaparse";
 
 import Dropzone from "./Dropzone";
 
+const ACCEPT = { "text/csv": [".csv"] };
+
 const CSVUploader = ({
   onFileParsed,
 }: {
@@ -39,7 +41,7 @@ const CSVUploader = ({
     [handleParseComplete]
   );
 
-  return <Dropzone accept=".csv" maxFiles={1} onDropAccepted={handleDrop} />;
+  return <Dropzone accept={ACCEPT} maxFiles={1} onDropAccepted={handleDrop} />;
 };
 
 export default memo(CSVUploader);
