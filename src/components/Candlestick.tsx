@@ -23,7 +23,7 @@ const Candlestick = (props: { index: number }) => {
   const labelPickerProps = useLabelPickerProps();
 
   const handleCandleClick = useCallback(
-    (e) => {
+    (e: any) => {
       const pointerEvent = e.data.originalEvent as PointerEvent;
 
       labelPickerProps.openAt({
