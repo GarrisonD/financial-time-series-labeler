@@ -7,7 +7,7 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "^5.6.0",
-    "@mui/material": "^5.9.2",
+    "@mui/material": "^5.9.3",
     "@types/file-saver": "^2.0.3",
     "@types/jest": "^28.1.6",
     "@types/node": "^16.11.47",
