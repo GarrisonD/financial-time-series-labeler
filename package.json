@@ -10,7 +10,7 @@
     "@mui/material": "^5.10.1",
     "@types/file-saver": "^2.0.3",
     "@types/jest": "^28.1.7",
-    "@types/node": "^16.11.52",
+    "@types/node": "^16.11.54",
     "@types/papaparse": "^5.3.3",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
