@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.3",
     "@types/file-saver": "^2.0.3",
-    "@types/jest": "^28.1.8",
+    "@types/jest": "^29.0.0",
     "@types/node": "^16.11.56",
     "@types/papaparse": "^5.3.5",
     "@types/react": "^18.0.17",
