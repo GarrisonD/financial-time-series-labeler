@@ -30,7 +30,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.6.2",
-    "source-map-explorer": "^2.5.2"
+    "source-map-explorer": "^2.5.3"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
