@@ -24,4 +24,5 @@ module.exports = {
     ],
   },
   plugins: [new CopyPlugin([{ from: "public" }])],
+  stats: "normal",
 };
