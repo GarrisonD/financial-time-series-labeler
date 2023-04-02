@@ -1,11 +1,26 @@
+const path = require("path");
+
 const CopyPlugin = require("copy-webpack-plugin");
 
-/*
- * @type {import('@rspack/cli').Configuration}
- */
+const PUBLIC_URL =
+  process.env.NODE_ENV === "production" ? "/financial-time-series-labeler" : "";
+
+/** @type {import('@rspack/cli').Configuration} */
 module.exports = {
-  entry: { main: "./src/index.tsx" },
-  resolve: { tsConfigPath: "./tsconfig.json" },
-  builtins: { html: [{ template: "./public/index.html" }] },
+  entry: "./src/index.tsx",
+  output: { filename: "[name].[contenthash].js" },
+  resolve: {
+    // https://github.com/web-infra-dev/rspack/issues/2312
+    tsConfigPath: path.resolve(__dirname, "./tsconfig.json"),
+  },
+  builtins: {
+    html: [
+      {
+        publicPath: PUBLIC_URL,
+        template: "./public/index.html",
+        templateParameters: { PUBLIC_URL },
+      },
+    ],
+  },
   plugins: [new CopyPlugin([{ from: "public", to: "." }])],
 };
