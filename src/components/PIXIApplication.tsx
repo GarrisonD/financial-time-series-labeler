@@ -11,7 +11,7 @@ const PIXIApplication = (props: { children: ReactNode }) => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const app = new PIXI.Application({
+      const app = new PIXI.Application<HTMLCanvasElement>({
         height: containerRef.current.clientHeight,
         width: containerRef.current.clientWidth,
         //

@@ -41,7 +41,8 @@ const usePixiElement = (
   }, [container, element]);
 
   useEffect(() => {
-    element.buttonMode = element.interactive = !!listeners.onClick;
+    element.interactive = !!listeners.onClick;
+    element.cursor = element.interactive ? "pointer" : "none";
   }, [element, listeners.onClick]);
 
   usePixiListener(element, "click", listeners.onClick);
