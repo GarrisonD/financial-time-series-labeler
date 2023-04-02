@@ -7,6 +7,7 @@ const PUBLIC_URL =
 
 /** @type {import('@rspack/cli').Configuration} */
 module.exports = {
+  target: "browserslist",
   entry: "./src/index.tsx",
   output: { filename: "[name].[contenthash].js" },
   resolve: {
