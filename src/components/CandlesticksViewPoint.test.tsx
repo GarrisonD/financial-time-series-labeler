@@ -1,3 +1,5 @@
+/* eslint-disable testing-library/await-async-query */
+
 import TestRenderer from "react-test-renderer";
 
 import CandlesticksViewPointContext from "contexts/CandlesticksViewPoint";
