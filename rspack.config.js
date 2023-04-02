@@ -22,5 +22,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [new CopyPlugin([{ from: "public", to: "." }])],
+  plugins: [new CopyPlugin([{ from: "public" }])],
 };
