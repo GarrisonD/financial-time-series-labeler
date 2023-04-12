@@ -1,7 +1,9 @@
 const path = require("path");
 
-const PUBLIC_URL =
-  process.env.NODE_ENV === "production" ? "/financial-time-series-labeler" : "";
+// https://github.com/web-infra-dev/rspack/issues/2616
+const PUBLIC_URL = ["build", "production"].includes(process.env.NODE_ENV)
+  ? "/financial-time-series-labeler"
+  : "";
 
 /** @type {import('@rspack/cli').Configuration} */
 module.exports = {
