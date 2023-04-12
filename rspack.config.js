@@ -9,7 +9,7 @@ const PUBLIC_URL =
 module.exports = {
   target: "browserslist",
   entry: "./src/index.tsx",
-  output: { filename: "[name].[contenthash].js" },
+  output: { clean: true, filename: "[name].[contenthash].js" },
   resolve: {
     // https://github.com/web-infra-dev/rspack/issues/2312
     tsConfigPath: path.resolve(__dirname, "./tsconfig.json"),
