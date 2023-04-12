@@ -1,7 +1,5 @@
 const path = require("path");
 
-const CopyPlugin = require("copy-webpack-plugin");
-
 const PUBLIC_URL =
   process.env.NODE_ENV === "production" ? "/financial-time-series-labeler" : "";
 
@@ -15,14 +13,14 @@ module.exports = {
     tsConfigPath: path.resolve(__dirname, "./tsconfig.json"),
   },
   builtins: {
+    copy: { patterns: ["public"] },
     html: [
       {
         publicPath: PUBLIC_URL,
-        template: "./public/index.html",
+        template: "./src/index.html",
         templateParameters: { PUBLIC_URL },
       },
     ],
   },
-  plugins: [new CopyPlugin([{ from: "public" }])],
   stats: "normal",
 };
