@@ -27,7 +27,7 @@
     "react-dom": "^18.1.0",
     "react-dropzone": "^14.2.3",
     "react-test-renderer": "^18.1.0",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
