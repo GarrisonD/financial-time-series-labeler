@@ -3,7 +3,7 @@ import { memo } from "react";
 import { useDropzone, DropzoneOptions } from "react-dropzone";
 
 const Dropzone = (
-  props: Pick<DropzoneOptions, "accept" | "maxFiles" | "onDropAccepted">
+  props: Pick<DropzoneOptions, "accept" | "maxFiles" | "onDropAccepted">,
 ) => {
   const { getRootProps, getInputProps } = useDropzone(props);
 

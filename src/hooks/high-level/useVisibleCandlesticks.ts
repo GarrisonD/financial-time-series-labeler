@@ -10,7 +10,7 @@ const useVisibleCandlesticks = () => {
   return useMemo(() => {
     return candlesticks.slice(
       Math.floor(viewPoint.firstVisibleCandlestickIndex),
-      Math.ceil(viewPoint.lastVisibleCandlestickIndex)
+      Math.ceil(viewPoint.lastVisibleCandlestickIndex),
     );
   }, [candlesticks, viewPoint]);
 };

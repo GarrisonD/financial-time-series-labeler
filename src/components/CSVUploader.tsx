@@ -22,7 +22,7 @@ const CSVUploader = ({
 
       onFileParsed({ name: file.name, candlesticks: result.data });
     },
-    [onFileParsed]
+    [onFileParsed],
   );
 
   const handleDrop = useCallback(
@@ -38,7 +38,7 @@ const CSVUploader = ({
         skipEmptyLines: true,
       });
     },
-    [handleParseComplete]
+    [handleParseComplete],
   );
 
   return <Dropzone accept={ACCEPT} maxFiles={1} onDropAccepted={handleDrop} />;
