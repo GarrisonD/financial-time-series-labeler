@@ -17,7 +17,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
   const maxVisibleCandlesticksCount = width / candlestickPlaceholderWidth;
   const visibleCandlesticksCount = Math.min(
     maxVisibleCandlesticksCount,
-    file.candlesticks.length
+    file.candlesticks.length,
   );
 
   const centered = visibleCandlesticksCount < maxVisibleCandlesticksCount;
@@ -37,8 +37,8 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
               (currentFirstVisibleCandlestickIndex) =>
                 Math.min(
                   currentFirstVisibleCandlestickIndex + 15,
-                  file.candlesticks.length - maxVisibleCandlesticksCount
-                )
+                  file.candlesticks.length - maxVisibleCandlesticksCount,
+                ),
             );
           }
           break;
@@ -47,7 +47,7 @@ const CandlesticksViewPoint = (props: { children: ReactNode }) => {
           if (!centered) {
             setFirstVisibleCandlestickIndex(
               (currentFirstVisibleCandlestickIndex) =>
-                Math.max(currentFirstVisibleCandlestickIndex - 15, 0)
+                Math.max(currentFirstVisibleCandlestickIndex - 15, 0),
             );
           }
           break;

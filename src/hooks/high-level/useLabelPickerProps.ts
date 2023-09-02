@@ -15,7 +15,7 @@ const useLabelPickerProps = () => {
       openAt: setPosition,
       position,
     }),
-    [onClose, position]
+    [onClose, position],
   );
 };
 

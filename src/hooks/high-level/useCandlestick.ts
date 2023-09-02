@@ -23,7 +23,7 @@ const useCandlestick = (index: number) => {
         return { candlesticks: newCandlesticks, ...rest };
       });
     },
-    [index, setFile]
+    [index, setFile],
   );
 
   return {

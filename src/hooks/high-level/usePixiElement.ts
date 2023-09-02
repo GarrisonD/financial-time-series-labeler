@@ -11,7 +11,7 @@ type ListenerFn = PIXI.utils.EventEmitter.ListenerFn;
 const usePixiListener = (
   element: PIXI.Container,
   event: "click",
-  listener?: ListenerFn
+  listener?: ListenerFn,
 ) => {
   useEffect(() => {
     if (listener) {
@@ -28,7 +28,7 @@ const usePixiListener = (
 
 const usePixiElement = (
   element: PIXI.Container,
-  listeners: { onClick?: ListenerFn } = {}
+  listeners: { onClick?: ListenerFn } = {},
 ) => {
   const container = usePixiContainer();
 

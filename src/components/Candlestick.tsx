@@ -31,7 +31,7 @@ const Candlestick = (props: { index: number }) => {
         left: pointerEvent.x,
       });
     },
-    [labelPickerProps]
+    [labelPickerProps],
   );
 
   const xOffset = xScale.domainToRange(props.index);
@@ -63,12 +63,12 @@ const Candlestick = (props: { index: number }) => {
         <PIXIRectangle
           x1={candlestickPlaceholderWidth * 0.2}
           y1={yScale.domainToRange(
-            candlestick.bullish ? candlestick.open : candlestick.close
+            candlestick.bullish ? candlestick.open : candlestick.close,
           )}
           //
           x2={candlestickPlaceholderWidth * 0.8}
           y2={yScale.domainToRange(
-            candlestick.bullish ? candlestick.close : candlestick.open
+            candlestick.bullish ? candlestick.close : candlestick.open,
           )}
           // https://material.io/design/color/the-color-system.html#tools-for-picking-colors:
           color={candlestick.bullish ? 0x16bf6a : 0xbf166a}

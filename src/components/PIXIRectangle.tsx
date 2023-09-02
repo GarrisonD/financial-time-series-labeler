@@ -13,7 +13,7 @@ const PIXIRectangle = (
     y2: number;
 
     color: number;
-  } & Parameters<typeof usePixiElement>[1]
+  } & Parameters<typeof usePixiElement>[1],
 ) => {
   const graphics = useMemo(() => new PIXI.Graphics(), []);
 
