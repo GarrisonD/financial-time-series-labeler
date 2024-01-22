@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.15.5",
     "@mui/material": "^5.15.5",
-    "@rspack/cli": "^0.3.14",
+    "@rspack/cli": "^0.5.1",
     "@types/file-saver": "^2.0.7",
     "@types/jest": "^29.5.11",
     "@types/node": "^18.19.8",
