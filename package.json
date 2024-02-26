@@ -40,7 +40,7 @@
     "build:ts": "tsc",
     "build": "rspack build",
     "predeploy": "npm run build",
-    "prepare": "husky install",
+    "prepare": "husky",
     "start": "rspack serve",
     "test": "jest"
   },
