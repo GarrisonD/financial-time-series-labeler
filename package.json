@@ -31,7 +31,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "husky": "^8.0.1",
+    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5"
   },
@@ -40,7 +40,7 @@
     "build:ts": "tsc",
     "build": "rspack build",
     "predeploy": "npm run build",
-    "prepare": "husky install",
+    "prepare": "husky",
     "start": "rspack serve",
     "test": "jest"
   },
