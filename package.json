@@ -10,7 +10,7 @@
     "@mui/material": "^5.15.11",
     "@rspack/cli": "^0.3.14",
     "@types/file-saver": "^2.0.7",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "@types/node": "^18.19.22",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18.2.64",
