@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    paths: [package-lock.json]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: npm ci
+      - run: npm run build
