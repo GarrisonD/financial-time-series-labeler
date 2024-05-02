@@ -9,5 +9,6 @@ export default defineConfig({
     template: "./src/index.html",
     templateParameters: { PUBLIC_URL },
   },
+  output: { assetPrefix: PUBLIC_URL },
   plugins: [pluginReact()],
 });
