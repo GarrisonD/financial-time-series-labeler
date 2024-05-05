@@ -2,7 +2,7 @@ type Candlestick = {
   index: number;
   label?: string;
 
-  timestamp: number;
+  timestamp: string;
 
   // DO NOT SORT THE PROPERTIES BELOW!
   // They correspond OHLC abbreviation:
