@@ -9,6 +9,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "dsznajder.es7-react-js-snippets",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
         "github.vscode-github-actions",
