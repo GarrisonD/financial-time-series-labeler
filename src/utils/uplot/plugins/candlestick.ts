@@ -61,9 +61,9 @@ const candlestick = (options: PartialDeep<Options> = {}): uPlot.Plugin => {
 
       // prettier-ignore
       const timeAsX  = u.valToPos(x,     "x", CANVAS_PIXELS),
-            lowAsY   = u.valToPos(low,   "y", CANVAS_PIXELS),
-            highAsY  = u.valToPos(high,  "y", CANVAS_PIXELS),
             openAsY  = u.valToPos(open,  "y", CANVAS_PIXELS),
+            highAsY  = u.valToPos(high,  "y", CANVAS_PIXELS),
+            lowAsY   = u.valToPos(low,   "y", CANVAS_PIXELS),
             closeAsY = u.valToPos(close, "y", CANVAS_PIXELS);
 
       // Labeled background
@@ -122,7 +122,31 @@ const candlestick = (options: PartialDeep<Options> = {}): uPlot.Plugin => {
     u.ctx.restore();
   };
 
-  return { hooks: { draw } };
+  const setCursor: uPlot.Hooks.Defs["setCursor"] = (u) => {
+    const idx = u.cursor.idx;
+
+    if (idx != null) {
+      // prettier-ignore
+      const open  = u.data[1][idx]!,
+            close = u.data[4][idx]!;
+
+      // prettier-ignore
+      const openAsY  = u.valToPos(open,  "y"),
+            closeAsY = u.valToPos(close, "y");
+
+      const [ySmaller, yBigger] =
+        openAsY < closeAsY ? [openAsY, closeAsY] : [closeAsY, openAsY];
+
+      if (u.cursor.top! >= ySmaller && u.cursor.top! <= yBigger) {
+        u.over.style.cursor = "pointer";
+        return;
+      }
+    }
+
+    u.over.style.cursor = "default";
+  };
+
+  return { hooks: { draw, setCursor } };
 };
 
 export default candlestick;
