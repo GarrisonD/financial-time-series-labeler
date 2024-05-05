@@ -82,7 +82,7 @@ const CandlesticksChart = () => {
               return (e) => {
                 const idx = u.cursor.idx;
 
-                if (idx != null) {
+                if (idx != null && u.over.style.cursor === "pointer") {
                   setCandlestickIndex(idx);
 
                   labelPickerProps.openAt({
