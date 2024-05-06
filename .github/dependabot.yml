@@ -13,3 +13,5 @@ updates:
     groups:
       material-ui:
         patterns: ["@mui/*"]
+      rsbuild:
+        patterns: ["@rsbuild/*"]
