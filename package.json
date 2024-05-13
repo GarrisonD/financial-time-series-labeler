@@ -13,7 +13,7 @@
     "@types/file-saver": "^2.0.7",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.1",
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.33",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
