@@ -32,7 +32,7 @@
     "ts-jest": "^29.2.5",
     "type-fest": "^4.26.1",
     "typescript": "^5.6.2",
-    "uplot": "^1.6.30"
+    "uplot": "^1.6.31"
   },
   "devDependencies": {
     "husky": "^9.1.6",
