@@ -16,7 +16,7 @@ import useLabelPickerProps from "hooks/high-level/useLabelPickerProps";
 import * as plugins from "utils/uplot/plugins";
 
 const CandlesticksChart = () => {
-  const plotRef = useRef<uPlot>();
+  const plotRef = useRef<uPlot>(undefined);
   const divRef = useRef<HTMLDivElement>(null);
 
   const candlesticks = useCandlesticks();
