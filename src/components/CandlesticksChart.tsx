@@ -27,91 +27,91 @@ const CandlesticksChart = () => {
 
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
 
-  useEffect(
-    () => {
-      if (!divRef.current) return;
+  useEffect(() => {
+    if (!divRef.current) return;
 
-      const maxVisibleCandlesticksCount = Math.floor(
-        divRef.current.clientWidth / candlestickPlaceholderWidth,
-      );
+    const maxVisibleCandlesticksCount = Math.floor(
+      divRef.current.clientWidth / candlestickPlaceholderWidth,
+    );
 
-      const opts: uPlot.Options = {
-        height: divRef.current.clientHeight,
-        width: divRef.current.clientWidth,
-        plugins: [plugins.candlestick()],
-        legend: { show: false },
-        scales: {
-          x: {
-            // not all markets work 24/7 thus there are gaps
-            // in the data. on the chart we don't need that.
-            // distr: 2 (ordinal) solves that as well but
-            // then user can't scroll freely...
-            time: false,
+    const opts: uPlot.Options = {
+      height: divRef.current.clientHeight,
+      width: divRef.current.clientWidth,
+      plugins: [plugins.candlestick()],
+      legend: { show: false },
+      scales: {
+        x: {
+          // not all markets work 24/7 thus there are gaps
+          // in the data. on the chart we don't need that.
+          // distr: 2 (ordinal) solves that as well but
+          // then user can't scroll freely...
+          time: false,
 
-            min:
-              candlesticks.length < maxVisibleCandlesticksCount
-                ? -(maxVisibleCandlesticksCount - candlesticks.length) / 2
-                : 0,
-            max:
-              candlesticks.length < maxVisibleCandlesticksCount
-                ? (maxVisibleCandlesticksCount - candlesticks.length) / 2
-                : maxVisibleCandlesticksCount,
+          min:
+            candlesticks.length < maxVisibleCandlesticksCount
+              ? -(maxVisibleCandlesticksCount - candlesticks.length) / 2
+              : 0,
+          max:
+            candlesticks.length < maxVisibleCandlesticksCount
+              ? (maxVisibleCandlesticksCount - candlesticks.length) / 2
+              : maxVisibleCandlesticksCount,
+        },
+      },
+      series: [{ label: "Index" }, { label: "Close" }],
+      axes: [
+        {
+          show: false,
+          grid: { show: false },
+          ticks: { show: false },
+        },
+        {
+          show: false,
+          side: 1, // right
+          grid: { show: false },
+          ticks: { show: false },
+        },
+      ],
+      cursor: {
+        bind: {
+          // got rid of the default logic to
+          // reset X scale on double click:
+          dblclick: () => () => null,
+
+          mouseup: (u, _, handler) => {
+            return (e) => {
+              const idx = u.cursor.idx;
+
+              if (idx != null && u.over.style.cursor === "pointer") {
+                setCandlestickIndex(idx);
+
+                labelPickerProps.openAt({
+                  top: e.clientY,
+                  left: e.clientX,
+                });
+              }
+
+              handler(e);
+              return null;
+            };
           },
         },
-        series: [{ label: "Index" }, { label: "Close" }],
-        axes: [
-          {
-            show: false,
-            grid: { show: false },
-            ticks: { show: false },
-          },
-          {
-            show: false,
-            side: 1, // right
-            grid: { show: false },
-            ticks: { show: false },
-          },
-        ],
-        cursor: {
-          bind: {
-            // got rid of the default logic to
-            // reset X scale on double click:
-            dblclick: () => () => null,
-
-            mouseup: (u, _, handler) => {
-              return (e) => {
-                const idx = u.cursor.idx;
-
-                if (idx != null && u.over.style.cursor === "pointer") {
-                  setCandlestickIndex(idx);
-
-                  labelPickerProps.openAt({
-                    top: e.clientY,
-                    left: e.clientX,
-                  });
-                }
-
-                handler(e);
-                return null;
-              };
-            },
-          },
-          drag: {
-            x: false,
-            y: false,
-          },
+        drag: {
+          x: false,
+          y: false,
         },
-      };
+      },
+    };
 
-      const plot = (plotRef.current = new uPlot(opts, [], divRef.current));
+    const plot = (plotRef.current = new uPlot(opts, [], divRef.current));
 
-      return () => {
-        plot.destroy();
-      };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [candlestickPlaceholderWidth, candlesticks.length, labelPickerProps.openAt],
-  );
+    return () => {
+      plot.destroy();
+    };
+  }, [
+    candlestickPlaceholderWidth,
+    candlesticks.length,
+    labelPickerProps.openAt,
+  ]);
 
   useEffect(() => {
     // prettier-ignore

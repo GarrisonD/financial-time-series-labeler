@@ -11,7 +11,9 @@ const Dropzone = (
     <div {...getRootProps({ className: "dropzone" })}>
       <input {...getInputProps()} />
 
-      <span>Drag 'n' drop the file here, or click to select the file</span>
+      <span>
+        Drag &apos;n&apos; drop the file here, or click to select the file
+      </span>
     </div>
   );
 };
