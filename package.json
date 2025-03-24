@@ -37,7 +37,7 @@
     "type-fest": "^4.37.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0",
-    "uplot": "^1.6.31"
+    "uplot": "^1.6.32"
   },
   "devDependencies": {
     "husky": "^9.1.7",
