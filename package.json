@@ -34,7 +34,7 @@
     "react-dropzone": "^14.3.5",
     "react-test-renderer": "^19.0.0",
     "ts-jest": "^29.2.6",
-    "type-fest": "^4.37.0",
+    "type-fest": "^4.38.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0",
     "uplot": "^1.6.32"
