@@ -19,13 +19,13 @@ const CandlesticksChart = () => {
   const plotRef = useRef<uPlot>(undefined);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const candlesticks = useCandlesticks();
-
+  const { candlestickPlaceholderWidth } = useCandlesticksSettings();
   const [candlestickIndex, setCandlestickIndex] = useState<number>(0);
   const candlestick = useCandlestick(candlestickIndex);
-  const labelPickerProps = useLabelPickerProps();
+  const candlesticks = useCandlesticks();
 
-  const { candlestickPlaceholderWidth } = useCandlesticksSettings();
+  const labelPickerProps = useLabelPickerProps();
+  const { openAt: openLabelPickerAt } = labelPickerProps;
 
   useEffect(() => {
     if (!divRef.current) return;
@@ -84,7 +84,7 @@ const CandlesticksChart = () => {
               if (idx != null && u.over.style.cursor === "pointer") {
                 setCandlestickIndex(idx);
 
-                labelPickerProps.openAt({
+                openLabelPickerAt({
                   top: e.clientY,
                   left: e.clientX,
                 });
@@ -107,11 +107,7 @@ const CandlesticksChart = () => {
     return () => {
       plot.destroy();
     };
-  }, [
-    candlestickPlaceholderWidth,
-    candlesticks.length,
-    labelPickerProps.openAt,
-  ]);
+  }, [candlestickPlaceholderWidth, candlesticks.length, openLabelPickerAt]);
 
   useEffect(() => {
     // prettier-ignore
