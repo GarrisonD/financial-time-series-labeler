@@ -1,10 +1,11 @@
+import "uplot/dist/uPlot.min.css";
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import "uplot/dist/uPlot.min.css";
+import App from "./App";
 
 import "./index.css";
-import App from "./App";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);

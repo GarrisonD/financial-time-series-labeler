@@ -1,10 +1,10 @@
 import { memo, useState } from "react";
+
 import CssBaseline from "@mui/material/CssBaseline";
 
+import CSVUploader from "components/CSVUploader";
 import CandlesticksChart from "components/CandlesticksChart";
 import CandlesticksSettings from "components/CandlesticksSettings";
-
-import CSVUploader from "components/CSVUploader";
 
 import CandlesticksFileContext from "contexts/CandlesticksFile";
 

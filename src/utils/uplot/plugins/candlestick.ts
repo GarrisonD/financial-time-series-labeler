@@ -1,6 +1,8 @@
-import { PartialDeep } from "type-fest";
 import merge from "lodash/merge";
+
 import uPlot from "uplot";
+
+import { PartialDeep } from "type-fest";
 
 const SHADOW_COLOR = "#000000";
 
