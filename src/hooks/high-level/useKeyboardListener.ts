@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from "react";
 
 import { saveAs } from "file-saver";
 import Papa from "papaparse";
-
 import uPlot from "uplot";
 
 import useCandlesticksFile from "hooks/high-level/useCandlesticksFile";

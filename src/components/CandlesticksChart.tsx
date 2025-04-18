@@ -2,18 +2,15 @@ import { memo, useEffect, useRef, useState } from "react";
 
 import uPlot from "uplot";
 
-import LabelPicker from "./LabelPicker";
-
 import useCandlestick from "hooks/high-level/useCandlestick";
 import useCandlesticks from "hooks/high-level/useCandlesticks";
-
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
-
 import useKeyboardListener from "hooks/high-level/useKeyboardListener";
-
 import useLabelPickerProps from "hooks/high-level/useLabelPickerProps";
 
 import * as plugins from "utils/uplot/plugins";
+
+import LabelPicker from "./LabelPicker";
 
 const CandlesticksChart = () => {
   const plotRef = useRef<uPlot>(undefined);
