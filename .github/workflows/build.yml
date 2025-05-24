@@ -2,13 +2,14 @@ on:
   pull_request:
     paths: [package-lock.json]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
+    
     steps:
       - uses: actions/checkout@v4
 
