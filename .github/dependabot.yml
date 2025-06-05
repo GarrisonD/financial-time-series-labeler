@@ -11,6 +11,8 @@ updates:
     schedule:
       interval: "weekly"
     groups:
+      eslint:
+        patterns: ["*eslint*"]
       material-ui:
         patterns: ["@mui/*"]
       rsbuild:
