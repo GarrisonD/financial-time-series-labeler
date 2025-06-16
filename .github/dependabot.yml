@@ -13,6 +13,8 @@ updates:
     groups:
       eslint:
         patterns: ["*eslint*"]
+      jest:
+        patterns: ["*jest*"]
       material-ui:
         patterns: ["@mui/*"]
       rsbuild:
