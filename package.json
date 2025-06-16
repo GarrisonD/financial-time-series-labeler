@@ -17,7 +17,7 @@
     "@types/lodash": "^4.17.17",
     "@types/node": "^22.15.30",
     "@types/papaparse": "^5.3.16",
-    "@types/react": "^19.1.6",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/react-test-renderer": "^19.1.0",
     "eslint": "^9.29.0",
