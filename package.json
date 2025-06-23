@@ -39,7 +39,7 @@
     "ts-jest": "^29.4.0",
     "type-fest": "^4.41.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.0",
+    "typescript-eslint": "^8.34.1",
     "uplot": "^1.6.32"
   },
   "devDependencies": {
