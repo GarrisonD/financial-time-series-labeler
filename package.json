@@ -7,7 +7,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@eslint/js": "^9.34.0",
+    "@eslint/js": "^9.35.0",
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.0.2",
     "@rsbuild/core": "^1.4.16",
@@ -20,7 +20,7 @@
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.7",
     "@types/react-test-renderer": "^19.1.0",
-    "eslint": "^9.34.0",
+    "eslint": "^9.35.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -39,7 +39,7 @@
     "ts-jest": "^29.4.1",
     "type-fest": "^4.41.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.40.0",
+    "typescript-eslint": "^8.42.0",
     "uplot": "^1.6.32"
   },
   "devDependencies": {
