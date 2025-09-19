@@ -1,7 +1,5 @@
 import { memo, useState } from "react";
 
-import CssBaseline from "@mui/material/CssBaseline";
-
 import CSVUploader from "components/CSVUploader";
 import CandlesticksChart from "components/CandlesticksChart";
 import CandlesticksSettings from "components/CandlesticksSettings";
@@ -12,9 +10,7 @@ const App = () => {
   const [candlesticksFile, setCandlesticksFile] = useState<CandlesticksFile>();
 
   return (
-    <>
-      <CssBaseline />
-
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <CandlesticksSettings>
         <div style={{ display: "flex", flex: 1, padding: 10 }}>
           {candlesticksFile ? (
@@ -31,7 +27,7 @@ const App = () => {
           )}
         </div>
       </CandlesticksSettings>
-    </>
+    </div>
   );
 };
 

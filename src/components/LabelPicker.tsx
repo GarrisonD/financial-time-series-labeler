@@ -1,7 +1,6 @@
 import { memo } from "react";
 
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Menu, MenuItem, MenuItemLabel } from "./ui/Menu";
 
 // TODO: configurable on UI
 const LABELS = ["RL", "RH"];
@@ -16,32 +15,27 @@ const LabelPicker = (props: {
   position: LabelPickerPosition;
 }) => {
   return (
-    <Menu
-      open
-      onClose={props.onClose}
-      anchorReference="anchorPosition"
-      anchorPosition={props.position}
-    >
+    <Menu isOpen={true} onClose={props.onClose} position={props.position}>
       <MenuItem
-        onClick={() => {
+        onPress={() => {
           props.onChange();
           props.onClose();
         }}
         selected={!props.value}
       >
-        NA
+        <MenuItemLabel>NA</MenuItemLabel>
       </MenuItem>
 
       {LABELS.map((label) => (
         <MenuItem
           key={label}
-          onClick={() => {
+          onPress={() => {
             props.onChange(label);
             props.onClose();
           }}
           selected={props.value === label}
         >
-          {label}
+          <MenuItemLabel>{label}</MenuItemLabel>
         </MenuItem>
       ))}
     </Menu>
