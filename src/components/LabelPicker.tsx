@@ -1,53 +1,26 @@
 import { memo } from "react";
 
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 // TODO: configurable on UI
 const LABELS = ["RL", "RH"];
 
-type LabelPickerPosition = { top: number; left: number };
-
 const LabelPicker = (props: {
   value?: string;
   onChange: (label?: string) => void;
-  //
-  onClose: () => void;
-  position: LabelPickerPosition;
 }) => {
   return (
-    <Menu
-      open
-      onClose={props.onClose}
-      anchorReference="anchorPosition"
-      anchorPosition={props.position}
-    >
-      <MenuItem
-        onClick={() => {
-          props.onChange();
-          props.onClose();
-        }}
-        selected={!props.value}
-      >
-        NA
-      </MenuItem>
-
-      {LABELS.map((label) => (
-        <MenuItem
-          key={label}
-          onClick={() => {
-            props.onChange(label);
-            props.onClose();
-          }}
-          selected={props.value === label}
-        >
-          {label}
-        </MenuItem>
-      ))}
-    </Menu>
+    <Autocomplete
+      options={LABELS}
+      value={props.value ?? null}
+      onChange={(event, newValue) => {
+        props.onChange(newValue ?? undefined);
+      }}
+      renderInput={(params) => <TextField {...params} label="Label" />}
+      size="small"
+    />
   );
 };
 
 export default memo(LabelPicker);
-
-export type { LabelPickerPosition };

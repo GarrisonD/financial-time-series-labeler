@@ -2,15 +2,14 @@ import { memo, useEffect, useRef, useState } from "react";
 
 import uPlot from "uplot";
 
-import useCandlestick from "hooks/high-level/useCandlestick";
+import useCandlestickPopover from "hooks/high-level/useCandlestickPopover";
 import useCandlesticks from "hooks/high-level/useCandlesticks";
 import useCandlesticksSettings from "hooks/high-level/useCandlesticksSettings";
 import useKeyboardListener from "hooks/high-level/useKeyboardListener";
-import useLabelPickerProps from "hooks/high-level/useLabelPickerProps";
 
 import * as plugins from "utils/uplot/plugins";
 
-import LabelPicker from "./LabelPicker";
+import CandlestickPopover from "./CandlestickPopover";
 
 const CandlesticksChart = () => {
   const plotRef = useRef<uPlot>(undefined);
@@ -18,11 +17,10 @@ const CandlesticksChart = () => {
 
   const { candlestickPlaceholderWidth } = useCandlesticksSettings();
   const [candlestickIndex, setCandlestickIndex] = useState<number>(0);
-  const candlestick = useCandlestick(candlestickIndex);
   const candlesticks = useCandlesticks();
 
-  const labelPickerProps = useLabelPickerProps();
-  const { openAt: openLabelPickerAt } = labelPickerProps;
+  const candlestickPopover = useCandlestickPopover();
+  const { openAt: openCandlestickPopoverAt } = candlestickPopover;
 
   useEffect(() => {
     if (!divRef.current) return;
@@ -81,7 +79,7 @@ const CandlesticksChart = () => {
               if (idx != null && u.over.style.cursor === "pointer") {
                 setCandlestickIndex(idx);
 
-                openLabelPickerAt({
+                openCandlestickPopoverAt({
                   top: e.clientY,
                   left: e.clientX,
                 });
@@ -104,7 +102,11 @@ const CandlesticksChart = () => {
     return () => {
       plot.destroy();
     };
-  }, [candlestickPlaceholderWidth, candlesticks.length, openLabelPickerAt]);
+  }, [
+    candlestickPlaceholderWidth,
+    candlesticks.length,
+    openCandlestickPopoverAt,
+  ]);
 
   useEffect(() => {
     // prettier-ignore
@@ -137,15 +139,12 @@ const CandlesticksChart = () => {
     <>
       <div ref={divRef} style={{ border: "1px solid black", flex: 1 }} />
 
-      {labelPickerProps.position ? (
-        <LabelPicker
-          value={candlestick.label}
-          onChange={candlestick.setLabel}
-          //
-          onClose={labelPickerProps.onClose}
-          position={labelPickerProps.position}
-        />
-      ) : null}
+      <CandlestickPopover
+        candlestickIndex={candlestickIndex}
+        //
+        onClose={candlestickPopover.onClose}
+        position={candlestickPopover.position}
+      />
     </>
   );
 };
