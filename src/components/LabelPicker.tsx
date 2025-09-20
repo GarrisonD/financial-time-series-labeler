@@ -1,7 +1,7 @@
 import { memo } from "react";
 
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 // TODO: configurable on UI
 const LABELS = ["RL", "RH"];
@@ -11,21 +11,15 @@ const LabelPicker = (props: {
   onChange: (label?: string) => void;
 }) => {
   return (
-    <Select
-      value={props.value || ""}
-      onChange={(event) => {
-        const value = event.target.value;
-        props.onChange(value === "" ? undefined : value);
+    <Autocomplete
+      options={LABELS}
+      value={props.value ?? null}
+      onChange={(event, newValue) => {
+        newValue ? props.onChange(newValue) : props.onChange();
       }}
-      displayEmpty
-    >
-      <MenuItem value="">NA</MenuItem>
-      {LABELS.map((label) => (
-        <MenuItem key={label} value={label}>
-          {label}
-        </MenuItem>
-      ))}
-    </Select>
+      renderInput={(params) => <TextField {...params} label="Label" />}
+      size="small"
+    />
   );
 };
 
