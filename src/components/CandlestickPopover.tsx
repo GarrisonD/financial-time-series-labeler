@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+import Box from "@mui/material/Box";
 import Popover from "@mui/material/Popover";
 
 import useCandlestick from "hooks/high-level/useCandlestick";
@@ -24,7 +25,12 @@ const CandlestickPopover = (props: {
       anchorReference="anchorPosition"
       anchorPosition={props.position ?? undefined}
     >
-      <LabelPicker value={candlestick.label} onChange={candlestick.setLabel} />
+      <Box p={2} sx={{ minWidth: 200 }}>
+        <LabelPicker
+          value={candlestick.label}
+          onChange={candlestick.setLabel}
+        />
+      </Box>
     </Popover>
   );
 };
