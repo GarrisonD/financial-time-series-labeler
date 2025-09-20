@@ -137,15 +137,13 @@ const CandlesticksChart = () => {
     <>
       <div ref={divRef} style={{ border: "1px solid black", flex: 1 }} />
 
-      {labelPickerProps.position ? (
-        <LabelPicker
-          value={candlestick.label}
-          onChange={candlestick.setLabel}
-          //
-          onClose={labelPickerProps.onClose}
-          position={labelPickerProps.position}
-        />
-      ) : null}
+      <LabelPicker
+        value={candlestick.label}
+        onChange={candlestick.setLabel}
+        //
+        onClose={labelPickerProps.onClose}
+        position={labelPickerProps.position}
+      />
     </>
   );
 };

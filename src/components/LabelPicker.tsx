@@ -13,14 +13,15 @@ const LabelPicker = (props: {
   onChange: (label?: string) => void;
   //
   onClose: () => void;
-  position: LabelPickerPosition;
+  position: LabelPickerPosition | null;
 }) => {
   return (
     <Menu
-      open
+      open={!!props.position}
       onClose={props.onClose}
+      //
       anchorReference="anchorPosition"
-      anchorPosition={props.position}
+      anchorPosition={props.position ?? undefined}
     >
       <MenuItem
         onClick={() => {
