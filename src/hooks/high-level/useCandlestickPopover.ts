@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 
-import type { LabelPickerPosition } from "components/LabelPicker";
+import type { CandlestickPopoverPosition } from "components/CandlestickPopover";
 
-const useLabelPickerProps = () => {
-  const [position, setPosition] = useState<LabelPickerPosition | null>(null);
+const useCandlestickPopover = () => {
+  const [position, setPosition] = useState<CandlestickPopoverPosition | null>(
+    null,
+  );
 
   const onClose = useCallback(() => {
     setPosition(null);
@@ -19,4 +21,4 @@ const useLabelPickerProps = () => {
   );
 };
 
-export default useLabelPickerProps;
+export default useCandlestickPopover;
