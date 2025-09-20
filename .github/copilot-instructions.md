@@ -8,7 +8,7 @@ Always reference these instructions first and fallback to search or bash command
 
 ### Bootstrap and Setup
 
-- Use Node.js LTS (project uses Node 20.19.5+ as specified in .nvmrc)
+- Use Node.js LTS (project uses Node 22+ as specified in .nvmrc)
 - Install dependencies: `npm ci` -- takes 17 seconds, includes husky git hooks setup. NEVER CANCEL.
 - Set timeout to 30+ minutes for initial install commands.
 
