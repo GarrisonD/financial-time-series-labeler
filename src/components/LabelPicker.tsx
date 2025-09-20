@@ -15,7 +15,7 @@ const LabelPicker = (props: {
       options={LABELS}
       value={props.value ?? null}
       onChange={(event, newValue) => {
-        newValue ? props.onChange(newValue) : props.onChange();
+        props.onChange(newValue ?? undefined);
       }}
       renderInput={(params) => <TextField {...params} label="Label" />}
       size="small"
