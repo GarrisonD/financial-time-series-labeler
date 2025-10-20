@@ -78,15 +78,7 @@ export default [
   pluginReact.configs.flat["jsx-runtime"],
   pluginJsxA11y.flatConfigs.recommended,
   pluginImport.flatConfigs.recommended,
-  {
-    plugins: {
-      "react-hooks": pluginReactHooks,
-    },
-    rules: {
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-    },
-  },
+  pluginReactHooks.configs.flat["recommended-latest"],
   {
     languageOptions: {
       ecmaVersion: "latest",
