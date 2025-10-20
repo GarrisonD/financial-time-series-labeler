@@ -68,14 +68,25 @@ const importOrderPathGroups = [
  * @type {import('eslint').Linter.Config[]}
  */
 export default [
+  {
+    ignores: ["dist/**", "build/**"],
+  },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   pluginReact.configs.flat["jsx-runtime"],
   pluginJsxA11y.flatConfigs.recommended,
-  pluginReactHooks.configs["recommended-latest"],
   pluginImport.flatConfigs.recommended,
+  {
+    plugins: {
+      "react-hooks": pluginReactHooks,
+    },
+    rules: {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
   {
     languageOptions: {
       ecmaVersion: "latest",
