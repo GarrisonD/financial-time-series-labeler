@@ -68,13 +68,14 @@ const importOrderPathGroups = [
  * @type {import('eslint').Linter.Config[]}
  */
 export default [
+  { ignores: ["dist/**", "build/**"] },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   pluginReact.configs.flat["jsx-runtime"],
   pluginJsxA11y.flatConfigs.recommended,
-  pluginReactHooks.configs["recommended-latest"],
+  pluginReactHooks.configs.flat.recommended,
   pluginImport.flatConfigs.recommended,
   {
     languageOptions: {
