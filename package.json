@@ -18,7 +18,7 @@
     "@types/node": "^22.19.0",
     "@types/papaparse": "^5.5.0",
     "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@types/react-dom": "^19.2.3",
     "@types/react-test-renderer": "^19.1.0",
     "eslint": "^9.39.1",
     "eslint-import-resolver-typescript": "^4.4.4",
