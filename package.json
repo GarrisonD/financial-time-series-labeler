@@ -11,7 +11,7 @@
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.0.2",
     "@rsbuild/core": "^1.7.2",
-    "@rsbuild/plugin-react": "^1.4.3",
+    "@rsbuild/plugin-react": "^1.4.5",
     "@types/file-saver": "^2.0.7",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.23",
