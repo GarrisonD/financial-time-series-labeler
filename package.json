@@ -35,7 +35,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.2.3",
     "react-dropzone": "^14.4.0",
-    "react-test-renderer": "^19.2.3",
+    "react-test-renderer": "^19.2.4",
     "ts-jest": "^29.4.6",
     "type-fest": "^5.4.3",
     "typescript": "^5.9.3",
