@@ -33,7 +33,7 @@
     "lodash": "^4.17.23",
     "papaparse": "^5.5.3",
     "react": "^19.1.1",
-    "react-dom": "^19.2.3",
+    "react-dom": "^19.2.4",
     "react-dropzone": "^14.4.0",
     "react-test-renderer": "^19.2.3",
     "ts-jest": "^29.4.6",
