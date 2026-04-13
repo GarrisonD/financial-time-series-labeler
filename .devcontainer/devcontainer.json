@@ -4,13 +4,13 @@
   "name": "Node.js",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:22-bookworm",
   "features": {
-    "ghcr.io/va-h/devcontainers-features/difftastic:1": {}
+    "ghcr.io/va-h/devcontainers-features/difftastic:1": {},
+    "ghcr.io/devcontainers-extra/features/mise:1": {}
   },
   "customizations": {
     "vscode": {
       "extensions": [
         "dsznajder.es7-react-js-snippets",
-        "eamodio.gitlens",
         "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github"
