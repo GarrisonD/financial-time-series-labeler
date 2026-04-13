@@ -25,7 +25,7 @@ const CandlestickPopover = (props: {
       anchorReference="anchorPosition"
       anchorPosition={props.position ?? undefined}
     >
-      <Box p={2} sx={{ minWidth: 200 }}>
+      <Box sx={{ p: 2, minWidth: 200 }}>
         <LabelPicker
           value={candlestick.label}
           onChange={candlestick.setLabel}
