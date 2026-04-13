@@ -17,5 +17,7 @@ updates:
         patterns: ["*jest*"]
       material-ui:
         patterns: ["@mui/*"]
+      react:
+        patterns: ["react", "react-dom"]
       rsbuild:
         patterns: ["@rsbuild/*"]
