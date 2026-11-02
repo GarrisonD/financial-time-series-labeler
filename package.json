@@ -40,7 +40,7 @@
     "react-dom": "^19.3.0",
     "react-dropzone": "^20.1.0",
     "react-test-renderer": "^19.3.0",
-    "ts-jest": "^29.4.13",
+    "ts-jest": "^29.4.15",
     "type-fest": "^5.9.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0",
